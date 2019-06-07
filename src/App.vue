@@ -1,22 +1,19 @@
 <template>
-  <div id="app">
-    <p>Test de mon bbbb alignment</p>
-    <svg>
-    <alignment-letter>A</alignment-letter>
-    </svg>
-  </div>
+  <v-app>
+    <v-toolbar app> </v-toolbar>
+    <v-content>
+      <multiple-alignment></multiple-alignment>
+    </v-content>
+  </v-app>
 </template>
 
 <script>
-import AlignmentLetter from './components/AlignmentLetter';
+import MultipleAlignment from './views/MultipleAlignment';
 
 export default {
-  name: 'app',
+  name: 'App',
   components: {
-    AlignmentLetter,
-  },
+    MultipleAlignment
+  }
 };
 </script>
-
-<style>
-</style>

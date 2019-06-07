@@ -16,7 +16,7 @@
 
 <script>
 export default {
-  name: "alignment-letter",
+  name: 'alignment-letter',
   props: {
     width: { type: Number, default: 10 },
     offsetX: { type: Number, default: 100 },
@@ -26,7 +26,7 @@ export default {
   },
   data() {
     return {
-      fill: "#BADA55"
+      fill: '#BADA55'
     };
   },
   computed: {
@@ -43,20 +43,18 @@ export default {
      * Change the color of the rectangle according to the letter.
      */
     changeColor() {
-      var c = " ";
+      var c = ' ';
       if (this.$slots.default) {
         var c = this.$slots.default[0].text;
         if (!c) {
-          console.error("Please indicate a letter in the alignment-letter tag");
+          console.error('Please indicate a letter in the alignment-letter tag');
         }
         c = c.trim();
         if (c.length > 1) {
-          console.error(
-            "Please indicate exactly one letter in the alignment-letter tag"
-          );
+          console.error('Please indicate exactly one letter in the alignment-letter tag');
           return;
         } else if (c.length == 0) {
-          c = " ";
+          c = ' ';
         }
       }
       this.fill = getAminoColor(c.toUpperCase());
@@ -76,68 +74,68 @@ export default {
  */
 function getAminoColor(char) {
   switch (char) {
-    case "A":
-      return "#DBFA60";
+    case 'A':
+      return '#DBFA60';
       break;
-    case "C":
-      return "#F9FA60";
+    case 'C':
+      return '#F9FA60';
       break;
-    case "D":
-      return "#F9605F";
+    case 'D':
+      return '#F9605F';
       break;
-    case "E":
-      return "#F9609C";
+    case 'E':
+      return '#F9609C';
       break;
-    case "F":
-      return "#5FF99D";
+    case 'F':
+      return '#5FF99D';
       break;
-    case "G":
-      return "#F9BC5F";
+    case 'G':
+      return '#F9BC5F';
       break;
-    case "H":
-      return "#609DF9";
+    case 'H':
+      return '#609DF9';
       break;
-    case "I":
-      return "#99F95A";
+    case 'I':
+      return '#99F95A';
       break;
-    case "K":
-      return "#A062FF";
+    case 'K':
+      return '#A062FF';
       break;
-    case "L":
-      return "#7EF960";
+    case 'L':
+      return '#7EF960';
       break;
-    case "M":
-      return "#63FF63";
+    case 'M':
+      return '#63FF63';
       break;
-    case "N":
-      return "#D95DF9";
+    case 'N':
+      return '#D95DF9';
       break;
-    case "P":
-      return "#F9DA60";
+    case 'P':
+      return '#F9DA60';
       break;
-    case "Q":
-      return "#F955D8";
+    case 'Q':
+      return '#F955D8';
       break;
-    case "R":
-      return "#5360FB";
+    case 'R':
+      return '#5360FB';
       break;
-    case "S":
-      return "#F97E60";
+    case 'S':
+      return '#F97E60';
       break;
-    case "T":
-      return "#FFA563";
+    case 'T':
+      return '#FFA563';
       break;
-    case "V":
-      return "#C0F86B";
+    case 'V':
+      return '#C0F86B';
       break;
-    case "W":
-      return "#FDD9F9";
+    case 'W':
+      return '#FDD9F9';
       break;
-    case "Y":
-      return "#60F9DA";
+    case 'Y':
+      return '#60F9DA';
       break;
     default:
-      return "#FFFFFF";
+      return '#FFFFFF';
   }
 }
 </script>
