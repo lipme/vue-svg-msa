@@ -1,15 +1,15 @@
 <template>
   <g>
     <rect
-      :x="x - padding"
-      :y="offsetY + 3 - padding"
-      :width="width + padding * 2"
-      :height="width + padding * 2"
+      :x="rectX"
+      :y="rectY"
+      :width="rectWidth"
+      :height="rectWidth"
       :fill="fill"
       fill-opacity="0.8"
     ></rect>
-    <text :x="x + padding" :y="offsetY + width + 1" :font-size="width" fill="black">
-      <slot></slot>
+    <text :x="textX" :y="textY" :font-size="width" fill="black">
+      {{ letter }}
     </text>
   </g>
 </template>
@@ -22,11 +22,13 @@ export default {
     offsetX: { type: Number, default: 100 },
     offsetY: { type: Number, default: 0 },
     pos: { type: Number, default: 0 },
-    padding: { type: Number, default: 2 }
+    padding: { type: Number, default: 2 },
+    letter: { type: String, default: ' ' },
+    color: { type: String, default: '#FFFFFF' }
   },
   data() {
     return {
-      fill: '#BADA55'
+      fill: this.color
     };
   },
   computed: {
@@ -36,6 +38,21 @@ export default {
      */
     x() {
       return this.offsetX + this.pos * (this.width + this.padding * 2);
+    },
+    rectWidth() {
+      return this.width + this.padding * 2;
+    },
+    rectX() {
+      return this.x - this.padding;
+    },
+    rectY() {
+      return this.offsetY + 3 - this.padding
+    },
+    textX() {
+      return this.x + this.padding;
+    },
+    textY() {
+      return this.offsetY + this.width + 1;
     }
   },
   methods: {
@@ -43,28 +60,15 @@ export default {
      * Change the color of the rectangle according to the letter.
      */
     changeColor() {
-      var c = ' ';
-      if (this.$slots.default) {
-        var c = this.$slots.default[0].text;
-        if (!c) {
-          console.error('Please indicate a letter in the alignment-letter tag');
-        }
-        c = c.trim();
-        if (c.length > 1) {
-          console.error('Please indicate exactly one letter in the alignment-letter tag');
-          return;
-        } else if (c.length == 0) {
-          c = ' ';
-        }
-      }
-      this.fill = getAminoColor(c.toUpperCase());
+      console.log('changeColor');
+      this.fill = getAminoColor(this.letter.toUpperCase());
     }
   },
   mounted() {
-    this.changeColor();
+    //this.changeColor();
   },
   updated() {
-    this.changeColor();
+    //this.changeColor();
   }
 };
 
