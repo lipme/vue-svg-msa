@@ -1,6 +1,5 @@
 <template>
   <v-app>
-    <v-toolbar app> </v-toolbar>
     <v-content>
       <multiple-alignment></multiple-alignment>
     </v-content>
@@ -8,7 +7,7 @@
 </template>
 
 <script>
-import MultipleAlignment from './views/MultipleAlignment';
+import MultipleAlignment from './views/MultipleAlignment.vue';
 
 export default {
   name: 'App',
