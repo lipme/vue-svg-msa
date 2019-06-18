@@ -58,15 +58,17 @@ export default {
      * @returns {array} The scale values and their positions on the Scale
      */
     labels() {
-      let a_labels = [
+      let a_labels = [];
+      if (this.length > 0)
+      {
+        a_labels.push(
         {
           id: 0,
           label: '1',
           pos: 100 / this.length + '%',
           pos_bar: 100 / this.length + '%'
-        }
-      ];
-
+        });
+      
       let cycle_number = Math.ceil(this.length / 5);
 
       for (let i = 1; i < cycle_number; i++) {
@@ -77,6 +79,7 @@ export default {
           pos_bar: (100 / this.length) * 5 * i + '%'
         });
       }
+      }
 
       // a_labels.push({
       //   id: cycle_number,
@@ -84,7 +87,6 @@ export default {
       //   pos: "99%",
       //   pos_bar: "99.7%",
       // });
-
       return a_labels;
     },
 
