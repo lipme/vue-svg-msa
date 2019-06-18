@@ -1,5 +1,5 @@
 <template>
-  <div :width="width" :height="height" id="tableau">
+  <div :width="width" :height="height" id="alignment-graphic">
     <div>
       <AlignmentQueryBar
         :length="seqLengthMax"
@@ -9,44 +9,43 @@
       ></AlignmentQueryBar>
     </div>
     <svg :width="widthSvg" :height="heightSvg">
-      <template v-for="seq in seqs">
-        <g :key="seq.id">
-          <text
-            :key="seq.id"
-            v-tooltip="seq.name"
+      <template v-for="(seq,seqIndex) in seqs">
+          <!-- Name of the sequence -->
+            <text
+            :key="seqIndex"
             font-size="15"
             fill="black"
             :x="1"
-            :y="(letterWidth + 6) * seq.number + 15"
-            :style="seq.selected ? 'font-weight: bold;' : 'font-weight: normal;'"
-            @click="onClick({ id: seq.id, selected: seq.selected })"
-          >
-            {{ nameDisplayed(seq.name) }}
-          </text>
-          <template v-for="letter in seq.seqSplit">
+            :y="labelY(seqIndex)"
+            :style="seq.selected ? 'font-weight: bold' : 'font-weight: normal;'"
+            >
+              <title>{{seq.name}}</title>
+              {{ nameDisplayed(seq.name) }}
+            </text>
+
+          <!-- Suite of sequence letters -->
+          <template v-for="(letter, letterIndex) in seq.seqSplit">
+            <!-- <text :key="letter.id">{{letter.value}}</text> -->
             <alignment-letter
+              :key="seqIndex + '-' + letterIndex"
+              :pos="letterIndex+1"
+              :letter="letter"
               :width="letterWidth"
+              :height="letterWidth"
               :padding="letterPadding"
               :offsetX="100"
-              :offsetY="(letterWidth + 6) * seq.number + 1"
-              :pos="letter.id"
-              :height="letterWidth"
-              :key="letter.id"
-              @click.native="onClick({ id: seq.id, selected: seq.selected })"
-            >
-              {{ letter.value }}
-            </alignment-letter>
+              :offsetY="letterY(seqIndex)"
+            ></alignment-letter>
           </template>
-        </g>
       </template>
     </svg>
   </div>
 </template>
 
 <script>
-import AlignmentLetter from '@/components/AlignmentLetter';
-import AlignmentQueryBar from '@/components/AlignmentQueryBar';
-import { ALPN_ENABLED } from 'constants';
+import AlignmentLetter from '@/components/AlignmentLetter.vue';
+import AlignmentQueryBar from '@/components/AlignmentQueryBar.vue';
+//import { ALPN_ENABLED } from 'constants';
 export default {
   name: 'AlignmentGraphic',
   components: {
@@ -92,7 +91,7 @@ export default {
      */
     heightSvg() {
       return this.seqs.length * 20;
-    }
+    },
   },
   methods: {
     /**
@@ -116,13 +115,20 @@ export default {
         title = title.concat('...');
         return title;
       } else return name;
+    },
+    labelY(seqNumber) {
+      return (this.letterWidth + 6) * seqNumber + 15;
+    },
+    letterY(seqNumber) {
+      return (this.letterWidth + 6) * seqNumber + 1;
     }
+
   }
 };
 </script> 
 
 <style lang="scss">
-#tableau {
+#alignment-graphic {
   margin: 3px;
   padding: 10px;
   border: thin solid rgb(221, 221, 221);
