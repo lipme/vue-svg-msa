@@ -8,7 +8,6 @@
 <script>
 import AlignmentGraphic from '@/components/AlignmentGraphic.vue';
 import AlignmentGraphicCanvas from '@/components/AlignmentGraphicCanvas.vue';
-//import axios from 'axios';
 
 export default {
   name: 'MultipleAlignment',
@@ -37,9 +36,8 @@ export default {
     seqs() {
       //let a_seq1 = this.$store.getters.getDataAlignment;
 
-      let a_seqs = this.$store.getters.getDataAlignment.filter(x => x.domainID === '1');
+      let a_seqs = this.$store.getters.getDataAlignment.filter(x => x.groupID === '3');
       for (let x in a_seqs) {
-        let i = 0;
         a_seqs[x].seqSplit = a_seqs[x].seq.split('')
         a_seqs[x].selected = true;
       }
