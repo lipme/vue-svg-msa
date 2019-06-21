@@ -1,217 +1,253 @@
 {
   "alignment": [
     {
-      "domainID": "1",
+      "groupID": "1",
+      "color": "orange",
       "id": "WP_004110431_1",
       "name": "R__freirei_PRF81_WP_004110431_1",
       "seq": "MSHARGAVFCVANIIITKVSLTLFYRLWERIGVRPLFHIDLRFLSEFSSFWLLQALGGIVASLIVLQASEFFYYWFHRLQHSNKFFWRFHAEHHSLEEMSAFN-SNHHFSEEIFRIPFLIIPVSLLFSFEQGYVPWIWVFLVRWQGYFEHSSTRLHLGWIRYLFPDNRYHRVHHSVERQHFNKNFGSGSAIWDILFGTAYYPRADEWPDVGLPNKREPQNFREFLLRPFLRGKIQ___________"
     },
     {
-      "domainID": "1",
+      "groupID": "1",
+      "color": "orange",
       "id": "WP_081917518_1",
       "name": "Devosia_sp__LC5WP_081917518_1",
       "seq": "MSRVRGAVFWMVYIVITATSMTLFYRLWGHLGVTPLFRIDLRFLSEWSGLAILDPVGGVLASLLVLQVSEFFYYWFHRLQHSSRFFWRFHAEHHSLEEMSAFN-SNHHFTEEIFRIPFVAIPISLLFSFEQGYVPWLWALLLGWQGIYEHSSTKVHFGFLRYVVPDNRFHRIHHSVEKRHHNKNFGSGSALWDIVFGTIHHPEKDEWPDVGVSYMREPKTLSEFMWRPFKRKKLK___________"
     },
     {
-      "domainID": "1",
+      "groupID": "1",
+      "color": "orange",
       "id": "WP_091872978_1",
       "name": "M__yuzhufengensis_CGMCC_1_12041_WP_091872978_1",
       "seq": "_SRLRGALLWVVYIAITVAFLTAFNALWNKLGVTPLVTITLAEYFA-SENKLVTILGWIAAPILAVMASDFFYYWFHRAQHTWAFLWAFHAEHHAIREMSAWN-SNHHWTEEIFRIPFIMIPMSLLIRVDPGFVPVIAWLLIGAQGQYIHSHTRLSLGPLRYIVADNRFHRIHHSVELPHWNRNFGSFSSVWDMVFRTAYFPKRNEWPDTGLDEHDEAQTVREYLFRPFQKLRGK___________"
     },
     {
-      "domainID": "1",
+      "groupID": "1",
+      "color": "pink",
       "id": "WP_018422639_1",
       "name": "P__tuberum_WSM4176_WP_018422639_1",
       "seq": "_SRARGILFHICYLFIGGLFFELYHSVIVALHIRPLFSISLDGVLD-SPRPVWRATSIALAIAGAILIGDLLYYWFHRAQHTFGFLWRFHQVHHSIREMNVWN-CNMHVSEELLRPLVVTLPMALLIDFHPPFLWSLIGMVILIQGTFEHADTRISFGPISYLFPDNRFHRIHHSVELRHYNRNFAAVVTLWDVLFGTAHFPKKGEWPEVGLDYTDEPDGLVDYLLMPF_________________"
     },
     {
-      "domainID": "1",
+      "groupID": "1",
+      "color": "pink",
       "id": "WP_090810755_1",
       "name": "P__tuberum_DUS833_WP_090810755_1",
       "seq": "_SRARGILFHICYLFIGGLFFEIYHSVIVALHIRPLFSIALDGVLD-SPRPVWRATGIALAIAGALLIGDLLYYWFHRAQHTFGFLWRFHQVHHSIREMNVWN-CNMHVSEELLRPLVVTLPMALLIDFHPPFLWSLIGMVILIQGTFEHADTRISFGPISYLFPDNRFHRIHHSVELRHYNRNFAAVVTLWDVLFGTAHFPKKGEWPDVGLDYTDEPDGLVDYLLMPF_________________"
     },
     {
-      "domainID": "1",
+      "groupID": "1",
+      "color": "pink",
       "id": "WP_094780851_1",
       "name": "P__ribeironis_STM7296_WP_094780851_1",
       "seq": "_SRARGFVFRICYLIIGGLFAEGYASAIGALHIRPLFSIPISGVLD-APQPVWRAVNIALAIVGAIVIGDFLYYWFHRAQHTFGFLWRFHQVHHSIREMNVWN-ANMHISEELLRPLVVTLPMALLIDFHPPFLWSLVGMLILIQGTFEHADTRVSLGPLSYLFADNRFHRIHHSIELRHYNRNFAAVVTLWDVLFGTAHFPKKGEWPKVGLDYTDEPNRLVDYLIMPF_________________"
     },
     {
-      "domainID": "1",
+      "groupID": "1",
+      "color": "yellow",
       "id": "WP_112130153_1",
       "name": "Mesorhizobium_sp__CNPSo3140_WP_112130153_1",
       "seq": "_____________________________RLGVKPLVTINFASLLH-SDNAIINSGLAVLSGVLVAIAGDFFYYWMHRAQHAVPFLWRLHATHHSIRELTAWN-CNHHISEPLVYAALVALPLALIHFESG-VVPIVAMTLITFQAHLSHSSTRINLGLLRYIIGDNKFHRIHHSMESQHRHRNYGFFTTIWDTVFLTAYWPKTNEWPEVGMRNQPEPLTVRDYIMFPFDR_______________"
     },
     {
-      "domainID": "1",
+      "groupID": "1",
+      "color": "yellow",
       "id": "WP_071101980_1",
       "name": "Mesorhizobium_sp__ORS3428_WP_071101980_1",
       "seq": "______________________________LGVKPLVTINLATLLH-SDNAVXNSGLAVLSGVLVAIAGDFFYYWMHRAQHAVPFLWRLHATHHSIRELTAWN-CNHHISEPLVYAALVALPLALIHFESG-VVPIVAMTLITFQAHLSHSSTRINLGPLRYIIGDNKFHRIHHSMEAHHRHRNYGFFTTLWDTVFLTAYWPKKNEWPEVGMRNQPEPLTVRDYIMFPFDR_______________"
     },
     {
-      "domainID": "1",
+      "groupID": "1",
+      "color": "yellow",
       "id": "WP_040999477_1",
       "name": "Mesorhizobium_sp__SOD10_WP_040999477_1",
       "seq": "______________________________LGVKPLATINFATLLH-SDNAIVSTGLAVLSGVLVAIAGDFFYYWMHRAQHAVPFLWRLHATHHSIRELTAWN-CNHHISEPLVYAALVALPLALIHFESG-VVPIVAMTLITFQAHLSHSSTRINLGPLRYIIGDNKFHRIHHSMEAHHRHRNYGFFTTLWDTVFLTAYWPKKNEWPEVGMRNQPEPLTVRDYIMFPFDR_______________"
     },
     {
-      "domainID": "1",
+      "groupID": "1",
+      "color": "yellow",
       "id": "WP_040970510_1",
       "name": "M__plurifarium_ORS3356_WP_040970510_1",
       "seq": "______________________________LGVKPLVTINFATLLH-SDNAIASSGLAVLSGVLVAIAGDFFYYWMHRAQHAVPFLWRLHATHHSIRELTAWN-CNHHISEPLVYAALVALPLALVHFESG-VVPIVAMTLITFQAHLSHSSTRINLGPLRYIIGDNKFHRIHHSMEAHHRHRNYGFFTTLWDTVFLTAYWPKKNEWPEVGMRNQPEPLTVRDYIMFPFDR_______________"
     },
     {
-      "domainID": "1",
+      "groupID": "1",
+      "color": "yellow",
       "id": "WP_040982565_1",
       "name": "M__plurifarium_STM8773_WP_040982565_1",
       "seq": "______________________________LGVKPLVTINFATLLH-SDNAVVNRGLAVLSGVLVAIAGDFFYYWMHRAQHAVPFLWRLHATHHSIRELTAWN-CNHHISEPLVYAALVALPLALIHFESG-AVPIIAMTLITFQAHLSHSSTRINLGPLRYIIGDNQFHRIHHSMEAHHRHRNYGFFTTLWDTIFLTAYWPKKNEWPEVGMRNQPEPLTVRDYIMFPFDR_______________"
     },
     {
-      "domainID": "1",
+      "groupID": "1",
+      "color": "yellow",
       "id": "WP_042646660_1",
       "name": "Mesorhizobium_sp__ORS3359_WP_042646660_1",
       "seq": "______________________________LGVKPLVTINFATLLH-SDNAIVSSGLAVLSGVLVAIAGDFFYYWMHRAQHAVPFLWRLHATHHSIRELTAWN-CNHHISEPLVYAALVALPLAVIHFESG-VVPIVAMTLITFQAHLSHSSTRINLGPLRYIIGDNKFHRIHHSMEADHRHRNYGFFTTLWDTVFLTAYWPKKNEWPEVGMRNQPEPLTVRDYIMFPFDR_______________"
     },
     {
-      "domainID": "3",
+      "groupID": "3",
+      "color": "green",
       "id": "WP_081688009_1",
       "name": "R__mesoamericanum_STM6155_WP_081688009_1",
       "seq": "SYIRGARNWIIRIGCGTLIWH"
     },
     {
-      "domainID": "3",
+      "groupID": "3",
+      "color": "green",
       "id": "WP_081593650_1",
       "name": "R__mesoamericanum_STM3625_WP_081593650_1",
       "seq": "SYIRGARNWIIRIGCGTLIWH"
     },
     {
-      "domainID": "3",
+      "groupID": "3",
+      "color": "green",
       "id": "WP_069268317_1",
       "name": "P__nodosa_CNPSo1341_WP_069268317_1",
       "seq": "SYIRGVRNWIIRIGCGALIWH"
     },
     {
-      "domainID": "3",
+      "groupID": "3",
+      "color": "green",
       "id": "WP_028208979_1",
       "name": "P__nodosa_DSM21604_WP_028208979_1",
       "seq": "SYVRGVRNWIIRIGCGALIWH"
     },
     {
-      "domainID": "3",
+      "groupID": "3",
+      "color": "green",
       "id": "WP_094778929_1",
       "name": "P__ribeironis_STM7296_WP_094778929_1",
       "seq": "SYVRGVRNWIIRIGCGALIWH"
     },
     {
-      "domainID": "3",
+      "groupID": "3",
+      "color": "green",
       "id": "WP_028209069_1",
       "name": "P__nodosa_DSM21604_WP_028209069_1",
       "seq": "SYIRGLRNWIIRIGCGALIWH"
     },
     {
-      "domainID": "3",
+      "groupID": "3",
+      "color": "green",
       "id": "WP_027487455_1",
       "name": "R__undicola_ORS992_WP_027487455_1",
       "seq": "SYVRGVRNWVIRLGCGAFIWH"
     },
     {
-      "domainID": "3",
+      "groupID": "3",
+      "color": "green",
       "id": "WP_085954320_1",
       "name": "Burkholderia_sp__CCGE1002_WP_085954320_1",
       "seq": "SYLRGARNWAIRIGCGALIWH"
     },
     {
-      "domainID": "3",
+      "groupID": "3",
+      "color": "green",
       "id": "WP_013094455_1",
       "name": "Burkholderia_sp__CCGE1002_WP_013094455_1",
       "seq": "SYLRGARNWAIRIGCGALIWH"
     },
     {
-      "domainID": "3",
+      "groupID": "3",
+      "color": "green",
       "id": "WP_018435825_1",
       "name": "Burkholderia_sp__JPY251_WP_018435825_1",
       "seq": "SYLRGARNWAIRIGCGALIWH"
     },
     {
-      "domainID": "3",
+      "groupID": "3",
+      "color": "green",
       "id": "WP_018435791_1",
       "name": "Burkholderia_sp__JPY251_WP_018435791_1",
       "seq": "SYLRGARNWTIRIGCGALIWH"
     },
     {
-      "domainID": "3",
+      "groupID": "3",
+      "color": "green",
       "id": "WP_107153845_1",
       "name": "P__symbiotica_JPY366_WP_107153845_1",
       "seq": "SYVRGVRTWIIRIGCGAVIWH"
     },
     {
-      "domainID": "3",
+      "groupID": "3",
+      "color": "green",
       "id": "WP_026229502_1",
       "name": "P__symbiotica_JPY581_WP_026229502_1",
       "seq": "SYVRGVRIWIIRIGCGAVIWH"
     },
     {
-      "domainID": "3",
+      "groupID": "3",
+      "color": "green",
       "id": "WP_084791833_1",
       "name": "M__huakuii_7653R_WP_084791833_1",
       "seq": "SYVRGFRNWTIRLGCAAVIWH"
     },
     {
-      "domainID": "3",
+      "groupID": "3",
+      "color": "green",
       "id": "WP_028215429_1",
       "name": "P__mimosarum_LMG23256_WP_028215429_1",
       "seq": "SYIRGVRNWIIRIGFGALIWH"
     },
     {
-      "domainID": "3",
+      "groupID": "3",
+      "color": "green",
       "id": "WP_087740341_1",
       "name": "P__piptadeniae_STM7183_WP_087740341_1",
       "seq": "SYVRGVRNWIIRIGLGALVWH"
     },
     {
-      "domainID": "3",
+      "groupID": "3",
+      "color": "green",
       "id": "WP_114715948_1",
       "name": "R__grahamii_CCGM3_WP_114715948_1",
       "seq": "SYVRGVRNWIIRLGLGALVWH"
     },
     {
-      "domainID": "3",
+      "groupID": "3",
+      "color": "green",
       "id": "WP_012406797_1",
       "name": "P__phymatum_STM815_WP_012406797_1",
       "seq": "SYVRGVRNWIIRIGLGAIVWH"
     },
     {
-      "domainID": "3",
+      "groupID": "3",
+      "color": "green",
       "id": "WP_015004782_1",
       "name": "P__phenoliruptrix_BR3459a_WP_015004782_1",
       "seq": "SYVRGVRNWIIRIGLGAIVWH"
     },
     {
-      "domainID": "3",
+      "groupID": "3",
+      "color": "green",
       "id": "WP_062827036_1",
       "name": "Burkholderia_sp__CCGE1001_WP_062827036_1",
       "seq": "SYVRGVRNWIIRIGLGAIVWH"
     },
     {
-      "domainID": "3",
+      "groupID": "3",
+      "color": "green",
       "id": "WP_095205246_1",
       "name": "M__carmichaelineae_ICMP18942_WP_095205246_1",
       "seq": "SYVRGVRNWIIRLGIGAFIWH"
     },
     {
-      "domainID": "3",
+      "groupID": "3",
+      "color": "green",
       "id": "WP_105375070_1",
       "name": "N__huautlense_DSM21817_WP_105375070_1",
       "seq": "SYVRGVRNWIIRLGLGAFIWH"
     },
     {
-      "domainID": "3",
+      "groupID": "3",
+      "color": "green",
       "id": "WP_016558465_1",
       "name": "R__grahamii_CCGE502_WP_016558465_1",
       "seq": "SYVRGVRNWIIRLGLGAFVWH"
     },
     {
-      "domainID": "3",
+      "groupID": "3",
+      "color": "green",
       "id": "WP_082296362_1",
       "name": "M__loti_UFLA_01-765_WP_082296362_1",
       "seq": "SYVRGVRNWLIRLGLGAFIWH"
