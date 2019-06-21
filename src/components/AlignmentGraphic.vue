@@ -1,42 +1,71 @@
 <template>
   <div :width="width" :height="height" id="alignment-graphic">
-    <div>
-      <AlignmentQueryBar
-        :length="seqLengthMax"
-        :letterWidth="letterWidth"
-        :letterPadding="letterPadding"
-        style="padding-left: 105px;"
-      ></AlignmentQueryBar>
-    </div>
-    <svg :width="widthSvg" :height="heightSvg">
-      <template v-for="(seq,seqIndex) in seqs">
-          <!-- Name of the sequence -->
-            <text
-            :key="seqIndex"
-            font-size="15"
-            fill="black"
-            :x="1"
-            :y="labelY(seqIndex)"
-            :style="seq.selected ? 'font-weight: bold' : 'font-weight: normal;'"
-            >
-              <title>{{seq.name}}</title>
-              {{ nameDisplayed(seq.name) }}
-            </text>
+    <AlignmentQueryBar
+      :length="seqLengthMax"
+      :letterWidth="letterWidth"
+      :letterPadding="letterPadding"
+      style="padding-left: 105px;"
+    ></AlignmentQueryBar>
 
-          <!-- Suite of sequence letters -->
+    <svg :width="widthSvg" :height="heightSvg">
+      <template v-for="(seq, seqIndex) in seqs">
+        <!-- Name of the sequence -->
+        <text
+          :key="seqIndex"
+          font-size="15"
+          fill="black"
+          :x="1"
+          :y="textY[seqIndex]"
+          :style="seq.selected ? 'font-weight: bold' : 'font-weight: normal;'"
+        >
+          <title>{{ seq.name }}</title>
+          {{ nameDisplayed(seq.name) }}
+        </text>
+
+        <!-- CASE 1 : SEQUENCE HAS A COLOR -->
+        <!-- Display a long rect of one color if the sequence has a color -->
+        <template v-if="seq.color !== ''">
+          <rect
+            v-if="seq.color !== ''"
+            :key="'rect' + seqIndex"
+            :x="rectX[1]"
+            :y="rectY[seqIndex]"
+            :width="letterAndPaddingWidth * seqLengthMax"
+            :height="letterAndPaddingWidth"
+            :fill="seq.color"
+            fill-opacity="0.8"
+          ></rect>
+          <!-- display the letters -->
           <template v-for="(letter, letterIndex) in seq.seqSplit">
-            <!-- <text :key="letter.id">{{letter.value}}</text> -->
+            <text
+              :key="seqIndex + '-' + letterIndex"
+              :y="textY[seqIndex]"
+              :x="textX[letterIndex + 1]"
+              :font-size="letterWidth"
+              fill="black"
+            >
+              {{ letter }}
+            </text>
+          </template>
+        </template>
+
+        <!-- CASE 2 : SEQUENCE HAS NO COLOR: create alignment-letter -->
+        <template v-else>
+          <!-- display the letters -->
+          <template v-for="(letter, letterIndex) in seq.seqSplit">
             <alignment-letter
               :key="seqIndex + '-' + letterIndex"
-              :pos="letterIndex+1"
               :letter="letter"
               :width="letterWidth"
-              :height="letterWidth"
-              :padding="letterPadding"
-              :offsetX="100"
-              :offsetY="letterY(seqIndex)"
+              :textX="textX[letterIndex + 1]"
+              :textY="textY[seqIndex]"
+              :rectX="rectX[letterIndex + 1]"
+              :rectY="rectY[seqIndex]"
+              :rectWidth="letterAndPaddingWidth"
+              autocolored
             ></alignment-letter>
           </template>
+        </template>
       </template>
     </svg>
   </div>
@@ -60,7 +89,8 @@ export default {
   data() {
     return {
       letterWidth: 13,
-      letterPadding: 3
+      letterPadding: 3,
+      offsetX: 100
     };
   },
   computed: {
@@ -75,7 +105,6 @@ export default {
       });
       return length;
     },
-
     /**
      * Return the width of the SVG of the alignment.
      * @return {number} the width of the SVG of the alignment.
@@ -84,7 +113,6 @@ export default {
       const adjust = this.seqLengthMax < 70 ? 1 : 5;
       return this.seqLengthMax * (this.letterWidth * 2 - adjust);
     },
-
     /**
      * Return the height of the SVG of the alignment.
      * @return {number} the height of the SVG of the alignment.
@@ -92,6 +120,37 @@ export default {
     heightSvg() {
       return this.seqs.length * 20;
     },
+    letterAndPaddingWidth() {
+      return this.letterWidth + 2 * this.letterPadding;
+    },
+    /**
+     * Return an array of the coordinate 'x' values. textX[10] 
+     * is the X coordinate of the 10th letter of a sequence.
+     * @return {number}  an array of the coordinate 'x' values.
+     */
+    textX() {
+      var xs = [];
+      for (var i = 0; i <= this.seqLengthMax; i++) {
+        xs.push(i);
+      }
+      return xs.map(i => i * this.letterAndPaddingWidth + this.offsetX + this.letterPadding);
+    },
+    /**
+     * Return an array of the coordinate 'x' values to display 'rect' element. 
+     * rect[10] is the X coordinate of the rect of the 10th letter of a seq.
+     * @return {number}  an array of the coordinate 'x' values.
+     */
+    rectX() {
+      return this.textX.map(i => i - this.letterPadding);
+    },
+
+    textY() {
+      return this.seqs.map((s, index) => (this.letterWidth + 6) * index + this.letterWidth + 2);
+    },
+    
+    rectY() {
+      return this.textY.map( i => i - this.letterWidth - 1);
+    }
   },
   methods: {
     /**
@@ -115,14 +174,7 @@ export default {
         title = title.concat('...');
         return title;
       } else return name;
-    },
-    labelY(seqNumber) {
-      return (this.letterWidth + 6) * seqNumber + 15;
-    },
-    letterY(seqNumber) {
-      return (this.letterWidth + 6) * seqNumber + 1;
     }
-
   }
 };
 </script> 

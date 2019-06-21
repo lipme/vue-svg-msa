@@ -1,6 +1,6 @@
 <template>
   <g>
-    <rect
+    <rect v-if="fill !== '#FFFFFF'"
       :x="rectX"
       :y="rectY"
       :width="rectWidth"
@@ -8,9 +8,9 @@
       :fill="fill"
       fill-opacity="0.8"
     ></rect>
-    <text :x="textX" :y="textY" :font-size="width" fill="black">
-      {{ letter }}
-    </text>
+  <text :x="textX" :y="textY" :font-size="width" fill="black">
+    {{ letter }}
+  </text>
   </g>
 </template>
 
@@ -18,57 +18,38 @@
 export default {
   name: 'alignment-letter',
   props: {
+    textX: {type: Number, default: 0 },
+    textY: {type: Number, default: 0 },
+    rectY: { type: Number, default: 0 },
+    rectX: {type: Number, default: 0},
     width: { type: Number, default: 10 },
-    offsetX: { type: Number, default: 100 },
-    offsetY: { type: Number, default: 0 },
-    pos: { type: Number, default: 0 },
-    padding: { type: Number, default: 2 },
+    rectWidth: {type: Number, default: 0},
     letter: { type: String, default: ' ' },
-    color: { type: String, default: '#FFFFFF' }
+    color: { type: String, default: '#FFFFFF' }, // '#DBFA60'}, //'#FFFFFF' }
+    autocolored: { type: Boolean, default: false}
+
   },
   data() {
     return {
       fill: this.color
     };
   },
-  computed: {
-    /**
-     * Return the x position of the rectangle.
-     * @return {number} the x position of the rectangle.
-     */
-    x() {
-      return this.offsetX + this.pos * (this.width + this.padding * 2);
-    },
-    rectWidth() {
-      return this.width + this.padding * 2;
-    },
-    rectX() {
-      return this.x - this.padding;
-    },
-    rectY() {
-      return this.offsetY + 3 - this.padding
-    },
-    textX() {
-      return this.x + this.padding;
-    },
-    textY() {
-      return this.offsetY + this.width + 1;
-    }
-  },
   methods: {
     /**
      * Change the color of the rectangle according to the letter.
      */
     changeColor() {
-      console.log('changeColor');
-      this.fill = getAminoColor(this.letter.toUpperCase());
+      if (this.autocolored)
+      {
+        this.fill = getAminoColor(this.letter.toUpperCase());
+      }
     }
   },
   mounted() {
-    //this.changeColor();
+    this.changeColor();
   },
   updated() {
-    //this.changeColor();
+    this.changeColor();
   }
 };
 
