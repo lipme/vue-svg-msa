@@ -14,26 +14,22 @@
 <!-- pour chaque nucelotide un petit trait vertical -->
   <template v-for="letterIndex in seqLengthMax">
       <rect
-          :key="letterIndex"
+          :key="'rect1-' +letterIndex"
           :y="scaleBarY"
           :x="textX[letterIndex]"
           :width="getScaleWidth(letterIndex)"
           :height="getScaleHeight(letterIndex)"
         ></rect>
-    </template>
-
-    <!-- number each 5nt -->
-    <template v-for="letterIndex in seqLengthMax">
-     <text
+        <!-- number each 5nt -->
+        <text
           v-if="letterIndex % 5 === 0 || letterIndex === 1"
-          :key="letterIndex"
+          :key="'rect2-' +letterIndex"
           :x="textX[letterIndex]"
           :y="scaleBarY-2"
           fill="black"
           font-size="10"
         >{{letterIndex}}</text>
     </template>
-
 
       <template v-for="(seq, seqIndex) in seqs">
         <!-- Name of the sequence -->
@@ -96,7 +92,6 @@
     </svg>
   </div>
 </template>
-
 <script>
 import AlignmentLetter from '@/components/AlignmentLetter.vue';
 import AlignmentQueryBar from '@/components/AlignmentQueryBar.vue';
