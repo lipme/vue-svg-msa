@@ -1,13 +1,40 @@
 <template>
   <div :width="width" :height="height" id="alignment-graphic">
-    <AlignmentQueryBar
+    <svg :width="widthSvg" :height="heightSvg">
+      <AlignmentQueryBar
       :length="seqLengthMax"
       :letterWidth="letterWidth"
       :letterPadding="letterPadding"
       style="padding-left: 105px;"
     ></AlignmentQueryBar>
 
-    <svg :width="widthSvg" :height="heightSvg">
+<!-- Trat horizontale -->
+      <rect :x="textX[1]+1" :y="scaleBarY" width="100%" height="2px"></rect>
+
+<!-- pour chaque nucelotide un petit trait vertical -->
+  <template v-for="letterIndex in seqLengthMax">
+      <rect
+          :key="letterIndex"
+          :y="scaleBarY"
+          :x="textX[letterIndex]"
+          :width="getScaleWidth(letterIndex)"
+          :height="getScaleHeight(letterIndex)"
+        ></rect>
+    </template>
+
+    <!-- number each 5nt -->
+    <template v-for="letterIndex in seqLengthMax">
+     <text
+          v-if="letterIndex % 5 === 0 || letterIndex === 1"
+          :key="letterIndex"
+          :x="textX[letterIndex]"
+          :y="scaleBarY-2"
+          fill="black"
+          font-size="10"
+        >{{letterIndex}}</text>
+    </template>
+
+
       <template v-for="(seq, seqIndex) in seqs">
         <!-- Name of the sequence -->
         <text
@@ -24,9 +51,8 @@
 
         <!-- CASE 1 : SEQUENCE HAS A COLOR -->
         <!-- Display a long rect of one color if the sequence has a color -->
-        <template v-if="seq.color !== ''">
+        <template v-if="seq.color">
           <rect
-            v-if="seq.color !== ''"
             :key="'rect' + seqIndex"
             :x="rectX[1]"
             :y="rectY[seqIndex]"
@@ -62,7 +88,7 @@
               :rectX="rectX[letterIndex + 1]"
               :rectY="rectY[seqIndex]"
               :rectWidth="letterAndPaddingWidth"
-              autocolored
+              autocolored="true"
             ></alignment-letter>
           </template>
         </template>
@@ -88,6 +114,7 @@ export default {
   },
   data() {
     return {
+      scaleBarY: 10,
       letterWidth: 13,
       letterPadding: 3,
       offsetX: 100
@@ -111,14 +138,15 @@ export default {
      */
     widthSvg() {
       const adjust = this.seqLengthMax < 70 ? 1 : 5;
-      return this.seqLengthMax * (this.letterWidth * 2 - adjust);
+      // return this.seqLengthMax * (this.letterWidth * 2 - adjust);
+      return this.seqLengthMax * this.letterAndPaddingWidth + this.offsetX + this.letterPadding;
     },
     /**
      * Return the height of the SVG of the alignment.
      * @return {number} the height of the SVG of the alignment.
      */
     heightSvg() {
-      return this.seqs.length * 20;
+      return this.seqs.length * 22;
     },
     letterAndPaddingWidth() {
       return this.letterWidth + 2 * this.letterPadding;
@@ -145,7 +173,7 @@ export default {
     },
 
     textY() {
-      return this.seqs.map((s, index) => (this.letterWidth + 6) * index + this.letterWidth + 2);
+      return this.seqs.map((s, index) => (this.letterWidth + 6) * (index+1)  + this.letterWidth + 2);
     },
     
     rectY() {
@@ -174,6 +202,15 @@ export default {
         title = title.concat('...');
         return title;
       } else return name;
+    },
+
+    getScaleWidth(i)
+    {
+      return ((i === 1) || i%5 === 0) ?"2px": "1px";
+    },
+    getScaleHeight(i)
+    {
+      return ((i === 1) || i%5 === 0) ?"8px": "7px";
     }
   }
 };
