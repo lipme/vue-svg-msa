@@ -1,19 +1,17 @@
 <template>
-  <svg :width="width" height="25px">
+  <!-- <svg :width="width" height="25px"> -->
     <g>
-      <g>
-        <rect x="19" y="12" width="100%" height="2px"></rect>
-        <rect
+
+        <!-- <rect x="19" y="12" width="100%" height="2px"></rect> -->
+        <!-- <rect
           v-for="label in labels"
           :key="label.id"
           :x="label.pos_bar"
           y="13"
           width="2px"
           height="8px"
-        ></rect>
-      </g>
-      <g>
-        <rect
+        ></rect> -->
+        <!-- <rect
           v-for="label in labels2"
           :key="label.id"
           :x="label.pos"
@@ -21,8 +19,6 @@
           width="1px"
           height="7px"
         ></rect>
-      </g>
-      <g>
         <text
           v-for="label in labels"
           :key="label.id"
@@ -32,10 +28,9 @@
           font-size="10"
         >
           {{ label.label }}
-        </text>
-      </g>
+        </text> -->
     </g>
-  </svg>
+  <!-- </svg> -->
 </template>
 
 <script>
@@ -48,7 +43,6 @@ export default {
   },
   data() {
     return {
-      start: 60
     };
   },
   computed: {
