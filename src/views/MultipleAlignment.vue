@@ -1,8 +1,6 @@
 <template>
-  <div>
     <!-- <v-progress-circular indeterminate color="primary" :v-if="isLoaded"></v-progress-circular> -->
     <component :is="alignmentComponent" :width="width" :height="height" :seqs="seqs"></component>
-  </div>
 </template>
 
 <script>
@@ -25,6 +23,7 @@ export default {
     };
   },
   created() {
+    //this.$store.dispatch('uploadJsonAlignment', '1000seq.json');
     this.$store.dispatch('uploadJsonAlignment', 'alignmentTest1.json');
     //this.$store.dispatch('uploadJsonAlignment', 'alignmentTest75seq.json');
   },
@@ -36,7 +35,7 @@ export default {
     seqs() {
       //let a_seq1 = this.$store.getters.getDataAlignment;
 
-      let a_seqs = this.$store.getters.getDataAlignment.filter(x => x.groupID === '3');
+      let a_seqs = this.$store.getters.getDataAlignment.filter(x => x.groupID === '1');
       for (let x in a_seqs) {
         a_seqs[x].seqSplit = a_seqs[x].seq.split('')
         a_seqs[x].selected = true;
