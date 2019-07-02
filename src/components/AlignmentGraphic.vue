@@ -1,106 +1,66 @@
 <template>
   <div :width="width" :height="height" id="alignment-graphic">
     <svg :width="widthSvg" :height="heightSvg">
-      <AlignmentQueryBar
-      :length="seqLengthMax"
-      :letterWidth="letterWidth"
-      :letterPadding="letterPadding"
-      style="padding-left: 105px;"
-    ></AlignmentQueryBar>
+      <scale-bar :scaleY="scaleBarY" :a_scaleX="textX"></scale-bar>
 
-<!-- Trat horizontale -->
-      <rect :x="textX[1]+1" :y="scaleBarY" width="100%" height="2px"></rect>
-
-<!-- pour chaque nucelotide un petit trait vertical -->
-  <template v-for="letterIndex in seqLengthMax">
-      <rect
-          :key="'rect1-' +letterIndex"
-          :y="scaleBarY"
-          :x="textX[letterIndex]"
-          :width="getScaleWidth(letterIndex)"
-          :height="getScaleHeight(letterIndex)"
-        ></rect>
-        <!-- number each 5nt -->
-        <text
-          v-if="letterIndex % 5 === 0 || letterIndex === 1"
-          :key="'rect2-' +letterIndex"
-          :x="textX[letterIndex]"
-          :y="scaleBarY-2"
-          fill="black"
-          font-size="10"
-        >{{letterIndex}}</text>
-    </template>
-
-      <template v-for="(seq, seqIndex) in seqs">
+      <template v-for="(s, seqIndex) in seqs">
         <!-- Name of the sequence -->
-        <text
+        <sequence-name-field
           :key="seqIndex"
-          font-size="15"
-          fill="black"
-          :x="1"
           :y="textY[seqIndex]"
-          :style="seq.selected ? 'font-weight: bold' : 'font-weight: normal;'"
-        >
-          <title>{{ seq.name }}</title>
-          {{ nameDisplayed(seq.name) }}
-        </text>
-
-        <!-- CASE 1 : SEQUENCE HAS A COLOR -->
-        <!-- Display a long rect of one color if the sequence has a color -->
-        <template v-if="seq.color">
-          <rect
+          :text-font-size="letterWidth"
+          :name="s.name"
+          :offset-x="offsetX"
+        ></sequence-name-field>
+        
+        <!-- CASE 1 : SEQUENCE HAS A COLOR    -->
+        <template v-if="s.color">
+          <MonoColorSequence
             :key="'rect' + seqIndex"
-            :x="rectX[1]"
-            :y="rectY[seqIndex]"
-            :width="letterAndPaddingWidth * seqLengthMax"
+            :sequence="s"
+            :rect-x="rectX[0]"
+            :rect-y="rectY[seqIndex]"
+            :atext-x="textX"
+            :text-y="textY[seqIndex]"
             :height="letterAndPaddingWidth"
-            :fill="seq.color"
-            fill-opacity="0.8"
-          ></rect>
-          <!-- display the letters -->
-          <template v-for="(letter, letterIndex) in seq.seqSplit">
-            <text
-              :key="seqIndex + '-' + letterIndex"
-              :y="textY[seqIndex]"
-              :x="textX[letterIndex + 1]"
-              :font-size="letterWidth"
-              fill="black"
-            >
-              {{ letter }}
-            </text>
-          </template>
+            :text-font-size="letterWidth"
+            :width="aligmentWidth"
+          ></MonoColorSequence>
         </template>
-
         <!-- CASE 2 : SEQUENCE HAS NO COLOR: create alignment-letter -->
         <template v-else>
-          <!-- display the letters -->
-          <template v-for="(letter, letterIndex) in seq.seqSplit">
-            <alignment-letter
-              :key="seqIndex + '-' + letterIndex"
-              :letter="letter"
-              :width="letterWidth"
-              :textX="textX[letterIndex + 1]"
-              :textY="textY[seqIndex]"
-              :rectX="rectX[letterIndex + 1]"
-              :rectY="rectY[seqIndex]"
-              :rectWidth="letterAndPaddingWidth"
-              autocolored="true"
-            ></alignment-letter>
-          </template>
+          <PolyColorSequence
+            :key="'rect' + seqIndex"
+            :sequence="s"
+            :arect-x="rectX"
+            :rect-y="rectY[seqIndex]"
+            :atext-x="textX"
+            :text-y="textY[seqIndex]"
+            :height="letterAndPaddingWidth"
+            :text-font-size="letterWidth"
+             auto-coloring
+          ></PolyColorSequence>
         </template>
       </template>
     </svg>
   </div>
 </template>
+
+
 <script>
-import AlignmentLetter from '@/components/AlignmentLetter.vue';
-import AlignmentQueryBar from '@/components/AlignmentQueryBar.vue';
+import ScaleBar from '@/components/ScaleBar.vue';
+import MonoColorSequence from '@/components/MonoColorSequence.vue';
+import PolyColorSequence from '@/components/PolyColorSequence.vue';
+import SequenceNameField from '@/components/SequenceNameField.vue';
+
 //import { ALPN_ENABLED } from 'constants';
 export default {
   name: 'AlignmentGraphic',
   components: {
-    AlignmentLetter,
-    AlignmentQueryBar
+    ScaleBar,
+    MonoColorSequence,
+    PolyColorSequence,
+    SequenceNameField
   },
   props: {
     width: { type: Number },
@@ -112,7 +72,7 @@ export default {
       scaleBarY: 10,
       letterWidth: 13,
       letterPadding: 3,
-      offsetX: 100
+      offsetX: 200
     };
   },
   computed: {
@@ -127,52 +87,53 @@ export default {
       });
       return length;
     },
+    aligmentWidth() {
+      return this.letterAndPaddingWidth * this.seqLengthMax;
+    },
     /**
      * Return the width of the SVG of the alignment.
      * @return {number} the width of the SVG of the alignment.
      */
     widthSvg() {
-      const adjust = this.seqLengthMax < 70 ? 1 : 5;
-      // return this.seqLengthMax * (this.letterWidth * 2 - adjust);
-      return this.seqLengthMax * this.letterAndPaddingWidth + this.offsetX + this.letterPadding;
+      return this.offsetX + this.aligmentWidth;
     },
     /**
      * Return the height of the SVG of the alignment.
      * @return {number} the height of the SVG of the alignment.
      */
     heightSvg() {
-      return this.seqs.length * 22;
+      return this.seqs.length * this.letterAndPaddingWidth + 2 * this.letterAndPaddingWidth;
     },
     letterAndPaddingWidth() {
       return this.letterWidth + 2 * this.letterPadding;
     },
+
     /**
-     * Return an array of the coordinate 'x' values. textX[10] 
-     * is the X coordinate of the 10th letter of a sequence.
-     * @return {number}  an array of the coordinate 'x' values.
-     */
-    textX() {
-      var xs = [];
-      for (var i = 0; i <= this.seqLengthMax; i++) {
-        xs.push(i);
-      }
-      return xs.map(i => i * this.letterAndPaddingWidth + this.offsetX + this.letterPadding);
-    },
-    /**
-     * Return an array of the coordinate 'x' values to display 'rect' element. 
+     * Return an array of the coordinate 'x' values to display 'rect' element.
      * rect[10] is the X coordinate of the rect of the 10th letter of a seq.
      * @return {number}  an array of the coordinate 'x' values.
      */
     rectX() {
-      return this.textX.map(i => i - this.letterPadding);
+      var xs = [];
+      for (var i = 0; i <= this.seqLengthMax; i++) {
+        xs.push(i);
+      }
+      return xs.map(i => this.offsetX + (i + 1) * this.letterAndPaddingWidth);
+    },
+    /**
+     * Return an array of the coordinate 'x' values. textX[10]
+     * is the X coordinate of the 10th letter of a sequence.
+     * @return {number}  an array of the coordinate 'x' values.
+     */
+    textX() {
+      return this.rectX.map(i => i + this.letterPadding);
     },
 
-    textY() {
-      return this.seqs.map((s, index) => (this.letterWidth + 6) * (index+1)  + this.letterWidth + 2);
-    },
-    
     rectY() {
-      return this.textY.map( i => i - this.letterWidth - 1);
+      return this.seqs.map((s, index) => (index + 1) * this.letterAndPaddingWidth + 1);
+    },
+    textY() {
+      return this.rectY.map(i => i + this.letterWidth + 1);
     }
   },
   methods: {
@@ -182,30 +143,6 @@ export default {
      */
     onClick(data) {
       this.$emit('onClick', data);
-    },
-    /**
-     * If the name is to long it is cut.
-     * @return {string} the name of the sequence.
-     */
-    nameDisplayed(name) {
-      if (name.length >= 16) {
-        let title = '';
-        const splitName = name.split('');
-        splitName.forEach(x => {
-          if (title.length < 11) title = title.concat(String(x));
-        });
-        title = title.concat('...');
-        return title;
-      } else return name;
-    },
-
-    getScaleWidth(i)
-    {
-      return ((i === 1) || i%5 === 0) ?"2px": "1px";
-    },
-    getScaleHeight(i)
-    {
-      return ((i === 1) || i%5 === 0) ?"8px": "7px";
     }
   }
 };
