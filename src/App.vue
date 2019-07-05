@@ -12,7 +12,7 @@ import MultipleAlignment from './views/MultipleAlignment.vue';
 export default {
   name: 'App',
   components: {
-    MultipleAlignment
-  }
+    MultipleAlignment,
+  },
 };
 </script>
