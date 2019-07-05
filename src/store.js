@@ -10,42 +10,7 @@ export default new Vuex.Store({
     status: '',
     upload: false,
   },
-
   mutations: {
-    // Upload Confirmation
-    /**
-     * Confirm the upload of the Jsons file.
-     * @param {Object} state store data.
-     */
-    confirm_upload(state) {
-      state.status = 'success';
-      state.upload = true;
-    },
-    /**
-     * Unconfirm the upload of the Jsons file.
-     * @param {Object} state store data.
-     */
-    unconfirm_upload(state) {
-      state.status = '';
-      state.upload = false;
-    },
-    /**
-     * Signal an error of the upload of the Jsons file.
-     * @param {Object} state store data.
-     */
-    upload_error(state) {
-      state.status = 'error';
-      state.upload = false;
-    },
-    /**
-     * Signal the upload request of the Jsons file.
-     * @param {Object} state store data.
-     */
-    upload_request(state) {
-      state.status = 'loading';
-      state.upload = true;
-    },
-
     // Upload Alignment
     /**
      * Upload the alignement data in the alignement variable.
@@ -53,7 +18,9 @@ export default new Vuex.Store({
      * @param {Object} alignment alignment data.
      */
     upload_data_alignment(state, alignment) {
-      state.alignment = alignment;
+      // state.alignment = alignment;
+      const s = state;
+      s.alignment = alignment;
     },
   },
 
@@ -65,15 +32,11 @@ export default new Vuex.Store({
           (resp) => {
             if (resp.data) {
               commit('upload_data_alignment', resp.data.alignment);
-            } else {
-              commit('unconfirm_upload');
             }
             resolve(resp);
           },
           (resp) => {
             // console.log('error', resp);
-            commit('upload_error');
-            commit('unconfirm_upload');
             reject(resp);
           },
         );
