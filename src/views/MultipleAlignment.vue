@@ -10,25 +10,59 @@
     <section v-else>
       <div v-if="loading">Loading...</div>
       <div v-else>
-        <v-btn @click="alignmentComponent = 'svg-alignment-graphic'">SVG</v-btn>
-        <v-btn @click="alignmentComponent = 'canvas-alignment-graphic'">Canvas</v-btn>
+        <v-layout row wrap>
+          <v-flex xs2>
+            <v-btn @click="alignmentComponent = 'global'">GLOBAL view</v-btn>
+            <v-divider></v-divider>
+            <v-btn @click="alignmentComponent = 'svg-alignment-graphic-unsteady'"
+              >SVG unsteady</v-btn
+            >
+            <v-btn @click="alignmentComponent = 'svg-alignment-graphic'">SVG</v-btn>
+            <v-btn @click="alignmentComponent = 'canvas-alignment-graphic'">Canvas</v-btn>
+            <v-divider></v-divider>
+            <v-btn @click="LoadNewFile('1016-ANN-2192-HanXRQr2_Chr17g0798961-A2-A3\.76seq\.json')"
+              >75 seq</v-btn
+            >
+            <v-btn @click="LoadNewFile('1016-ANN-2192-HanXRQr2_Chr17g0798961-A2-A3\.json')"
+              >1000 seq</v-btn
+            >
+            <v-btn @click="LoadNewFile('alignmentTest1\.json')">10 seq (AA)</v-btn>
+            <v-btn @click="LoadNewFile('alignmentTest75coloredseq\.json')">75 seq (AA)</v-btn>
+            <v-btn @click="LoadNewFile('1000seq\.json')">1000 seq (AA)</v-btn>
+            <v-divider></v-divider>
 
-        <v-btn @click="LoadNewFile('alignmentTest1\.json')">Basic Test</v-btn>
-        <v-btn @click="LoadNewFile('alignmentTest75coloredseq\.json')">75 sequences</v-btn>
-        <v-btn @click="LoadNewFile('1000seq\.json')">1000 sequences</v-btn>
-        <h3>{{ alignmentComponent }}</h3>
-        <component
-          :is="alignmentComponent"
-          :width="width"
-          :height="height"
-          :seqs="seqs"
-        ></component>
+            <h3>{{ fileName }} displayed with {{ alignmentComponent }}</h3>
+          </v-flex>
 
-        <svg-global-alignment-graphic
-          :width="width"
-          :height="height"
-          :seqs="seqs"
-        ></svg-global-alignment-graphic>
+          <v-flex x10>
+            <svg-alignment-graphic
+              v-if="alignmentComponent === 'svg-alignment-graphic-unsteady'"
+              :width="width"
+              :height="height"
+              :seqs="seqs"
+              :unsteady="true"
+            ></svg-alignment-graphic>
+            <svg-alignment-graphic
+              v-else-if="alignmentComponent === 'svg-alignment-graphic'"
+              :width="width"
+              :height="height"
+              :seqs="seqs"
+            ></svg-alignment-graphic>
+            <canvas-alignment-graphic
+              v-else-if="alignmentComponent === 'canvas-alignment-graphic'"
+              :width="width"
+              :height="height"
+              :seqs="seqs"
+            >
+            </canvas-alignment-graphic>
+            <svg-global-alignment-graphic
+              v-else-if="alignmentComponent === 'global'"
+              :width="width"
+              :height="height"
+              :seqs="seqs"
+            ></svg-global-alignment-graphic>
+          </v-flex>
+        </v-layout>
       </div>
     </section>
   </section>
@@ -54,22 +88,16 @@ export default {
   data() {
     return {
       // alignmentComponent: 'canvas-alignment-graphic', // 'svg-alignement-graphic'
-      alignmentComponent: 'svg-alignment-graphic', // 'svg-alignement-graphic'
+      alignmentComponent: 'global', // 'svg-alignment-graphic-unsteady', // 'svg-alignement-graphic'
       alignments: {},
       errored: false,
       loading: true,
-      fileName: 'alignmentTest1.json'
+      fileName: '1016-ANN-2192-HanXRQr2_Chr17g0798961-A2-A3.76seq.json',
     };
   },
   mounted() {
-    // const fileName = 'alignmentTest1.json';
-    // const fileName = 'alignmentTest75coloredseq.json';
-    // const fileName = '1000seq.json';
-    // this.$store.dispatch('uploadJsonAlignment', '1000seq.json');
-
     this.LoadFile();
   },
-  created() {},
   computed: {
     /**
      * Return all the sequence that are aligned
@@ -90,7 +118,6 @@ export default {
           this.alignments = resp.data.alignment;
         })
         .catch(error => {
-          console.log(`impossible to read ${this.fileName} json file.${error}`);
           this.errored = true;
         })
         .finally(() => {
@@ -101,7 +128,7 @@ export default {
       // console.log("Load new file")
       this.fileName = f;
       this.LoadFile();
-    }
+    },
   }
 };
 </script>
