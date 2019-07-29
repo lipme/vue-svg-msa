@@ -1,26 +1,26 @@
 <template>
-  <g>
+  <g id="scalebar">
     <!-- horizontal line -->
-    <rect :x="a_scaleX[0] + 1" :y="scaleY" width="100%" height="2px"></rect>
+    <rect :x="fctScaleX(0) + 1" :y="scaleY" :width="getGlobalWidth" height="2px"></rect>
 
     <!-- vertical line for each nt -->
-    <template v-for="x in a_scaleX.length">
+    <template v-for="x in length">
       <rect
         :key="'rect1-' + x"
         :y="scaleY"
-        :x="a_scaleX[x - 1]"
+        :x="fctScaleX(x - 1)"
         :width="getScaleWidth(x)"
         :height="getScaleHeight(x)"
       ></rect>
 
       <!-- number each 5nt -->
       <text
-        v-if="x % 5 === 0 || x === 1"
+        v-if="(x % step) === 0 || x === 1"
         :key="'rect2-' + x"
-        :x="a_scaleX[x - 1]"
+        :x="fctScaleX(x - 1)"
         :y="scaleY - 2"
-        fill="black"
-        font-size="10"
+        font-size=10
+        class="numberText"
       >
         {{ x }}
       </text>
@@ -32,15 +32,38 @@
 export default {
   props: {
     scaleY: { type: Number },
-    a_scaleX: { type: Array },
+    fctScaleX: { type: Function },
+    length: {type: Number}
+  },
+  data() {
+    return {
+    step: 10,
+    }
   },
   methods: {
     getScaleWidth(i) {
-      return i === 1 || i % 5 === 0 ? '2px' : '1px';
+      return i === 1 || (i % this.step) === 0 ? '2px' : '1px';
     },
     getScaleHeight(i) {
-      return i === 1 || i % 5 === 0 ? '8px' : '7px';
+      return i === 1 || (i % this.step) === 0 ? '8px' : '7px';
     },
   },
+  computed:
+  {
+    getGlobalWidth()
+    {
+      var l = this.fctScaleX(this.length-1) - this.fctScaleX(0) + 5
+      return l
+    }
+  }
 };
 </script>
+
+<style scoped>
+.numberText {
+  fill: black;
+  text-anchor: middle;
+  font-family: 'monospace';
+}
+
+</style>
