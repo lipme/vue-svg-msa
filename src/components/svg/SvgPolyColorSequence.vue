@@ -1,20 +1,22 @@
 <template>
   <g>
+    <rect
+      v-for="(r, index) in getColoredRect"
+      :key="index"
+      :x="r.x"
+      :y="rectY"
+      :height="height"
+      :width="r.width"
+      :fill="r.color"
+      fill-opacity="0.8"
+    ></rect>
     <template v-for="(letter, letterIndex) in sequence.seq.split('')">
-      <rect
-        :key="'rect-' + letterIndex"
-        v-if="autocoloring"
-        :x="arectX[letterIndex]"
-        :y="rectY"
-        :height="height"
-        :width="height"
-        :fill="getAminoColor(letter)"
-        fill-opacity="0.8"
-      ></rect>
       <text
         :key="'txt-' + letterIndex"
-        :x="atextX[letterIndex]"
-        :y="textY"
+        text-anchor="middle"
+        :x="aX(letterIndex)"
+        :y="y"
+        :class="getClass"
         :font-size="textFontSize"
         fill="black"
       >
@@ -28,24 +30,65 @@
 export default {
   props: {
     sequence: { type: Object },
-    arectX: { type: Array },
-    rectY: { type: Number },
-    atextX: { type: Array },
-    textY: { type: Number },
+    aX: { type: Function },
+    y: { type: Number },
     height: { type: Number },
     textFontSize: { type: Number },
-    autocoloring: { type: Boolean, default: false },
+    coloring: { type: String, default: '' }
+  },
+  computed: {
+    getLetterWidth(){
+      return this.aX(1)-this.aX(0)
+    },
+    getShift() {
+      return Math.round(((this.getLetterWidth)/2)*10) / 10
+    },
+    rectY() {
+      return this.y - this.textFontSize + 1;
+    },
+    getColoredRect() {
+      var displayedRect = [];
+      if (this.coloring === 'metadata') {
+        this.sequence.metadata.forEach(m => {
+          m.positions.split(',').forEach(s => {
+            const pos = s.split('-');
+            displayedRect.push({
+              x: this.rectX(pos[0] - 1),
+              color: m.color,
+              width: (pos[1] - pos[0] +1) * this.getLetterWidth
+            });
+          });
+        });
+      } else if (this.coloring === 'auto') {
+        var i = -1;
+        displayedRect = this.sequence.seq.split('').map(l => {
+          i++;
+          return {
+            x: this.rectX(i),
+            color: this.getAminoColor(l),
+            width: this.getLetterWidth
+          };
+        });
+      }
+      return displayedRect;
+    },
+    getClass() {
+      return {
+        consensus: (this.sequence.isConsensus === true && this.sequence.isFinal === true),
+        nodesequence: (this.sequence.isFinal === false)
+      }
+    },
   },
   methods: {
+    /** x coordinate of the rectangle at the index i */
+    rectX(i) {
+      return this.aX(i)  - this.getShift
+    },
     /**
      * Return a color for a letter.
      * @return {String} the color of the letter.
      */
     getAminoColor(char) {
-      if (this.autoColoring === 'false') {
-        return '#FFFFFF';
-      }
-
       switch (char) {
         case 'A':
           return '#DBFA60';
@@ -90,7 +133,20 @@ export default {
         default:
           return '#FFFFFF';
       }
-    },
-  },
+    }
+  }
 };
 </script>
+<style scoped>
+#sequence {
+  font-weight: normal;
+  fill: black;
+  font-family: "monospace";
+}
+.consensus{
+      font-weight: bold;
+}
+.nodesequence{
+    font-style: italic;
+}
+</style>
