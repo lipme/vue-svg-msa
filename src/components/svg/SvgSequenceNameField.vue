@@ -1,5 +1,5 @@
 <template>
-  <text :x="1" :y="y" :font-size="textFontSize" fill="black" font-family="monospace">
+  <text :x="1" :y="y" :font-size="textFontSize" fill="black" font-family="monospace" @click="$emit('click', name)" class="clickabletext">
     <title>{{ name }}</title>
     {{ displayedName }}
   </text>
@@ -22,7 +22,7 @@ export default {
         let title = '';
         const splitName = this.name.split('');
         splitName.forEach((x) => {
-          if (title.length <= this.displaySeqNameLength) title = title.concat(String(x));
+          if (title.length < this.displaySeqNameLength) title = title.concat(String(x));
         });
         title = title.concat('...');
         return title;
@@ -31,3 +31,9 @@ export default {
   },
 };
 </script>
+
+<style> 
+.clickabletext { 
+  cursor:pointer;
+  } 
+</style>
