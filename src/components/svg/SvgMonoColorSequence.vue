@@ -1,6 +1,6 @@
 <template>
-  <g>
-    <rect
+  <g id="sequence">
+    <rect v-if="fill !== ''"
       :x="rectX"
       :y="rectY"
       :width="width"
@@ -14,13 +14,11 @@
                Careful: the sequence is not exaclty align with the scalebar.
                TODO: to improve -->
       <text
-        :y="textY"
-        :x="atextX[0]"
+        :y="y"
+        :x="aX(0)"
         :font-size="textFontSize"
-        letter-spacing="11px"
-        font-family="monospace"
-        fill="black"
-        :font-weight="fontWeight"
+        :class="getClass"
+        letter-spacing="2px"
       >
         {{ sequence.seq }}
       </text>
@@ -30,10 +28,10 @@
       <text
         v-for="(letter, letterIndex) in sequence.seq.split('')"
         :key="letterIndex"
-        :y="textY"
-        :x="atextX[letterIndex]"
+        :y="y"
+        :x="aX(letterIndex)"
         :font-size="textFontSize"
-        fill="black"
+        :class="getClass"
       >
         {{ letter }}
       </text>
@@ -41,21 +39,20 @@
   </g>
 </template>
 
+        
 <script>
 export default {
   name: 'MonoColorSequence',
   props: {
-    rectX: { type: Number },
-    rectY: { type: Number },
-    textY: { type: Number },
-    atextX: { type: Array },
+    y: { type: Number },
+    aX: { type: Function },
     width: { type: Number },
     height: { type: Number },
     sequence: { type: Object },
     textFontSize: { type: Number },
     // if 'unsteady' is activated, the sequence is display in one text element
     // the display time is very short but the nt are not perfectly align with scalebar
-    unsteady: { type: Boolean, default: false }
+    unsteady: { type: Boolean, default: false },
   },
   data() {
     return {
@@ -63,21 +60,42 @@ export default {
     };
   },
   computed: {
+    /** x coordinate of the rectangle */
+    rectX() {
+      //return this.aX(i) - this.height / 2;
+      return this.aX(0)
+    },
+    rectY() {
+      return this.y - this.textFontSize + 1;
+    },
+    getClass() {
+      return {
+        consensus: (this.sequence.isConsensus === true && this.sequence.isFinal === true),
+        nodesequence: (this.sequence.isFinal === false)
+      }
+    },
     fill() {
       if (this.sequence.color) return this.sequence.color;
       else {
-        return this.defaultColor;
+        return "";
       }
     },
-    fontWeight() {
-      if (this.sequence.isConsensus)
-      {
-        return "bold"
-      }
-      else {
-        return "normal"
-      }
-    }
   }
 };
 </script>
+
+<style scoped>
+#sequence {
+  font-weight: normal;
+  fill: black;
+  font-family: "monospace";
+  /* font: "fira mono"; */
+  text-align: justify;
+}
+.consensus{
+      font-weight: bold;
+}
+.nodesequence{
+    font-style: italic;
+}
+</style>
