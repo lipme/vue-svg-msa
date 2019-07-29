@@ -1,0 +1,23 @@
+{
+    "featureTypes": [
+        {
+            "color": "green",
+            "type": "exon"
+        },
+        {
+            "color": "yellow",
+            "type": "intron"
+        }
+    ],
+    "features": [
+        {
+            "positions": "1-100,500-1500,2500-3289",
+            "type": "exon"
+        },
+        {
+            "positions": "101-499,1501-2499",
+            "type": "intron"
+        }
+    ],
+    "trackLabel": "exon/intron"
+}
