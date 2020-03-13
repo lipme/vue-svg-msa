@@ -8,9 +8,9 @@
 <script>
 export default {
   props: {
-    label: { type: String },
-    y: { type: Number },
-    maxWidth: { type: Number },
+    label: { type: String, default: '' },
+    y: { type: Number, default: 1 },
+    maxWidth: { type: Number, default: 1 },
     textFontSize: { type: Number, default: 10 },
   },
   computed: {
@@ -29,7 +29,7 @@ export default {
       } else {
         return this.label;
       }
-    }
-  }
+    },
+  },
 };
 </script>
