@@ -34,18 +34,18 @@ export default {
     y: { type: Number, default: 1 },
     fctScaleX: { type: Function, default: () => {} },
     length: { type: Number, default: 800 },
-    start: { type: Number, default: 0 },
+    start: { type: Number, default: 0 }
   },
   data() {
     return {
-      step: 10,
+      step: 10
     };
   },
   computed: {
     getGlobalWidth() {
-      var l = this.fctScaleX(this.length - 1) - this.fctScaleX(0) + 5;
+      const l = this.fctScaleX(this.length - 1) - this.fctScaleX(0) + 5;
       return l;
-    },
+    }
   },
   methods: {
     getScaleWidth(i) {
@@ -53,8 +53,8 @@ export default {
     },
     getScaleHeight(i) {
       return i === 1 || (i + this.start) % this.step === 0 ? '8px' : '7px';
-    },
-  },
+    }
+  }
 };
 </script>
 
