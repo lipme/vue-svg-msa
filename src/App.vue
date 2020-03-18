@@ -1,30 +1,42 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-     <svg-seq-alignment
-      :start="rangeSlider[0]"
-      :end="rangeSlider[1]"
+    <svg-seq-alignment
+      :start="start"
+      :end="end"
       :seqs="seqs"
       :tracks="tracks"
-      :selectedseqs="selectedSeqs"
       :coloring="coloring"
+      unsteady="true"
       v-on="$listeners"
     ></svg-seq-alignment>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-import SvgSeqAlignment from './components/alignment/svg/SvgSeqAlignment.vue'
+import SvgSeqAlignment from './components/alignment/svg/SvgSeqAlignment.vue';
 
 export default {
   name: 'App',
   components: {
-    HelloWorld,
-    SvgSeqAlignment,
+    SvgSeqAlignment
+  },
+  data() {
+    return {
+      start: 1,
+      end: 30,
+      seqs: [
+        {
+          seq: 'ATCATCATCATCATCATACTCATTTTTACATCATCATCATACTACATCATCAT',
+          id: 'seqid1',
+          name: 'seq1'
+        },
+        { seq: 'ATCATCATCATCATCATACTCATTTTTACATCATCATCATACTACATCATCAT', id: 'seqid2', name: 'seq2' }
+      ],
+      tracks: [],
+      coloring: 'auto'
+    };
   }
-}
+};
 </script>
 
 <style>
