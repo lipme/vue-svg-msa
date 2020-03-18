@@ -11,7 +11,7 @@ export default {
     label: { type: String, default: '' },
     y: { type: Number, default: 1 },
     maxWidth: { type: Number, default: 1 },
-    textFontSize: { type: Number, default: 10 },
+    textFontSize: { type: Number, default: 10 }
   },
   computed: {
     displayLabelLength() {
@@ -26,10 +26,9 @@ export default {
         });
         title = title.concat('...');
         return title;
-      } else {
-        return this.label;
       }
-    },
-  },
+      return this.label;
+    }
+  }
 };
 </script>

@@ -18,16 +18,16 @@ export default {
   props: {
     track: {
       type: Object,
-      default: function() {
+      default() {
         return {};
-      },
+      }
     },
     aX: { type: Function, default: () => {} },
     height: { type: Number, default: 8 },
     y: { type: Number, default: 1 },
     textFontSize: { type: Number, default: 10 },
     start: { type: Number, default: 0 },
-    length: { type: Number, default: 150 },
+    length: { type: Number, default: 150 }
   },
   computed: {
     rectY() {
@@ -38,17 +38,17 @@ export default {
       return Math.round(((this.aX(1) - this.aX(0)) / 2) * 10) / 10;
     },
     getRect() {
-      var displayedRect = [];
+      const displayedRect = [];
       this.track.features.forEach(f => {
         if ('positions' in f) {
           f.positions.forEach(pos => {
-            if (typeof pos !== 'undefined' && pos.length == 2) {
-              let newPos = this.transformPos(pos);
+            if (typeof pos !== 'undefined' && pos.length === 2) {
+              const newPos = this.transformPos(pos);
               if (newPos != null) {
                 displayedRect.push({
                   x: this.rectX(newPos[0] - 1),
                   color: f.color,
-                  width: this.rectX(newPos[1]) - this.rectX(newPos[0] - 1),
+                  width: this.rectX(newPos[1]) - this.rectX(newPos[0] - 1)
                 });
               }
             }
@@ -56,7 +56,7 @@ export default {
         }
       });
       return displayedRect;
-    },
+    }
   },
   methods: {
     /** x coordinate of the rectangle at the index i */
@@ -70,8 +70,8 @@ export default {
       let posStart = pos[0];
       let posEnd = pos[1];
 
-      let offSetStart = this.start;
-      let offSetEnd = offSetStart + this.length;
+      const offSetStart = this.start;
+      const offSetEnd = offSetStart + this.length;
 
       if (
         (posStart < offSetStart && posEnd < offSetStart) ||
@@ -83,17 +83,17 @@ export default {
       if (posStart < offSetStart) {
         posStart = 0;
       } else {
-        posStart = posStart - offSetStart;
+        posStart -= offSetStart;
       }
 
       if (posEnd > offSetEnd) {
         posEnd = this.length;
       } else {
-        posEnd = posEnd - offSetStart;
+        posEnd -= offSetStart;
       }
 
       return [posStart, posEnd];
-    },
-  },
+    }
+  }
 };
 </script>

@@ -21,11 +21,11 @@ export default {
     name: { type: String, default: '' },
     offsetX: { type: Number, default: 0 },
     isClickable: { type: Boolean, default: false },
-    textColor: { type: String, default: 'black' },
+    textColor: { type: String, default: 'black' }
   },
   computed: {
     getClass() {
-      var textClass = '';
+      let textClass = '';
       if (this.isClickable) textClass = 'clickable';
       return textClass;
     },
@@ -43,8 +43,8 @@ export default {
         return title;
       }
       return this.name;
-    },
-  },
+    }
+  }
 };
 </script>
 
