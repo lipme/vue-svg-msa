@@ -35,8 +35,8 @@ export default {
       type: Array,
       default() {
         return [];
-      },
-    },
+      }
+    }
   },
   data() {
     return { dialog: true, currentseqs: this.seqs };
@@ -53,19 +53,19 @@ export default {
         return this.currentseqs.map(s => this.getFastaFormattedSeq(s)).join('\n');
       }
       return '';
-    },
+    }
   },
   methods: {
     getFastaFormattedSeq(s) {
-      var formattedseq = s.seq.replace(/\.|-/g, '').replace(/(.{60})(?=.)/g, '$1\n');
+      const formattedseq = s.seq.replace(/\.|-/g, '').replace(/(.{60})(?=.)/g, '$1\n');
 
-      return '>' + s.name + '\n' + formattedseq;
+      return `>${s.name}\n${formattedseq}`;
     },
     close() {
       this.$emit('close');
       this.dialog = false;
-    },
-  },
+    }
+  }
 };
 </script>
 

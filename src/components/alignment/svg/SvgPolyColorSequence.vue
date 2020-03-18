@@ -44,7 +44,7 @@ export default {
       type: Object,
       default() {
         return [];
-      },
+      }
     },
     aX: { type: Function, default: () => {} },
     y: { type: Number, default: 1 },
@@ -53,13 +53,11 @@ export default {
     coloring: { type: String, default: 'no' },
     seqName: { type: String, default: 'seqname' },
     isSelected: { type: Boolean, defaut: false },
-    start: { type: Number, default: 0 },
+    start: { type: Number, default: 0 }
   },
   computed: {
     sequenceArray() {
-      return this.sequence.seq.split('').map((s, i) => {
-        return { id: i, letter: s };
-      });
+      return this.sequence.seq.split('').map((s, i) => ({ id: i, letter: s }));
     },
     selectClass() {
       if (this.isSelected) {
@@ -83,39 +81,39 @@ export default {
     // Get the rectangles to display according to the metadata values
     // Return an array of objects
     getColoredRect() {
-      var displayedRect = [];
+      let displayedRect = [];
 
       if (this.coloring === 'metadata' && this.sequence.metadata) {
         this.sequence.metadata.forEach(m => {
           m.positions.forEach(pos => {
-            let newPos = this.transformPos(pos);
+            const newPos = this.transformPos(pos);
 
             if (newPos != null) {
               displayedRect.push({
                 x: this.rectX(newPos[0] - this.start - 1),
                 color: m.color,
-                width: (newPos[1] - newPos[0] + 1) * this.getLetterWidth,
+                width: (newPos[1] - newPos[0] + 1) * this.getLetterWidth
               });
             }
           });
         });
       } else if (this.coloring === 'auto') {
-        var i = -1;
+        let i = -1;
         displayedRect = this.sequence.seq.split('').map(l => {
-          i++;
+          i += 1;
           return {
             x: this.rectX(i),
             color: this.getNtColor(l),
-            width: this.getLetterWidth,
+            width: this.getLetterWidth
           };
         });
       } else if (this.coloring === 'seqcolor') {
         /* the color is the attribute sequence.color */
-        if (this.sequence.color != '') {
+        if (this.sequence.color !== '') {
           displayedRect.push({
             x: this.rectX(0),
             color: this.sequence.color,
-            width: this.getWidth,
+            width: this.getWidth
           });
         }
       }
@@ -124,9 +122,9 @@ export default {
     getClass() {
       return {
         consensus: this.sequence.isConsensus === true && this.sequence.isNode === false,
-        nodesequence: this.sequence.isNode === true,
+        nodesequence: this.sequence.isNode === true
       };
-    },
+    }
   },
   methods: {
     /** x coordinate of the rectangle at the index i */
@@ -162,8 +160,8 @@ export default {
       let posStart = pos[0];
       let posEnd = pos[1];
 
-      let offSetStart = this.start;
-      let offSetEnd = offSetStart + this.sequence.seq.length;
+      const offSetStart = this.start;
+      const offSetEnd = offSetStart + this.sequence.seq.length;
 
       if (
         (posStart < offSetStart && posEnd < offSetStart) ||
@@ -181,8 +179,8 @@ export default {
       }
 
       return [posStart, posEnd];
-    },
-  },
+    }
+  }
 };
 </script>
 <style scoped>
