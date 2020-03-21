@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <svg-seq-alignment
+    <svg-msa :seqs="seqs2"></svg-msa>
+    <svg-msa
       :start="start"
       :end="end"
       :seqs="seqs"
@@ -8,29 +9,41 @@
       :coloring="coloring"
       unsteady="true"
       v-on="$listeners"
-    ></svg-seq-alignment>
+    ></svg-msa>
   </div>
 </template>
 
 <script>
-import SvgSeqAlignment from './components/alignment/svg/SvgSeqAlignment.vue';
+import SvgMsa from './components/SvgMsa/SvgMsa.vue';
 
 export default {
   name: 'App',
   components: {
-    SvgSeqAlignment
+    SvgMsa
   },
   data() {
     return {
-      start: 1,
-      end: 30,
+      start: 10,
+      end: 20,
       seqs: [
         {
-          seq: 'ATCATCATCATCATCATACTCATTTTTACATCATCATCATACTACATCATCAT',
+          seq: 'ATCATCATCATCATCATACTCATTTTTACATCATCATCATACTACATCATCATATACTCATTTTTACATCATC-AT',
           id: 'seqid1',
           name: 'seq1'
         },
-        { seq: 'ATCATCATCATCATCATACTCATTTTTACATCATCATCATACTACATCATCAT', id: 'seqid2', name: 'seq2' }
+        {
+          seq: 'ATCATCATCATCATCATACTCATTTTTACATCATCATCATACTACATCATCATATACTCATTTTTACATCATCATC',
+          id: 'seqid2',
+          name: 'seq2'
+        }
+      ],
+      seqs2: [
+        {
+          seq: 'ATCATCATCATCATCATACTCATTTTTACATCATCATCATACTACATCATCATATACTCATTTTTACATCATC-AT'
+        },
+        {
+          seq: 'ATCATCATCATCATCATACTCATTTTTACATCATCATCATACTACATCATCATATACTCATTTTTACATCATCATC'
+        }
       ],
       tracks: [],
       coloring: 'auto'
