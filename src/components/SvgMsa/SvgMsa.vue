@@ -10,14 +10,14 @@
         :track="track"
         :text-font-size="seqTextFontSize"
         :start="start"
-      ></svg-track>
+      />
 
       <svg-scale-bar
         :length="maxLengthExtractSeqs"
         :y="trackY[metadataTrackNumber]"
         :fct-scale-x="coordX"
         :start="start"
-      ></svg-scale-bar>
+      />
       <template v-for="(s, seqIndex) in extractSeqs">
         <!-- Name of the sequence -->
         <svg-sequence-name-field
@@ -28,7 +28,7 @@
           :offset-x="offsetX"
           :is-clickable="s.isNode"
           @click="selectNode(s)"
-        ></svg-sequence-name-field>
+        />
         <svg-poly-color-sequence
           :key="'rect' + seqIndex"
           :sequence="s"
@@ -41,7 +41,7 @@
           :is-selected="isSelected(s.id)"
           :start="start"
           @click="showSeqDialog(seqIndex)"
-        ></svg-poly-color-sequence>
+        />
       </template>
     </svg>
 
@@ -55,14 +55,18 @@
 
 <script>
 import * as d3 from 'd3-scale';
-import SvgScaleBar from '@/components/alignment/svg/SvgScaleBar.vue';
-import SvgTrack from '@/components/alignment/svg/SvgTrack.vue';
-import SvgPolyColorSequence from '@/components/alignment/svg/SvgPolyColorSequence.vue';
-import SvgSequenceNameField from '@/components/alignment/svg/SvgSequenceNameField.vue';
-import SeqDialog from '@/components/generic/SeqDialog.vue';
+import SvgScaleBar from '@/components/SvgMsa/SvgScaleBar.vue';
+import SvgTrack from '@/components/SvgMsa/SvgTrack.vue';
+import SvgPolyColorSequence from '@/components/SvgMsa/SvgPolyColorSequence.vue';
+import SvgSequenceNameField from '@/components/SvgMsa/SvgSequenceNameField.vue';
+import SeqDialog from '@/components/SvgMsa/SeqDialog.vue';
 
 export default {
-  name: 'AlignmentGraphic',
+  /*
+  When the use click to the name of a sequence, emit the event 'select-node'
+  whose value is equals to id */
+
+  name: 'SvgMsa',
   components: {
     SvgTrack,
     SvgScaleBar,
@@ -71,43 +75,58 @@ export default {
     SeqDialog
   },
   props: {
-    start: {
-      type: Number,
-      default: 1
-    },
-    end: {
-      type: Number,
-      default: 10000000
-    },
+    /**
+     * Array of object sequence. Allowed attributes:
+     * mandatory: seq
+     * optional: id, name, isConsensus, isNode
+     */
     seqs: {
       type: Array,
       default() {
         return [];
       }
     },
+    /**
+     * Use to display only subsequences, from start (0-based) to end.
+     * If end === -1, display until the end of the sequence.
+     */
+    start: {
+      type: Number,
+      default: 0
+    },
+    end: {
+      type: Number,
+      default: -1
+    },
+    /**
+     * Array of object track
+     */
     tracks: {
       type: Array,
       default() {
         return [];
       }
     },
+    /**
+     * Array of id, of the sequences to display as selected
+     */
     selectedseqs: {
       type: Array,
       default() {
         return [];
       }
     },
-    coloring: { type: String, default: 'no' },
-    // if 'unsteady' is activated, the sequence is display in one text element
-    // the display time is very short but the nt are not perfectly align with scalebar
-    unsteady: { type: Boolean, default: false }
+    /**
+     * String to change the coloration
+     * Allowed values:  'no', 'metadata', 'seqcolor', 'auto'
+     */
+    coloring: { type: String, default: 'no' }
   },
   data() {
     return {
       letterWidth: 10,
       trackHeight: 15,
       offsetX: 200,
-      //labelTextFontSize: 12,
       displaySeqDialog: false,
       displayDialogSequences: null,
       isLoading: false
@@ -120,7 +139,6 @@ export default {
     maxLengthExtractSeqs() {
       return Math.max(...this.extractSeqs.map(s => s.seq.length));
     },
-
     metadataTrackNumber() {
       return this.tracks.length;
     },
@@ -136,14 +154,16 @@ export default {
      */
     seqLengthMax() {
       let maxlen = 0;
-      this.seqs.forEach(seq => {
-        if (maxlen < seq.seq.length) {
-          maxlen = seq.seq.length;
+      this.seqs.forEach(s => {
+        if (maxlen < s.seq.length) {
+          maxlen = s.seq.length;
         }
       });
       return maxlen;
     },
-
+    /**
+     *@return alignment width
+     */
     aligmentWidth() {
       return this.letterWidth * this.maxLengthExtractSeqs;
     },
@@ -162,7 +182,7 @@ export default {
      * @return {number} the height of the SVG of the alignment.
      */
     heightSvg() {
-      return (this.displayedSeqs.length + 1) * this.trackHeight + this.metadataTrackGlobalHeight;
+      return (this.seqs.length + 1) * this.trackHeight + this.metadataTrackGlobalHeight;
     },
 
     /**
@@ -199,17 +219,16 @@ export default {
         metadataTrackY.push(this.trackHeight * (i + 1));
       }
       return metadataTrackY;
-    },
-
-    /* return an array of the sequences to display */
-    displayedSeqs() {
-      return this.seqs;
     }
   },
   mounted() {
     this.isLoading = true;
   },
   methods: {
+    /**
+     * Extract the sequence to display: subseq from start to end
+     * @return {Object}
+     */
     extractSeq(s) {
       const extractSeq = Object.assign({}, s);
       const lengthSeq = s.seq.length;
@@ -224,6 +243,11 @@ export default {
       extractSeq.seq = s.seq.substr(start, length);
       return extractSeq;
     },
+    /**
+     * Emit the event 'select-node' with the value= id of the sequence
+     * Action only available if the obehect ahs the attribute isConsensus or
+     * isNode === true
+     */
     selectNode(s) {
       if (s.isConsensus && s.isNode) {
         this.$emit('select-node', [s.id]);

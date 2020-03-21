@@ -37,6 +37,9 @@ export default {
     getShift() {
       return Math.round(((this.aX(1) - this.aX(0)) / 2) * 10) / 10;
     },
+    /**
+     * Build an array of objects with attributes x,color, width
+     */
     getRect() {
       const displayedRect = [];
       this.track.features.forEach(f => {

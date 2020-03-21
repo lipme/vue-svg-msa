@@ -18,8 +18,8 @@
 </template>
 
 <script>
-import SvgTrackLabel from '@/components/alignment/svg/SvgTrackLabel.vue';
-import SvgTrackContent from '@/components/alignment/svg/SvgTrackContent.vue';
+import SvgTrackLabel from '@/components/SvgMsa/SvgTrackLabel.vue';
+import SvgTrackContent from '@/components/SvgMsa/SvgTrackContent.vue';
 
 export default {
   components: {

@@ -5,6 +5,7 @@
 
     <!-- vertical line for each nt -->
     <template v-for="x in length">
+      {{ x }}
       <rect
         :key="'rect1-' + x"
         :y="y"
@@ -13,7 +14,7 @@
         :height="getScaleHeight(x)"
       ></rect>
 
-      <!-- number each 5nt -->
+      <!-- number each step nt -->
       <text
         v-if="(x + start) % step === 0"
         :key="'rect2-' + x"
