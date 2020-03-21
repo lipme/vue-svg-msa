@@ -1,29 +1,42 @@
-# multiple-alignment-ui
+# svg-msa
 
-## Project setup
-```
-npm install
-```
+VueJs component to build a svg multiple sequence alignment.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## Install
 
-### Compiles and minifies for production
-```
-npm run build
-```
+npm install --save svg-msa
 
-### Run your tests
-```
-npm run test
-```
+## Usage
 
-### Lints and fixes files
 ```
-npm run lint
+import {svg-msa} from svg-msa;
+...
+<svg-msa
+      :seqs="seqs"
+      :start="start"
+      :end="end"
+      :tracks="tracks"
+      :coloring="coloring"
+    ></svg-msa>
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+seqs is an array as:
+
+```
+seqs: [
+{
+seq: 'ATCATCATCATCATCATACTCATTTTTACAT---CATCATACTACATCATCATATACTCATTTTTACATCATC-TC',
+id: 'seqid1',
+name: 'sequence1'
+},
+{
+seq: 'ATCATCATCATCATCATACTCATTTTTACATCATCATCATA--ACATCATCATATACTCATTTTTACATCATCATC',
+id: 'seqid2',
+name: 'sequence2'
+}
+],
+```
+
+## Contributing
+
+## License
