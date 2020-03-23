@@ -1,15 +1,15 @@
-# svg-msa
+# vue-svg-msa
 
 VueJs component to build a svg multiple sequence alignment.
 
 ## Install
 
-npm install --save svg-msa
+npm install --save vue-svg-msa
 
 ## Usage
 
 ```
-import {svg-msa} from svg-msa;
+import {svg-msa} from vue-svg-msa;
 ...
 <svg-msa
       :seqs="seqs"
