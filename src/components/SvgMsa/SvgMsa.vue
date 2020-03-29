@@ -44,12 +44,11 @@
         />
       </template>
     </svg>
-
-    <seq-dialog
+    <sequence-modal
       v-if="displaySeqDialog"
       :seqs="displayDialogSequences"
       @close="displaySeqDialog = false"
-    ></seq-dialog>
+    ></sequence-modal>
   </div>
 </template>
 
@@ -59,7 +58,7 @@ import SvgScaleBar from '@/components/SvgMsa/SvgScaleBar.vue';
 import SvgTrack from '@/components/SvgMsa/SvgTrack.vue';
 import SvgPolyColorSequence from '@/components/SvgMsa/SvgPolyColorSequence.vue';
 import SvgSequenceNameField from '@/components/SvgMsa/SvgSequenceNameField.vue';
-import SeqDialog from '@/components/SvgMsa/SeqDialog.vue';
+import SequenceModal from '@/components/SvgMsa/SequenceModal.vue';
 
 export default {
   /*
@@ -72,7 +71,7 @@ export default {
     SvgScaleBar,
     SvgPolyColorSequence,
     SvgSequenceNameField,
-    SeqDialog
+    SequenceModal
   },
   props: {
     /**
@@ -128,7 +127,7 @@ export default {
       trackHeight: 15,
       offsetX: 200,
       displaySeqDialog: false,
-      displayDialogSequences: null,
+      displayDialogSequences: [],
       isLoading: false
     };
   },
