@@ -272,7 +272,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 #seq-alignment {
   margin: 3px;
   padding: 10px;
