@@ -9,15 +9,15 @@ npm install --save vue-svg-msa
 ## Usage
 
 ```
-import {svg-msa} from vue-svg-msa;
+import {SvgMsa} from 'vue-svg-msa';
 ...
-<svg-msa
+<SvgMsa
       :seqs="seqs"
       :start="start"
       :end="end"
       :tracks="tracks"
       :coloring="coloring"
-    ></svg-msa>
+    ></SvgMsa>
 ```
 
 seqs is an array as:
