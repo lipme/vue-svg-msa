@@ -12,7 +12,7 @@
           <div class="modal-body">
             <slot name="body">
               <template v-for="seq in seqs">
-                <p :key="seq.name" class="displayseq">{{ getFastaFormattedSeq(seq) }}</p>
+                <pre :key="seq.name" class="displayseq">{{ getFastaFormattedSeq(seq) }}</pre>
               </template>
             </slot>
           </div>
@@ -93,7 +93,7 @@ export default {
 }
 
 .modal-container {
-  width: 650px;
+  width: 500px;
   margin: 2px auto;
   padding: 30px 30px;
   background-color: #fff;
@@ -109,7 +109,6 @@ export default {
 }
 
 .modal-body {
-  margin: 20px 0;
   font-family: 'Courier';
 }
 
@@ -119,7 +118,7 @@ export default {
   margin: auto 5px;
   border: none;
   border-radius: 2px;
-  background-color: green;
+  background-color: rgb(196, 194, 194);
 }
 .modal-header h3 {
   margin-top: 0;
@@ -129,10 +128,10 @@ export default {
   padding: 10px 10px;
 }
 .displayseq {
-  width: 600px;
+  /* width: 500px; */
   max-height: 400px;
   overflow: auto;
-  user-select: text;
+  /* user-select: text; */
   font-family: monospace;
 }
 
