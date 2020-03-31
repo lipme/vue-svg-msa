@@ -70,5 +70,5 @@
     "prettier": "^1.18.1",
     "vue-template-compiler": "^2.6.11"
   },
-  "sideEffects": false
+  "sideEffects": true
 }
