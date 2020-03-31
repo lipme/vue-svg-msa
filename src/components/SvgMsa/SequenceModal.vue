@@ -19,9 +19,7 @@
 
           <div class="modal-footer">
             <slot name="footer">
-              <button v-clipboard:copy="getFastaFormattedSeqs" class="modal-default-button">
-                Copy
-              </button>
+              <button v-clipboard:copy="getFastaFormattedSeqs" class="modal-default-button">Copy</button>
               <button class="modal-default-button" @click="$emit('close')">Close</button>
             </slot>
           </div>
@@ -74,7 +72,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .modal-mask {
   position: fixed;
   z-index: 9998;
@@ -82,6 +80,7 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
+  /* color of the background when dialog is visible */
   background-color: rgba(0, 0, 0, 0.5);
   display: table;
   transition: opacity 0.3s ease;
@@ -99,17 +98,12 @@ export default {
   background-color: #fff;
   border-radius: 2px;
   transition: all 0.3s ease;
-  font-family: 'Courier';
   text-align: left;
 }
 .modal-header h3 {
   margin-top: 0;
   color: #42b983;
   text-align: center;
-}
-
-.modal-body {
-  font-family: 'Courier';
 }
 
 .modal-default-button {
@@ -120,18 +114,13 @@ export default {
   border-radius: 2px;
   background-color: rgb(196, 194, 194);
 }
-.modal-header h3 {
-  margin-top: 0;
-  color: #42b983;
-}
+
 .modal-footer {
   padding: 10px 10px;
 }
 .displayseq {
-  /* width: 500px; */
   max-height: 400px;
   overflow: auto;
-  /* user-select: text; */
   font-family: monospace;
 }
 
