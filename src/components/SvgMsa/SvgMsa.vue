@@ -1,5 +1,5 @@
 <template>
-  <div id="seq-alignment">
+  <div class="seq-alignment">
     <svg :width="widthSvg" :height="heightSvg">
       <svg-track
         v-for="(track, index) in tracks"
@@ -273,7 +273,7 @@ export default {
 </script>
 
 <style scoped>
-#seq-alignment {
+.seq-alignment {
   text-align: center;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   margin: 3px;

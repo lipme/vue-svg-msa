@@ -184,19 +184,11 @@ export default {
 };
 </script>
 <style scoped>
-#sequence {
-  font-weight: normal;
-  fill: black;
-  font-family: 'monospace';
-}
 .consensus {
   font-weight: bold;
 }
 .nodesequence {
   font-weight: bold;
-}
-.scroller {
-  height: 100%;
 }
 .selected {
   fill-opacity: 0;

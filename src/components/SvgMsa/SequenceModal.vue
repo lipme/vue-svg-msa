@@ -19,7 +19,9 @@
 
           <div class="modal-footer">
             <slot name="footer">
-              <button v-clipboard:copy="getFastaFormattedSeqs" class="modal-default-button">Copy</button>
+              <button v-clipboard:copy="getFastaFormattedSeqs" class="modal-default-button">
+                Copy
+              </button>
               <button class="modal-default-button" @click="$emit('close')">Close</button>
             </slot>
           </div>
@@ -31,6 +33,7 @@
 
 <script>
 export default {
+  name: 'SequenceModal',
   props: {
     seqs: {
       type: Array,

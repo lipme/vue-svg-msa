@@ -64,11 +64,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.numberText {
-  fill: black;
-  text-anchor: middle;
-  font-family: 'monospace';
-}
-</style>

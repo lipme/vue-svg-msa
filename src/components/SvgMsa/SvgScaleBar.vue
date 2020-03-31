@@ -21,7 +21,6 @@
         :x="fctScaleX(x - 1)"
         :y="y - 2"
         font-size="10"
-        class="numberText"
       >
         {{ x + start }}
       </text>
@@ -58,11 +57,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.numberText {
-  fill: black;
-  text-anchor: middle;
-  font-family: 'monospace';
-}
-</style>
