@@ -274,6 +274,8 @@ export default {
 
 <style scoped>
 #seq-alignment {
+  text-align: center;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
   margin: 3px;
   padding: 10px;
   border: thin solid rgb(221, 221, 221);
