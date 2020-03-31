@@ -36,6 +36,7 @@
     "email": "erika.sallet@inrae.fr"
   },
   "main": "./dist/vue-svg-msa.common.js",
+  "unpkg": ".dist/vue-svg-msa.min.js",
   "files": [
     "dist/*"
   ],
