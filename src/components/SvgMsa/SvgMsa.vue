@@ -9,14 +9,14 @@
         :fct-scale-x="coordX"
         :track="track"
         :text-font-size="seqTextFontSize"
-        :start="start"
+        :start="zerobasedStart"
       />
 
       <svg-scale-bar
         :length="maxLengthExtractSeqs"
         :y="trackY[metadataTrackNumber]"
         :fct-scale-x="coordX"
-        :start="start"
+        :start="zerobasedStart"
       />
       <template v-for="(s, seqIndex) in extractSeqs">
         <!-- Name of the sequence -->
@@ -39,7 +39,7 @@
           :coloring="coloring"
           :seqName="s.name"
           :is-selected="isSelected(s.id)"
-          :start="start"
+          :start="zerobasedStart"
           @click="showSeqDialog(seqIndex)"
         />
       </template>
@@ -86,12 +86,12 @@ export default {
       }
     },
     /**
-     * Use to display only subsequences, from start (0-based) to end.
+     * Use to display only subsequences, from start (1-based) to end.
      * If end === -1, display until the end of the sequence.
      */
     start: {
       type: Number,
-      default: 0
+      default: 1
     },
     end: {
       type: Number,
@@ -132,6 +132,9 @@ export default {
     };
   },
   computed: {
+    zerobasedStart() {
+      return this.start - 1;
+    },
     extractSeqs() {
       return this.seqs.map(s => this.extractSeq(s));
     },
@@ -231,13 +234,14 @@ export default {
     extractSeq(s) {
       const extractSeq = Object.assign({}, s);
       const lengthSeq = s.seq.length;
-      let start = this.start >= 0 ? this.start : 0;
+      let start = this.zerobasedStart >= 0 ? this.zerobasedStart : 0;
       // just to deal with the last position
       if (start > lengthSeq) {
         start = lengthSeq - 1;
       }
+      // end in 1-based
       const end = this.end >= 0 && this.end < lengthSeq ? this.end : lengthSeq - 1;
-      const length = end - start + 1;
+      const length = end - start;
 
       extractSeq.seq = s.seq.substr(start, length);
       return extractSeq;
