@@ -16,14 +16,12 @@
 
       <!-- number each step nt -->
       <text
-        v-if="(x + start) % step === 0"
+        v-if="(x + start) % step === 0 "
         :key="'rect2-' + x"
         :x="fctScaleX(x - 1)"
         :y="y - 2"
         font-size="10"
-      >
-        {{ x + start }}
-      </text>
+      >{{ x + start }}</text>
     </template>
   </g>
 </template>
