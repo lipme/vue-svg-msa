@@ -15,8 +15,8 @@ export default {
   },
   data() {
     return {
-      start: 18,
-      end: 40,
+      start: 10,
+      end: -1,
       seqs: [
         {
           seq:
