@@ -1,14 +1,7 @@
 <template>
   <div id="app">
-    <svg-msa :seqs="seqs2"></svg-msa>
-    <svg-msa
-      :start="start"
-      :end="end"
-      :seqs="seqs"
-      :tracks="tracks"
-      :coloring="coloring"
-      unsteady="true"
-    ></svg-msa>
+    <svg-msa :seqs="seqs2" coloring="metadata"></svg-msa>
+    <svg-msa :start="start" :end="end" :seqs="seqs" :tracks="testTracks" coloring="auto"></svg-msa>
   </div>
 </template>
 
@@ -22,8 +15,8 @@ export default {
   },
   data() {
     return {
-      start: 10,
-      end: 20,
+      start: 18,
+      end: 40,
       seqs: [
         {
           seq:
@@ -76,14 +69,60 @@ export default {
       ],
       seqs2: [
         {
-          seq: 'ATCATCATCATCATCATACTCATTTTTACATCATCATCATACTACATCATCATATACTCATTTTTACATCATC-AT'
+          seq: 'ATCATCATCATCATCATACTCATTTTTACATCATCATCATACTACATCATCATATACTCATTTTTACATCATC-AT',
+          metadata: [
+            {
+              color: 'orange',
+              positions: [
+                [1, 5],
+                [20, 30]
+              ]
+            },
+            {
+              color: 'yellow',
+              positions: [[6, 19]]
+            }
+          ]
         },
         {
-          seq: 'ATCATCATCATCATCATACTCATTTTTACATCATCATCATACTACATCATCATATACTCATTTTTACATCATCATC'
+          seq: 'ATCATCATCATCATCATACTCATTTTTACATCATCATCATACTACATCATCATATACTCATTTTTACATCATCATC',
+          metadata: [
+            {
+              color: 'orange',
+              positions: [
+                [1, 5],
+                [25, 30]
+              ]
+            },
+            {
+              color: 'yellow',
+              positions: [[6, 19]]
+            }
+          ]
         }
       ],
       tracks: [],
-      coloring: 'auto'
+      testTracks: [
+        {
+          features: [
+            {
+              positions: [
+                [1, 20],
+                [109, 130]
+              ],
+              type: 'label1',
+              color: 'green'
+            },
+            {
+              positions: [[21, 108]],
+              type: 'label2',
+              color: 'pink'
+            }
+          ],
+          trackLabel: 'label1/label2'
+        }
+      ],
+      coloring: 'metadata' //'auto'
     };
   }
 };
