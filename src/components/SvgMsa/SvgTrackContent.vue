@@ -84,7 +84,7 @@ export default {
       }
 
       if (posStart < offSetStart) {
-        posStart = 0;
+        posStart = 1;
       } else {
         posStart -= offSetStart;
       }
