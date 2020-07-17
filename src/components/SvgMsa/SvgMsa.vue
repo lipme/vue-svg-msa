@@ -37,6 +37,7 @@
           :height="trackHeight"
           :text-font-size="seqTextFontSize"
           :coloring="coloring"
+          :metadatas="metadatas"
           :seqName="s.name"
           :is-selected="isSelected(s.id)"
           :start="zerobasedStart"
@@ -101,6 +102,15 @@ export default {
      * Array of object track
      */
     tracks: {
+      type: Array,
+      default() {
+        return [];
+      }
+    },
+    /**
+     * metadatas: array of metadata definitions
+     */
+    metadatas: {
       type: Array,
       default() {
         return [];
@@ -240,7 +250,7 @@ export default {
         start = lengthSeq - 1;
       }
       // end in 1-based
-      const end = this.end >= 0 && this.end < lengthSeq ? this.end : lengthSeq - 1;
+      const end = this.end >= 1 && this.end < lengthSeq ? this.end : lengthSeq;
       const length = end - start;
 
       extractSeq.seq = s.seq.substr(start, length);
@@ -248,8 +258,7 @@ export default {
     },
     /**
      * Emit the event 'select-node' with the value= id of the sequence
-     * Action only available if the obehect ahs the attribute isConsensus or
-     * isNode === true
+     * Action only available if the sequence has the attribute isClickable
      */
     selectNode(s) {
       if (s.isConsensus && s.isNode) {
