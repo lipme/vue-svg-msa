@@ -1,7 +1,15 @@
 <template>
   <div id="app">
-    <svg-msa :seqs="seqs2" coloring="metadata"></svg-msa>
-    <svg-msa :start="start" :end="end" :seqs="seqs" :tracks="testTracks" coloring="auto"></svg-msa>
+    <svg-msa :seqs="seqs2" coloring="auto"></svg-msa>
+    <svg-msa
+      :start="start"
+      :end="end"
+      :seqs="testSeqs"
+      :tracks="testTracks"
+      coloring="seqcolor"
+      :selectedseqs="selectedseqid"
+      :metadatas="metadatas"
+    ></svg-msa>
   </div>
 </template>
 
@@ -15,8 +23,139 @@ export default {
   },
   data() {
     return {
-      start: 10,
+      start: 58,
       end: -1,
+      selectedseqid: ['seqid1', 'seqid2', 'seqid5'],
+      metadatas: [
+        {
+          label: 'conservation level',
+          values: [
+            {
+              label: 'high level',
+              fill: 'blue',
+              fillopacity: 0.3
+            },
+            {
+              label: 'moderate level',
+              fill: 'pink',
+              fillopacity: 0.8
+            }
+          ]
+        },
+        {
+          label: 'drought resistance',
+          values: [
+            { label: 'high', stroke: 'green', strokedash: true },
+            { label: 'weak', stroke: 'blue', strokedash: false }
+          ]
+        }
+      ],
+
+      seqs2: [
+        {
+          seq: 'ATCATCATCATCATCATACTCATTTTTACATCATCATCATACTACATCATCATATACTCATTTTTACATCATC-AT',
+          seqid: 's1',
+          isNode: true,
+          isConsensus: true
+        },
+        {
+          seq: 'ATCATCATCATCATCATACTCATTTTTACATCATCATCATACTACATCATCATATACTCATTTTTACATCATCATC',
+          seqid: 's2',
+          isNode: false,
+          isConsensus: false
+        }
+      ],
+
+      testSeqs: [
+        {
+          seq:
+            'ATCATCATCATCATCATACTCATTTTTACATCATCATCATACTACATGACGACGACAGCAGCCCTTACGACGATTTACGCGAGAACACTATCATCACAGACGAATTAGAGAGGGGGACAGAGGGACAGCAGCAGCCCAGACAGACGACCCGATTTATACTCATACTCACAGCATACGATGACACAGACGACGACAGCAGACGACGCATCATATACTCATTTTTACATCATCAAT',
+          id: 'seq1',
+          name: 'seq1',
+          color: 'red',
+          metadatas: [
+            {
+              id: 0,
+              value_id: 0,
+              ranges: [
+                [1, 40],
+                [100, 234]
+              ]
+            },
+            { id: 0, value_id: 1, ranges: [[41, 99]] },
+            { id: 1, value_id: 0 }
+          ]
+        },
+        {
+          seq:
+            'ATCATCATCATCATCATACTCATTTTTACATCATCATCATACTACATGACGACGACAGCAGCCCTTACGACGATTTACGCGAGAACACTATCATCACAGACGAATTAGAGAGGGGGACAGAGGGACAGCAGCAGCCCAGACAGACGACCCGATTTATACTCATACTCACAGCATAC----ACACAGACGACGACAGCAGTCGACGTTTCATATACTCA---TTACATCATCAAT',
+          id: 'seq2',
+          name: 'seq2',
+          color: 'red'
+        },
+        {
+          seq:
+            'ATCATCATCATCATCATACTCATTTTTACATCATCATCATACTACATGACGACGACAGCAGCCC-GACG--GATTTACGCGAGAACACTATCATCACAGACGAATTAGAGAGGGGGACAGAGGGACAGCAGCAGCCCAGACAGACGACCCGATTTATACTCATACTCACAGCATACGATGACACAGACGACGACAGCAGACGACGCATCATATACTCATTTTTACATCATCAAT',
+          id: 'seq3',
+          name: 'seq3',
+          color: 'red'
+        },
+        {
+          seq:
+            'ATCATCATCATCATGGTACTCA---TTACATCATCATCATACTACATGACGACGACAGCAGCCCTTACGACGATTTACGCGAGAACACTATCATCACAGACGAATT------------AGAGGGACAGCAGCAGCCCAGACAGACGACCCGATTTATACTCATACTCACAGCATACGATGACACAGACGACGACAGCAGACGACGCATCATATACTCATTTTTACATCATCAAT',
+          id: 'seq4',
+          name: 'seq4',
+          color: 'blue'
+        },
+        {
+          seq:
+            'ATCATCATCATCATGGTACTCATTTTTACATCATCATCATACTACATGACGACGACAGCAGCCCTTACGACGATTTACGCGAGAACACTATCATCACAGACGAATT------------AGAGGGACAGCAGCAGCCCAGACAGACGACCCGATTTATACTCATACTCACAGCATACGATGACACAGACGACGACAGCAGACGACGCATCATATACTCATTTTTACATCATCAAT',
+          id: 'seq5',
+          name: 'seq5',
+          color: 'blue'
+        },
+        {
+          seq:
+            '--------------------CATTTTTACATCATCATCATACTACATGACGACGACAGCAGCCCTTACGACGATTTACGCGAGAACACTATCATCACAGACGAATTAGAGAGGGGGACAGAGGGACAGCAGCAGCCCAGACAGACGACCCGATTTATACTCATACTCACAGCATACGATGACACAGACGACGACAGCAGACGACGCATCATATACTCATTTTTACATCATCAAT',
+          id: 'seq6',
+          name: 'seq6',
+          color: 'green'
+        },
+        {
+          seq:
+            '--------------------CATTTTTACATCATCATCATACTACATGACGACGACAGCAGCCCTTACGACGATTTACGCGAGAACACTATCATCACAGACGAATTAGAGAGGGGGACAGAGGGACAGCAGCAGCCCAGACAGACGACCCGATTTATACTCATACTCACAGCATACGATGACACAGACGACGACAGCAGACGACGCATCATATACTCATTTTTACATCATCAAT',
+          id: 'seq7',
+          name: 'seq7',
+          color: 'green'
+        },
+        {
+          seq:
+            '--------------------CATTTTTACATCATCATCATACTACATGACGACGACAGCAGCCCTTACGACGATTTACGCGAGAACACTATCATCACAGACGAA----------GGACAGAGGGACAGCAGCAGCCCAGACAGACGACCCGATTTATACTCATACCCACAGCATACGATGACACAGACGACGACAGCAGACGACGCATCATATACTCATTTTTACATCAGGAAT',
+          name: 'seq8',
+          color: 'green'
+        },
+        {
+          seq:
+            '--------------------CATTTTTACATCATCATCATACTACATGACGACGACAGCAGCCCTTACGACGATTTACGCGAGAACACTATCATCACAGACGAATTAGA-----GGACAGAGGGACAGCAGCAGCCCAGACAGACGACCCGATTTATACTCATACTCACAGCATACGATGACACAGACGACGACAGCAGACGACGCATCATATACTCATTTTTACATCATCAAT',
+          id: 'seq9',
+          name: 'seq9',
+          color: 'green'
+        },
+        {
+          seq:
+            '--------------------CATTTTTACATCATCATCATACTACATGACGACGACAGCAGCCCTTACGACGATTTACGCGAGAACACTATCATCACAGACGAATTAGAGA---TGACAGAGGGACAGCAGCAGCCCAGACAGACGACCCGATTTATACTCATACTCACAGCATACGATGACACAGACGACGACAGCAGACGACGCATCATATACTCATTTTTACATCATCAAT',
+          id: 'seq10',
+          name: 'seq10',
+          color: 'green'
+        },
+        {
+          seq:
+            '--------------------CATTTTTACATCATTATCATACTACATGACGACGACAGCAGCCCTTACGACGATTTACGCGAGAACACTATCATCACAGACGAATTAGAGA---T-TCAGAGGGACAGCAGCAGCCCAGACAGACGACCCGATTTATACTCATACTCACAGCATACGATGACACAGACGACGACAGCAGACGACGCATCATATACTCATTTTTACATCATCAAT',
+          id: 'seq11',
+          name: 'seq11',
+          color: 'green'
+        }
+      ],
       seqs: [
         {
           seq:
@@ -67,40 +206,6 @@ export default {
           name: 'seq8'
         }
       ],
-      seqs2: [
-        {
-          seq: 'ATCATCATCATCATCATACTCATTTTTACATCATCATCATACTACATCATCATATACTCATTTTTACATCATC-AT',
-          metadata: [
-            {
-              color: 'orange',
-              positions: [
-                [1, 5],
-                [20, 30]
-              ]
-            },
-            {
-              color: 'yellow',
-              positions: [[6, 19]]
-            }
-          ]
-        },
-        {
-          seq: 'ATCATCATCATCATCATACTCATTTTTACATCATCATCATACTACATCATCATATACTCATTTTTACATCATCATC',
-          metadata: [
-            {
-              color: 'orange',
-              positions: [
-                [1, 5],
-                [25, 30]
-              ]
-            },
-            {
-              color: 'yellow',
-              positions: [[6, 19]]
-            }
-          ]
-        }
-      ],
       tracks: [],
       testTracks: [
         {
@@ -108,7 +213,7 @@ export default {
             {
               positions: [
                 [1, 20],
-                [109, 130]
+                [109, 234]
               ],
               type: 'label1',
               color: 'green'
@@ -122,7 +227,7 @@ export default {
           trackLabel: 'label1/label2'
         }
       ],
-      coloring: 'metadata' //'auto'
+      coloring: 'auto' //'auto'
     };
   }
 };
