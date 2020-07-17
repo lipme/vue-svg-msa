@@ -8,9 +8,9 @@
       :y="rectY"
       :height="height"
       :width="r.width"
-      :fill="r.color"
-      fill-opacity="0.5"
+      :style="r.style"
     ></rect>
+    <!-- display on text element for each nt -->
     <template v-for="item in sequenceArray">
       <text
         :key="'txt-' + item.id"
@@ -20,10 +20,9 @@
         :class="getClass"
         :font-size="textFontSize"
         fill="black"
-      >
-        {{ item.letter }}
-      </text>
+      >{{ item.letter }}</text>
     </template>
+
     <!-- draw a rectangle only to display a tooltip -->
     <rect
       :x="rectX(0)"
@@ -32,8 +31,9 @@
       :width="getWidth"
       :class="selectClass"
       @click="$emit('click')"
-      ><title>Click to extract the sequence {{ seqName }}</title></rect
     >
+      <title>Click to extract the sequence {{ seqName }}</title>
+    </rect>
   </g>
 </template>
 
@@ -53,7 +53,18 @@ export default {
     coloring: { type: String, default: 'no' },
     seqName: { type: String, default: 'seqname' },
     isSelected: { type: Boolean, defaut: false },
+    metadatas: {
+      type: Array,
+      default() {
+        return [];
+      }
+    },
     start: { type: Number, default: 0 }
+  },
+  data() {
+    return {
+      defaultOpacity: 0.5
+    };
   },
   computed: {
     sequenceArray() {
@@ -65,8 +76,11 @@ export default {
       }
       return 'unselected';
     },
+    getSeqLength() {
+      return this.sequence.seq.length;
+    },
     getWidth() {
-      return this.aX(this.sequence.seq.length) - this.aX(0);
+      return this.aX(this.getSeqLength) - this.aX(0);
     },
     getLetterWidth() {
       return this.aX(1) - this.aX(0);
@@ -77,25 +91,59 @@ export default {
     rectY() {
       return this.y - this.textFontSize + 1;
     },
+    metadataStyle() {
+      return function(i, i2) {
+        var style = '';
+        const o_style = this.metadatas[i].values[i2];
 
+        if (o_style.hasOwnProperty('fill')) {
+          style = 'fill: ' + o_style.fill;
+          if (o_style.hasOwnProperty('fillopacity')) {
+            style = style + ';fill-opacity: ' + o_style.fillopacity;
+          } else {
+            style = style + ';fill-opacity: ' + this.defaultOpacity;
+          }
+        } else {
+          style = 'fill:blue;fill-opacity:0';
+        }
+        if (o_style.hasOwnProperty('stroke')) {
+          style = style + ';stroke:' + o_style.stroke;
+        }
+        if (o_style.hasOwnProperty('strokedash') && o_style.strokedash == true) {
+          style = style + ';stroke-dasharray: 4,2';
+        }
+
+        return style;
+      };
+    },
     // Get the rectangles to display according to the metadata values
     // Return an array of objects
     getColoredRect() {
       let displayedRect = [];
 
-      if (this.coloring === 'metadata' && this.sequence.metadata) {
-        this.sequence.metadata.forEach(m => {
-          m.positions.forEach(pos => {
-            const newPos = this.transformPos(pos);
+      if (this.coloring === 'metadata' && this.sequence.metadatas) {
+        this.sequence.metadatas.forEach(m => {
+          const metadata_style = this.metadataStyle(m.id, m.value_id);
 
-            if (newPos != null) {
-              displayedRect.push({
-                x: this.rectX(newPos[0] - this.start - 1),
-                color: m.color,
-                width: (newPos[1] - newPos[0] + 1) * this.getLetterWidth
-              });
-            }
-          });
+          if (!m.hasOwnProperty('ranges')) {
+            displayedRect.push({
+              x: this.rectX(0),
+              width: this.getWidth,
+              style: metadata_style
+            });
+          } else {
+            m.ranges.forEach(pos => {
+              const newPos = this.transformPos(pos);
+
+              if (newPos != null) {
+                displayedRect.push({
+                  x: this.rectX(newPos[0] - this.start - 1),
+                  width: (newPos[1] - newPos[0] + 1) * this.getLetterWidth,
+                  style: metadata_style
+                });
+              }
+            });
+          }
         });
       } else if (this.coloring === 'auto') {
         let i = -1;
@@ -103,8 +151,8 @@ export default {
           i += 1;
           return {
             x: this.rectX(i),
-            color: this.getNtColor(l),
-            width: this.getLetterWidth
+            width: this.getLetterWidth,
+            style: 'fill: ' + this.getNtColor(l) + ';fill-opacity: ' + this.defaultOpacity
           };
         });
       } else if (this.coloring === 'seqcolor') {
@@ -112,8 +160,8 @@ export default {
         if (this.sequence.color !== '') {
           displayedRect.push({
             x: this.rectX(0),
-            color: this.sequence.color,
-            width: this.getWidth
+            width: this.getWidth,
+            style: 'fill: ' + this.sequence.color + ';fill-opacity: ' + this.defaultOpacity
           });
         }
       }
@@ -121,8 +169,9 @@ export default {
     },
     getClass() {
       return {
-        consensus: this.sequence.isConsensus === true && this.sequence.isNode === false,
-        nodesequence: this.sequence.isNode === true
+        consensus:
+          (this.sequence.isConsensus === true && this.sequence.isNode === false) ||
+          this.sequence.isNode === true
       };
     }
   },
@@ -161,7 +210,7 @@ export default {
       let posEnd = pos[1];
 
       const offSetStart = this.start;
-      const offSetEnd = offSetStart + this.sequence.seq.length;
+      const offSetEnd = offSetStart + this.getSeqLength;
 
       if (
         (posStart < offSetStart && posEnd < offSetStart) ||
@@ -187,14 +236,13 @@ export default {
 .consensus {
   font-weight: bold;
 }
-.nodesequence {
-  font-weight: bold;
-}
 .selected {
-  fill-opacity: 0;
+  fill-opacity: 0.3;
+  fill: blue;
   stroke: black;
-  stroke-width: 2;
-  stroke-opacity: 0.9;
+  stroke-opacity: 1;
+  stroke-width: 1;
+  stroke-dasharray: 4, 2;
 }
 .unselected {
   fill-opacity: 0;
