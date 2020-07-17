@@ -49,7 +49,7 @@ export default {
               const newPos = this.transformPos(pos);
               if (newPos != null) {
                 displayedRect.push({
-                  x: this.rectX(newPos[0] - 1),
+                  x: this.rectX(newPos[0] - this.start - 1),
                   color: f.color,
                   width: this.rectX(newPos[1]) - this.rectX(newPos[0] - 1)
                 });
@@ -83,16 +83,12 @@ export default {
         return null;
       }
 
-      if (posStart < offSetStart) {
-        posStart = 1;
-      } else {
-        posStart -= offSetStart;
+      if (posStart <= offSetStart) {
+        posStart = offSetStart + 1;
       }
 
       if (posEnd > offSetEnd) {
-        posEnd = this.length;
-      } else {
-        posEnd -= offSetStart;
+        posEnd = offSetEnd;
       }
 
       return [posStart, posEnd];
