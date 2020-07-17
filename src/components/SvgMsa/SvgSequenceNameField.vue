@@ -16,12 +16,12 @@
 <script>
 export default {
   props: {
-    y: { type: Number, default: 1 },
-    textFontSize: { type: Number, default: 15 },
     name: { type: String, default: '' },
+    y: { type: Number, default: 1 },
     offsetX: { type: Number, default: 0 },
-    isClickable: { type: Boolean, default: false },
-    textColor: { type: String, default: 'black' }
+    textFontSize: { type: Number, default: 15 },
+    textColor: { type: String, default: 'black' },
+    isClickable: { type: Boolean, default: false }
   },
   computed: {
     getClass() {
