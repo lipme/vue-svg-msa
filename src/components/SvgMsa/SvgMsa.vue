@@ -148,6 +148,10 @@ export default {
     extractSeqs() {
       return this.seqs.map(s => this.extractSeq(s));
     },
+    /**
+     * Return the bigger size of all the displayed sequences.
+     * @return {number} the bigger size of all the displayed sequences.
+     */
     maxLengthExtractSeqs() {
       return Math.max(...this.extractSeqs.map(s => s.seq.length));
     },
@@ -159,19 +163,6 @@ export default {
      */
     seqTextFontSize() {
       return this.trackHeight - 2;
-    },
-    /**
-     * Return the bigger size of all the displayed sequences.
-     * @return {number} the bigger size of all the displayed sequences.
-     */
-    seqLengthMax() {
-      let maxlen = 0;
-      this.seqs.forEach(s => {
-        if (maxlen < s.seq.length) {
-          maxlen = s.seq.length;
-        }
-      });
-      return maxlen;
     },
     /**
      *@return alignment width
@@ -254,7 +245,19 @@ export default {
       const length = end - start;
 
       extractSeq.seq = s.seq.substr(start, length);
+      extractSeq.oriseqpositions = this.computeOriPosition(s.seq).slice(start, end);
       return extractSeq;
+    },
+    computeOriPosition(sequence) {
+      var currentPos = 0;
+      return sequence.split('').map(nt => {
+        if (nt != '-') {
+          currentPos += 1;
+          return currentPos;
+        } else {
+          return 0;
+        }
+      });
     },
     /**
      * Emit the event 'select-node' with the value= id of the sequence
