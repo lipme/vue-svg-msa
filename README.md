@@ -21,6 +21,7 @@ import 'vue-svg-msa/dist/vue-svg-msa.css'
       :end="end"
       :tracks="tracks"
       coloring="auto"
+      :metadatas="metadata"
       :selectedseqs="getselectectids"
     ></SvgMsa>
 ```
@@ -65,30 +66,50 @@ tracks: [
 ```
 
 **coloring** allows the values 'no', 'seqcolor', 'auto', 'metadata'.
-If the value is 'metadata', the sequences are colored with the colors containing in their own **metadata** array.
+If the value is 'metadata', the sequences are colored with the colors containing in the **metadatas** array.
 
 ```
+metadatas: [
+  {
+    metadata_id: 0,
+    label: 'conservation level',
+    values: [
+    {
+      value_id: 0,
+      label: 'high level',
+      fill: 'blue',
+      fillopacity: 0.3,
+      stroke: 'black',
+      strokedash: false
+    },
+    {
+      value_id: 1,
+      label: 'moderate level',
+      fill: 'pink',
+      fillopacity: 0.8,
+    }
+    ]
+  }
+]
+
 seqs: [
 {
   seq: 'ATCATCATCATCATCATACTCATTTTTACAT---CATCATACTACATCATCATATACTCATTTTTACATCATC-TCTT',
   ..
-  metadata: [
-    {
-      color: 'orange',
-      positions: [
-       [1, 5],
-       [25, 30]
-      ]
-    },
-    {
-      color: 'yellow',
-      positions: [[6, 19],[31,80]]
-    }
-]
+  metadatas: [
+    { metadata_id: 0, value_id: 0, ranges: [[1, 40],[100, 234]]},
+    { metadata_id: 0, value_id: 1, ranges: [[41, 99]] }
+  ]
 },
+{
+  seq: 'ATCATCATCATCATCATACTCATTTTTACATTTTCATCATACTACATCATCATATACTCATTTTTACATCATCTTCTT',
+  ...
+  metadatas: [ { metadata_id: 0, value_id: 1}]
+}
 ...
 ]
-```
+
+In the second example the metadata coloring would be apply on all the sequence
 
 **selectedseqs** is an array of sequence ids which will be highlighted in the msa.
 
@@ -105,3 +126,4 @@ LIPM Bioinfo Team
 ##Contact
 
 erika.sallet@inrae.fr
+```
