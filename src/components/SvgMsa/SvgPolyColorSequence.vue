@@ -21,19 +21,18 @@
         :font-size="textFontSize"
         fill="black"
       >{{ item.letter }}</text>
+      <rect
+        :key="'rect-' + item.id"
+        :x="item.x"
+        :y="rectY"
+        :height="height"
+        :width="getLetterWidth"
+        class="unselected"
+        @click="$emit('click')"
+      >
+        <title style="text-align:left">{{ seqName }} {{ item.pos }} - Click to extract the sequence</title>
+      </rect>
     </template>
-
-    <!-- draw a rectangle only to display a tooltip -->
-    <rect
-      :x="rectX(0)"
-      :y="rectY"
-      :height="height"
-      :width="getWidth"
-      :class="selectClass"
-      @click="$emit('click')"
-    >
-      <title>Click to extract the sequence {{ seqName }}</title>
-    </rect>
   </g>
 </template>
 
@@ -68,7 +67,12 @@ export default {
   },
   computed: {
     sequenceArray() {
-      return this.sequence.seq.split('').map((s, i) => ({ id: i, letter: s }));
+      return this.sequence.seq.split('').map((s, i) => ({
+        id: i,
+        letter: s,
+        x: this.rectX(i),
+        pos: this.sequence.oriseqpositions[i] > 0 ? 'pos ' + this.sequence.oriseqpositions[i] : ''
+      }));
     },
     selectClass() {
       if (this.isSelected) {
