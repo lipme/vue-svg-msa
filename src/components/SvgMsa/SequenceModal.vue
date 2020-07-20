@@ -19,9 +19,7 @@
 
           <div class="modal-footer">
             <slot name="footer">
-              <button v-clipboard:copy="getFastaFormattedSeqs" class="modal-default-button">
-                Copy
-              </button>
+              <button v-clipboard:copy="getFastaFormattedSeqs" class="modal-default-button">Copy</button>
               <button class="modal-default-button" @click="$emit('close')">Close</button>
             </slot>
           </div>
@@ -95,11 +93,11 @@ export default {
 }
 
 .modal-container {
-  width: 500px;
+  width: 470px;
   margin: 2px auto;
-  padding: 30px 30px;
+  padding: 8px 8px;
   background-color: #fff;
-  border-radius: 2px;
+  border-radius: 3px;
   transition: all 0.3s ease;
   text-align: left;
 }
@@ -110,7 +108,7 @@ export default {
 }
 
 .modal-default-button {
-  float: right;
+  /* float: right; */
   padding: 5px 10px;
   margin: auto 5px;
   border: none;
@@ -119,7 +117,7 @@ export default {
 }
 
 .modal-footer {
-  padding: 10px 10px;
+  padding: 5px 5px;
 }
 .displayseq {
   max-height: 400px;
