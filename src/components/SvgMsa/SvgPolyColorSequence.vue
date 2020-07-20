@@ -9,6 +9,7 @@
       :height="height"
       :width="r.width"
       :style="r.style"
+      :class="r.class"
     ></rect>
     <!-- display on text element for each nt -->
     <template v-for="item in sequenceArray">
@@ -27,7 +28,7 @@
         :y="rectY"
         :height="height"
         :width="getLetterWidth"
-        class="unselected"
+        class="invisible"
         @click="$emit('click')"
       >
         <title style="text-align:left">{{ seqName }} {{ item.pos }} - Click to extract the sequence</title>
@@ -74,12 +75,6 @@ export default {
         pos: this.sequence.oriseqpositions[i] > 0 ? 'pos ' + this.sequence.oriseqpositions[i] : ''
       }));
     },
-    selectClass() {
-      if (this.isSelected) {
-        return 'selected';
-      }
-      return 'unselected';
-    },
     getSeqLength() {
       return this.sequence.seq.length;
     },
@@ -95,6 +90,9 @@ export default {
     rectY() {
       return this.y - this.textFontSize + 1;
     },
+    /**
+     * build a string given the style of the metadata number i, value i2
+     */
     metadataStyle() {
       return function(i, i2) {
         var style = '';
@@ -120,8 +118,10 @@ export default {
         return style;
       };
     },
-    // Get the rectangles to display according to the metadata values
-    // Return an array of objects
+    /**
+     * Get the rectangles to display according to the metadata values
+     *  Return an array of objects
+     */
     getColoredRect() {
       let displayedRect = [];
 
@@ -169,8 +169,19 @@ export default {
           });
         }
       }
+      if (this.isSelected) {
+        displayedRect.push({
+          x: this.rectX(0),
+          width: this.getWidth,
+          style: '',
+          class: 'selected'
+        });
+      }
       return displayedRect;
     },
+    /**
+     *
+     */
     getClass() {
       return {
         consensus:
@@ -245,10 +256,10 @@ export default {
   fill: blue;
   stroke: black;
   stroke-opacity: 1;
-  stroke-width: 1;
+  stroke-width: 2;
   stroke-dasharray: 4, 2;
 }
-.unselected {
+.invisible {
   fill-opacity: 0;
 }
 </style>
