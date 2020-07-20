@@ -96,7 +96,17 @@ export default {
     metadataStyle() {
       return function(i, i2) {
         var style = '';
-        const o_style = this.metadatas[i].values[i2];
+        if (
+          !(
+            this.metadatas.find(m => m.metadata_id === i) &&
+            this.metadatas.find(m => m.metadata_id === i).values.find(v => v.value_id === i2)
+          )
+        ) {
+          return '';
+        }
+        const o_style = this.metadatas
+          .find(m => m.metadata_id === i)
+          .values.find(v => v.value_id === i2);
 
         if (o_style.hasOwnProperty('fill')) {
           style = 'fill: ' + o_style.fill;
@@ -127,7 +137,7 @@ export default {
 
       if (this.coloring === 'metadata' && this.sequence.metadatas) {
         this.sequence.metadatas.forEach(m => {
-          const metadata_style = this.metadataStyle(m.id, m.value_id);
+          const metadata_style = this.metadataStyle(m.metadata_id, m.value_id);
 
           if (!m.hasOwnProperty('ranges')) {
             displayedRect.push({
