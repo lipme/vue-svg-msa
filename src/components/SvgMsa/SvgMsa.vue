@@ -230,6 +230,8 @@ export default {
   methods: {
     /**
      * Extract the sequence to display: subseq from start to end
+     * Return a sequence object representing the sequence from start to end positions
+     * TODO: transform the metadata to keep only those included from start to end
      * @return {Object}
      */
     extractSeq(s) {
@@ -248,6 +250,12 @@ export default {
       extractSeq.oriseqpositions = this.computeOriPosition(s.seq).slice(start, end);
       return extractSeq;
     },
+    /**
+     * sequence is a string representing a sequence in a multiple alignement
+     * (composed of nt and '-' characters)
+     * return an array given for each character of the input string its position
+     * in the original sequence. If the caracter is '-' the corresponding value would be 0
+     */
     computeOriPosition(sequence) {
       var currentPos = 0;
       return sequence.split('').map(nt => {
