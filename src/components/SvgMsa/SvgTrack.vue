@@ -6,14 +6,7 @@
       :label="track.trackLabel"
       :text-font-size="textFontSize"
     ></svg-track-label>
-    <svg-track-content
-      :start="start"
-      :length="length"
-      :y="y"
-      :track="track"
-      :a-x="fctScaleX"
-      :height="height"
-    ></svg-track-content>
+    <svg-track-content :length="length" :y="y" :track="track" :a-x="fctScaleX" :height="height"></svg-track-content>
   </g>
 </template>
 
@@ -36,11 +29,7 @@ export default {
     y: { type: Number, default: 1 },
     fctScaleX: { type: Function, default: () => {} },
     length: { type: Number, default: 150 },
-    textFontSize: { type: Number, default: 10 },
-    start: {
-      type: Number,
-      default: 0
-    }
+    textFontSize: { type: Number, default: 10 }
   },
   data() {
     return {
