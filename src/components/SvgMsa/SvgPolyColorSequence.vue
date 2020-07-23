@@ -12,18 +12,18 @@
       :class="r.class"
     ></rect>
     <!-- display on text element for each nt -->
-    <template v-for="item in sequenceArray">
+    <template v-for="(item, id) in sequenceArray">
       <text
-        :key="'txt-' + item.id"
+        :key="'txt-' + id"
         text-anchor="middle"
-        :x="aX(item.id)"
+        :x="aX(id)"
         :y="y"
         :class="getClass"
         :font-size="textFontSize"
         fill="black"
       >{{ item.letter }}</text>
       <rect
-        :key="'rect-' + item.id"
+        :key="'rect-' + id"
         :x="item.x"
         :y="rectY"
         :height="height"
@@ -31,7 +31,9 @@
         class="invisible"
         @click="$emit('click')"
       >
-        <title style="text-align:left">{{ seqName }} {{ item.pos }} - Click to extract the sequence</title>
+        <title
+          style="text-align:left"
+        >{{ sequence.name }} {{ item.pos }} - Click to extract the sequence</title>
       </rect>
     </template>
   </g>
@@ -51,7 +53,6 @@ export default {
     height: { type: Number, default: 20 },
     textFontSize: { type: Number, default: 15 },
     coloring: { type: String, default: 'no' },
-    seqName: { type: String, default: 'seqname' },
     isSelected: { type: Boolean, defaut: false },
     metadatas: {
       type: Array,
@@ -59,17 +60,24 @@ export default {
         return [];
       }
     },
-    start: { type: Number, default: 0 }
+    selectionMode: { type: Boolean, default: false }
   },
   data() {
     return {
-      defaultOpacity: 0.5
+      defaultOpacity: 0.4,
+      defaultOpacityContrast: 0.2
     };
   },
   computed: {
+    opacity() {
+      if (this.selectionMode === false || (this.selectionMode === true && this.isSelected)) {
+        return this.defaultOpacity;
+      } else {
+        return this.defaultOpacity - this.defaultOpacityContrast;
+      }
+    },
     sequenceArray() {
       return this.sequence.seq.split('').map((s, i) => ({
-        id: i,
         letter: s,
         x: this.rectX(i),
         pos: this.sequence.oriseqpositions[i] > 0 ? 'pos ' + this.sequence.oriseqpositions[i] : ''
@@ -91,16 +99,14 @@ export default {
       return this.y - this.textFontSize + 1;
     },
     /**
-     * build a string given the style of the metadata number i, value i2
+     * build a string given the style of the metadata i, value i2
      */
     metadataStyle() {
       return function(i, i2) {
         var style = '';
         if (
-          !(
-            this.metadatas.find(m => m.metadata_id === i) &&
-            this.metadatas.find(m => m.metadata_id === i).values.find(v => v.value_id === i2)
-          )
+          !this.metadatas.find(m => m.metadata_id === i) ||
+          !this.metadatas.find(m => m.metadata_id === i).values.find(v => v.value_id === i2)
         ) {
           return '';
         }
@@ -113,10 +119,10 @@ export default {
           if (o_style.hasOwnProperty('fillopacity')) {
             style = style + ';fill-opacity: ' + o_style.fillopacity;
           } else {
-            style = style + ';fill-opacity: ' + this.defaultOpacity;
+            style = style + ';fill-opacity: ' + this.opacity;
           }
         } else {
-          style = 'fill:blue;fill-opacity:0';
+          style = 'fill-opacity:0';
         }
         if (o_style.hasOwnProperty('stroke')) {
           style = style + ';stroke:' + o_style.stroke;
@@ -135,57 +141,46 @@ export default {
     getColoredRect() {
       let displayedRect = [];
 
-      if (this.coloring === 'metadata' && this.sequence.metadatas) {
-        this.sequence.metadatas.forEach(m => {
-          const metadata_style = this.metadataStyle(m.metadata_id, m.value_id);
-
-          if (!m.hasOwnProperty('ranges')) {
-            displayedRect.push({
-              x: this.rectX(0),
-              width: this.getWidth,
-              style: metadata_style
-            });
-          } else {
-            m.ranges.forEach(pos => {
-              const newPos = this.transformPos(pos);
-
-              if (newPos != null) {
-                displayedRect.push({
-                  x: this.rectX(newPos[0] - this.start - 1),
-                  width: (newPos[1] - newPos[0] + 1) * this.getLetterWidth,
-                  style: metadata_style
-                });
-              }
-            });
-          }
-        });
-      } else if (this.coloring === 'auto') {
-        let i = -1;
-        displayedRect = this.sequence.seq.split('').map(l => {
-          i += 1;
-          return {
-            x: this.rectX(i),
-            width: this.getLetterWidth,
-            style: 'fill: ' + this.getNtColor(l) + ';fill-opacity: ' + this.defaultOpacity
-          };
-        });
-      } else if (this.coloring === 'seqcolor') {
-        /* the color is the attribute sequence.color */
-        if (this.sequence.color !== '') {
-          displayedRect.push({
-            x: this.rectX(0),
-            width: this.getWidth,
-            style: 'fill: ' + this.sequence.color + ';fill-opacity: ' + this.defaultOpacity
+      switch (this.coloring) {
+        case 'metadata':
+          if (!this.sequence.metadatas) break;
+          this.sequence.metadatas.forEach(m => {
+            const metadata_style = this.metadataStyle(m.metadata_id, m.value_id);
+            if (!m.hasOwnProperty('ranges')) {
+              displayedRect.push(this.newSeqRect(metadata_style));
+            } else {
+              m.ranges.forEach(pos => {
+                displayedRect.push(
+                  this.newRect(
+                    this.rectX(pos[0] - 1),
+                    (pos[1] - pos[0] + 1) * this.getLetterWidth,
+                    metadata_style
+                  )
+                );
+              });
+            }
           });
-        }
+          break;
+
+        case 'auto':
+          displayedRect = this.sequence.seq.split('').map((l, i) => {
+            return this.newRect(
+              this.rectX(i),
+              this.getLetterWidth,
+              this.getStyle(this.getNtColor(l), this.opacity)
+            );
+          });
+          break;
+
+        case 'seqcolor':
+          if (this.sequence.color === '') break;
+          displayedRect.push(this.newSeqRect(this.getStyle(this.sequence.color, this.opacity)));
+          break;
       }
+
+      /* if the sequence is selected add a dash rectangle  */
       if (this.isSelected) {
-        displayedRect.push({
-          x: this.rectX(0),
-          width: this.getWidth,
-          style: '',
-          class: 'selected'
-        });
+        displayedRect.push(this.newSeqRect('', 'selected'));
       }
       return displayedRect;
     },
@@ -204,6 +199,31 @@ export default {
     /** x coordinate of the rectangle at the index i */
     rectX(i) {
       return this.aX(i) - this.getShift;
+    },
+    /**
+     * return a string given the fill and its opacity
+     */
+    getStyle(f, o) {
+      return 'fill: ' + f + ';fill-opacity: ' + o;
+    },
+    /**
+     * return a new object corresponding to a rect to color all the sequence
+     */
+    newSeqRect(s, c) {
+      return {
+        x: this.rectX(0),
+        width: this.getWidth,
+        style: s,
+        class: c
+      };
+    },
+    newRect(x, w, s, c) {
+      return {
+        x: x,
+        width: w,
+        style: s,
+        class: c
+      };
     },
     /**
      * Return a color for a letter.
@@ -226,33 +246,6 @@ export default {
         default:
           return '#FFFFFF';
       }
-    },
-    /**
-     * Transform position array [start, end] according to start
-     */
-    transformPos(pos) {
-      let posStart = pos[0];
-      let posEnd = pos[1];
-
-      const offSetStart = this.start;
-      const offSetEnd = offSetStart + this.getSeqLength;
-
-      if (
-        (posStart < offSetStart && posEnd < offSetStart) ||
-        (posStart > offSetEnd && posEnd > offSetEnd)
-      ) {
-        return null;
-      }
-
-      if (posStart <= offSetStart) {
-        posStart = offSetStart + 1;
-      }
-
-      if (posEnd > offSetEnd) {
-        posEnd = offSetEnd;
-      }
-
-      return [posStart, posEnd];
     }
   }
 };
@@ -262,8 +255,8 @@ export default {
   font-weight: bold;
 }
 .selected {
-  fill-opacity: 0.3;
-  fill: blue;
+  fill: white;
+  fill-opacity: 0;
   stroke: black;
   stroke-opacity: 1;
   stroke-width: 2;
