@@ -2,14 +2,13 @@
   <div class="seq-alignment">
     <svg :width="widthSvg" :height="heightSvg">
       <svg-track
-        v-for="(track, index) in tracks"
+        v-for="(track, index) in regionTracks"
         :key="'track-' + index"
         :length="maxLengthExtractSeqs"
         :y="trackY[index]"
         :fct-scale-x="coordX"
         :track="track"
         :text-font-size="seqTextFontSize"
-        :start="zerobasedStart"
       />
 
       <svg-scale-bar
@@ -38,9 +37,8 @@
           :text-font-size="seqTextFontSize"
           :coloring="coloring"
           :metadatas="metadatas"
-          :seqName="s.name"
           :is-selected="isSelected(s.id)"
-          :start="zerobasedStart"
+          :selection-mode="selectionMode"
           @click="showSeqDialog(seqIndex)"
         />
       </template>
@@ -143,14 +141,26 @@ export default {
   },
   computed: {
     zerobasedStart() {
-      return this.start - 1;
+      return this.start >= 1 ? this.start - 1 : 0;
     },
+    onebasedEnd() {
+      return this.end >= 1 && this.end <= this.maxLengthSeqs ? this.end : this.maxLengthSeqs;
+    },
+    /**
+     * get a list of seq object with transformed coordinates
+     * according to start and end values.
+     */
     extractSeqs() {
       return this.seqs.map(s => this.extractSeq(s));
     },
     /**
-     * Return the bigger size of all the displayed sequences.
-     * @return {number} the bigger size of all the displayed sequences.
+     * Return the max length of all the sequences.
+     */
+    maxLengthSeqs() {
+      return Math.max(...this.seqs.map(s => s.seq.length));
+    },
+    /**
+     * Return the max length of the displayed sequences.
      */
     maxLengthExtractSeqs() {
       return Math.max(...this.extractSeqs.map(s => s.seq.length));
@@ -222,6 +232,31 @@ export default {
         metadataTrackY.push(this.trackHeight * (i + 1));
       }
       return metadataTrackY;
+    },
+    /**
+     * return true if a sequence is selected
+     * in that case the display opacuty would change
+     */
+    selectionMode() {
+      return this.selectedseqs.length > 0;
+    },
+    /**
+     * return an array of tracks with the transformed coordinate
+     */
+    regionTracks() {
+      let regTracks = this.tracks;
+      regTracks.forEach(t => {
+        t.features.forEach(f => {
+          if ('positions' in f) {
+            f.positions = f.positions
+              .map(p => {
+                return this.transformPos(p);
+              })
+              .filter(p => p != null);
+          }
+        });
+      });
+      return regTracks;
     }
   },
   mounted() {
@@ -231,23 +266,34 @@ export default {
     /**
      * Extract the sequence to display: subseq from start to end
      * Return a sequence object representing the sequence from start to end positions
-     * TODO: transform the metadata to keep only those included from start to end
      * @return {Object}
      */
     extractSeq(s) {
       const extractSeq = Object.assign({}, s);
       const lengthSeq = s.seq.length;
-      let start = this.zerobasedStart >= 0 ? this.zerobasedStart : 0;
-      // just to deal with the last position
+      // get the 0-based start position
+      let start = this.zerobasedStart;
       if (start > lengthSeq) {
         start = lengthSeq - 1;
       }
-      // end in 1-based
-      const end = this.end >= 1 && this.end < lengthSeq ? this.end : lengthSeq;
-      const length = end - start;
-
-      extractSeq.seq = s.seq.substr(start, length);
+      // get the end position in 1-based
+      const end = this.onebasedEnd;
+      // extract the subsequence from start to end
+      extractSeq.seq = s.seq.substr(start, end - start);
+      // compute the positions of each nucleotide in the original sequence (without gap)
       extractSeq.oriseqpositions = this.computeOriPosition(s.seq).slice(start, end);
+      // change the ccordinate of the metadata ranges
+      if (extractSeq.hasOwnProperty('metadatas')) {
+        extractSeq.metadatas.forEach(m => {
+          if (m.hasOwnProperty('ranges')) {
+            m.ranges = m.ranges
+              .map(p => {
+                return this.transformPos(p);
+              })
+              .filter(p => p != null);
+          }
+        });
+      }
       return extractSeq;
     },
     /**
@@ -267,6 +313,39 @@ export default {
         }
       });
     },
+    /**
+     * Transform position array [start, end] according to start
+     */
+    transformPos(pos) {
+      let posStart = pos[0];
+      let posEnd = pos[1];
+
+      // zero-based start
+      const offSetStart = this.zerobasedStart;
+      // one-based end
+      const offSetEnd = this.onebasedEnd;
+
+      if (
+        (posStart < offSetStart && posEnd < offSetStart) ||
+        (posStart > offSetEnd && posEnd > offSetEnd)
+      ) {
+        return null;
+      }
+
+      if (posStart <= offSetStart) {
+        posStart = offSetStart + 1;
+      }
+
+      if (posEnd > offSetEnd) {
+        posEnd = offSetEnd;
+      }
+
+      posStart -= offSetStart;
+      posEnd -= offSetStart;
+
+      return [posStart, posEnd];
+    },
+
     /**
      * Emit the event 'select-node' with the value= id of the sequence
      * Action only available if the sequence has the attribute isClickable
