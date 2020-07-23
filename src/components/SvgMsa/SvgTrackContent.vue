@@ -26,7 +26,6 @@ export default {
     height: { type: Number, default: 8 },
     y: { type: Number, default: 1 },
     textFontSize: { type: Number, default: 10 },
-    start: { type: Number, default: 0 },
     length: { type: Number, default: 150 }
   },
   computed: {
@@ -46,14 +45,11 @@ export default {
         if ('positions' in f) {
           f.positions.forEach(pos => {
             if (typeof pos !== 'undefined' && pos.length === 2) {
-              const newPos = this.transformPos(pos);
-              if (newPos != null) {
-                displayedRect.push({
-                  x: this.rectX(newPos[0] - this.start - 1),
-                  color: f.color,
-                  width: this.rectX(newPos[1]) - this.rectX(newPos[0] - 1)
-                });
-              }
+              displayedRect.push({
+                x: this.rectX(pos[0] - 1),
+                color: f.color,
+                width: this.rectX(pos[1]) - this.rectX(pos[0] - 1)
+              });
             }
           });
         }
@@ -65,33 +61,6 @@ export default {
     /** x coordinate of the rectangle at the index i */
     rectX(i) {
       return this.aX(i) - this.getShift;
-    },
-    /**
-     * Transform position array [start, end] according to start
-     */
-    transformPos(pos) {
-      let posStart = pos[0];
-      let posEnd = pos[1];
-
-      const offSetStart = this.start;
-      const offSetEnd = offSetStart + this.length;
-
-      if (
-        (posStart < offSetStart && posEnd < offSetStart) ||
-        (posStart > offSetEnd && posEnd > offSetEnd)
-      ) {
-        return null;
-      }
-
-      if (posStart <= offSetStart) {
-        posStart = offSetStart + 1;
-      }
-
-      if (posEnd > offSetEnd) {
-        posEnd = offSetEnd;
-      }
-
-      return [posStart, posEnd];
     }
   }
 };
