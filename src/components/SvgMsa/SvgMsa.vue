@@ -17,11 +17,31 @@
         :fct-scale-x="coordX"
         :start="zerobasedStart"
       />
+      <!-- display a rectangles for each selected sequence -->
+      <sequence-selection-rect
+        v-for="s in selectionSeqs"
+        :key="'sel' + s.index"
+        :a-x="coordX"
+        :a-y="coordY"
+        :y="s.index"
+        :seqlen="maxLengthExtractSeqs"
+      />
+      <!-- display a rectangle for each selected region -->
+      <region-selection-rect
+        v-for="(s, i) in selectionRegs"
+        :key="'column' + i"
+        :a-x="coordX"
+        :a-y="coordY"
+        :x1="s[0]-1"
+        :y1="0"
+        :x2="s[1]-1"
+        :y2="sequenceNb"
+      />
+      <!-- display each sequence -->
       <template v-for="(s, seqIndex) in extractSeqs">
-        <!-- Name of the sequence -->
         <svg-sequence-name-field
           :key="seqIndex"
-          :y="coordY[seqIndex]"
+          :y="coordY(seqIndex)"
           :text-font-size="seqTextFontSize"
           :name="displayName(s)"
           :offset-x="offsetX"
@@ -32,8 +52,8 @@
           :key="'rect' + seqIndex"
           :sequence="s"
           :a-x="coordX"
-          :y="coordY[seqIndex]"
-          :height="trackHeight"
+          :a-y="coordY"
+          :y="seqIndex"
           :text-font-size="seqTextFontSize"
           :coloring="coloring"
           :metadatas="metadatas"
@@ -57,6 +77,8 @@ import SvgScaleBar from '@/components/SvgMsa/SvgScaleBar.vue';
 import SvgTrack from '@/components/SvgMsa/SvgTrack.vue';
 import SvgPolyColorSequence from '@/components/SvgMsa/SvgPolyColorSequence.vue';
 import SvgSequenceNameField from '@/components/SvgMsa/SvgSequenceNameField.vue';
+import SequenceSelectionRect from '@/components/SvgMsa/SequenceSelectionRect.vue';
+import RegionSelectionRect from '@/components/SvgMsa/RegionSelectionRect.vue';
 import SequenceModal from '@/components/SvgMsa/SequenceModal.vue';
 
 export default {
@@ -70,7 +92,9 @@ export default {
     SvgScaleBar,
     SvgPolyColorSequence,
     SvgSequenceNameField,
-    SequenceModal
+    SequenceModal,
+    SequenceSelectionRect,
+    RegionSelectionRect
   },
   props: {
     /**
@@ -114,6 +138,12 @@ export default {
         return [];
       }
     },
+    selectedregs: {
+      type: Array,
+      default() {
+        return [];
+      }
+    },
     /**
      * Array of id, of the sequences to display as selected
      */
@@ -131,8 +161,8 @@ export default {
   },
   data() {
     return {
-      letterWidth: 10,
       trackHeight: 15,
+      letterAdditionalWidth: 0,
       offsetX: 200,
       displaySeqDialog: false,
       displayDialogSequences: [],
@@ -140,6 +170,94 @@ export default {
     };
   },
   computed: {
+    /**
+     * return the width of a nucleotide
+     */
+    letterWidth() {
+      return this.trackHeight + this.letterAdditionalWidth - 5;
+    },
+    /**
+     * Return the width of the SVG of the alignment.
+     * @return {number} the width of the SVG of the alignment.
+     */
+    widthSvg() {
+      return this.offsetX + this.letterWidth * this.maxLengthExtractSeqs;
+    },
+
+    /**
+     * Return the max length of all the sequences.
+     */
+    maxLengthSeqs() {
+      return Math.max(...this.seqs.map(s => s.seq.length));
+    },
+    /**
+     * Return the max length of the displayed sequences.
+     */
+    maxLengthExtractSeqs() {
+      return Math.max(...this.extractSeqs.map(s => s.seq.length));
+    },
+    sequenceNb() {
+      return this.seqs.length;
+    },
+
+    /**
+     * Text font size computed according to the height of the sequence tracks.
+     */
+    seqTextFontSize() {
+      return this.trackHeight - 2;
+    },
+
+    metadataTrackNumber() {
+      return this.tracks.length;
+    },
+    metadataTrackGlobalHeight() {
+      return (this.metadataTrackNumber + 2) * this.trackHeight;
+    },
+    seqsHeight() {
+      return this.seqs.length * this.trackHeight;
+    },
+    /**
+     * Return the height of the SVG of the alignment.
+     * @return {number} the height of the SVG of the alignment.
+     */
+    heightSvg() {
+      return this.seqsHeight + this.trackHeight + this.metadataTrackGlobalHeight;
+    },
+    /**
+     * Return a function given the coordinate 'x' values
+     * coordX(10) is the X coordinate of the text of the 10th letter of a seq.
+     * @return {function}
+     */
+    coordX() {
+      const x = d3
+        .scaleLinear()
+        .domain([0, this.maxLengthExtractSeqs])
+        .range([this.offsetX, this.widthSvg]);
+
+      return x;
+    },
+    /**
+     * Return a function of the coordinate 'y' values
+     * coordY(10) is the Y coordinate of the 10th sequence.
+     * @return {function}
+     */
+    coordY() {
+      return i => {
+        return this.metadataTrackGlobalHeight + (i + 1) * this.trackHeight;
+      };
+    },
+    /**
+     * Return an array of the coordinate 'y' values
+     * of the metadat tracks
+     * @return {number}  an array of the coordinate 'y' values.
+     */
+    trackY() {
+      const metadataTrackY = [];
+      for (let i = 0; i <= this.tracks.length; i += 1) {
+        metadataTrackY.push(this.trackHeight * (i + 1));
+      }
+      return metadataTrackY;
+    },
     zerobasedStart() {
       return this.start >= 1 ? this.start - 1 : 0;
     },
@@ -154,84 +272,20 @@ export default {
       return this.seqs.map(s => this.extractSeq(s));
     },
     /**
-     * Return the max length of all the sequences.
+     * return an array of the selected sequence objects
+     * add the prop index to knwo the position of the sequence in the alignment
+     * (useful to comute the y position)
      */
-    maxLengthSeqs() {
-      return Math.max(...this.seqs.map(s => s.seq.length));
+    selectionSeqs() {
+      return this.extractSeqs
+        .map((s, i) => {
+          s.index = i;
+          return s;
+        })
+        .filter(s => this.selectedseqs.find(e => e === s.id));
     },
-    /**
-     * Return the max length of the displayed sequences.
-     */
-    maxLengthExtractSeqs() {
-      return Math.max(...this.extractSeqs.map(s => s.seq.length));
-    },
-    metadataTrackNumber() {
-      return this.tracks.length;
-    },
-    /**
-     * Text font size computed according to the height of the sequence tracks.
-     */
-    seqTextFontSize() {
-      return this.trackHeight - 2;
-    },
-    /**
-     *@return alignment width
-     */
-    aligmentWidth() {
-      return this.letterWidth * this.maxLengthExtractSeqs;
-    },
-    /**
-     * Return the width of the SVG of the alignment.
-     * @return {number} the width of the SVG of the alignment.
-     */
-    widthSvg() {
-      return this.offsetX + this.aligmentWidth;
-    },
-    metadataTrackGlobalHeight() {
-      return (this.tracks.length + 2) * this.trackHeight;
-    },
-    /**
-     * Return the height of the SVG of the alignment.
-     * @return {number} the height of the SVG of the alignment.
-     */
-    heightSvg() {
-      return (this.seqs.length + 1) * this.trackHeight + this.metadataTrackGlobalHeight;
-    },
-
-    /**
-     * Return an array of the coordinate 'x' values
-     * coordX[10] is the X coordinate of the text of the 10th letter of a seq.
-     * @return {number}  an array of the coordinate 'x' values.
-     */
-    coordX() {
-      const x = d3
-        .scaleLinear()
-        .domain([0, this.maxLengthExtractSeqs])
-        .range([this.offsetX, this.widthSvg]);
-
-      return x;
-    },
-    /**
-     * Return an array of the coordinate 'y' values
-     * coordY[10] is the Y coordinate of the 10th sequence.
-     * @return {number}  an array of the coordinate 'y' values.
-     */
-    coordY() {
-      return this.seqs.map(
-        (s, index) => this.metadataTrackGlobalHeight + (index + 1) * this.trackHeight
-      );
-    },
-    /**
-     * Return an array of the coordinate 'y' values
-     * of the metadat tracks
-     * @return {number}  an array of the coordinate 'y' values.
-     */
-    trackY() {
-      const metadataTrackY = [];
-      for (let i = 0; i <= this.tracks.length; i += 1) {
-        metadataTrackY.push(this.trackHeight * (i + 1));
-      }
-      return metadataTrackY;
+    selectionRegs() {
+      return this.selectedregs.map(s => this.sliceRange(s.ranges)).flat();
     },
     /**
      * return true if a sequence is selected
@@ -247,13 +301,7 @@ export default {
       let regTracks = this.tracks;
       regTracks.forEach(t => {
         t.features.forEach(f => {
-          if ('positions' in f) {
-            f.positions = f.positions
-              .map(p => {
-                return this.transformPos(p);
-              })
-              .filter(p => p != null);
-          }
+          if ('positions' in f) f.positions = this.sliceRange(f.positions);
         });
       });
       return regTracks;
@@ -264,8 +312,9 @@ export default {
   },
   methods: {
     /**
-     * Extract the sequence to display: subseq from start to end
-     * Return a sequence object representing the sequence from start to end positions
+     * Transform the seq object s to match with the start and end positions:
+     * extract the subsequence, change the coordinates included io ranges
+     * add a oriseqpositions array containing the position of each nt in the original sequence
      * @return {Object}
      */
     extractSeq(s) {
@@ -285,17 +334,12 @@ export default {
       // change the ccordinate of the metadata ranges
       if (extractSeq.hasOwnProperty('metadatas')) {
         extractSeq.metadatas.forEach(m => {
-          if (m.hasOwnProperty('ranges')) {
-            m.ranges = m.ranges
-              .map(p => {
-                return this.transformPos(p);
-              })
-              .filter(p => p != null);
-          }
+          if (m.hasOwnProperty('ranges')) m.ranges = this.sliceRange(m.ranges);
         });
       }
       return extractSeq;
     },
+
     /**
      * sequence is a string representing a sequence in a multiple alignement
      * (composed of nt and '-' characters)
@@ -312,6 +356,17 @@ export default {
           return 0;
         }
       });
+    },
+    /**
+     * ranges is an array of range
+     * for each element, transfrom the position accroding to start and end values
+     */
+    sliceRange(ranges) {
+      return ranges
+        .map(p => {
+          return this.transformPos(p);
+        })
+        .filter(p => p != null);
     },
     /**
      * Transform position array [start, end] according to start
