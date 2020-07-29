@@ -6,8 +6,9 @@
       :seqs="testSeqs"
       :tracks="testTracks"
       coloring="metadata"
-      :metadatas="metadatas"
+      :metadatas="metadatas2"
       :selectedseqs="selectedseqid"
+      :selectedregs="selectedregs"
     ></svg-msa>
 
     <svg-msa :seqs="seqs2" coloring="auto"></svg-msa>
@@ -26,45 +27,43 @@ export default {
     return {
       start: 1,
       end: -1,
-      selectedseqid: ['seq1', 'seq2', 'seq5'],
-      //selectedseqid: [],
-      metadatas: [
+      //selectedseqid: ['seq1', 'seq2', 'seq5'],
+      selectedregs: [
         {
-          metadata_id: 1,
-          values: [
-            { value_id: 1, fill: 'blue' },
-            { value_id: 2, fill: 'red' }
+          ranges: [
+            [1, 20],
+            [180, 230]
           ]
         }
       ],
-      // metadatas: [
-      //   {
-      //     metadata_id: 0,
-      //     label: 'conservation level',
-      //     values: [
-      //       {
-      //         value_id: 0,
-      //         label: 'high level',
-      //         fill: 'blue',
-      //         fillopacity: 0.3
-      //       },
-      //       {
-      //         value_id: 1,
-      //         label: 'moderate level',
-      //         fill: 'pink',
-      //         fillopacity: 0.8
-      //       }
-      //     ]
-      //   },
-      //   {
-      //     metadata_id: 1,
-      //     label: 'drought resistance',
-      //     values: [
-      //       { value_id: 0, label: 'high', stroke: 'green', strokedash: true },
-      //       { value_id: 1, label: 'weak', stroke: 'blue', strokedash: false }
-      //     ]
-      //   }
-      // ],
+      selectedseqid: [],
+      //selectedregs: [],
+      metadatas2: [
+        {
+          metadata_id: 1,
+          label: 'conservation level',
+          values: [
+            {
+              value_id: 1,
+              label: 'high level',
+              fill: 'blue'
+            },
+            {
+              value_id: 2,
+              label: 'moderate level',
+              fill: 'red'
+            }
+          ]
+        },
+        {
+          metadata_id: 2,
+          label: 'drought resistance',
+          values: [
+            { value_id: 1, label: 'high', stroke: 'green', stroke_dasharray: '4,2' },
+            { value_id: 2, label: 'weak', stroke: 'blue', fill: 'pink', fill_opacity: 0.9 }
+          ]
+        }
+      ],
 
       testSeqs: [
         {
