@@ -2,45 +2,44 @@
   <g>
     <!-- draw colored rectangles -->
     <rect
-      v-for="(r, index) in getColoredRect"
+      v-for="(r, index) in coloredRect"
       :key="index"
       :x="r.x"
-      :y="rectY"
-      :height="height"
+      :y="seqRectY"
+      :height="getTrackHeight"
       :width="r.width"
       :style="r.style"
       :class="r.class"
     ></rect>
     <!-- display on text element for each nt -->
-    <template v-for="(item, id) in sequenceArray">
+    <template v-for="(item, id) in seqNucleotides">
       <text
         :key="'txt-' + id"
         text-anchor="middle"
         :x="aX(id)"
-        :y="y"
+        :y="aY(y)"
         :class="getClass"
         :font-size="textFontSize"
-        fill="black"
       >{{ item.letter }}</text>
       <rect
         :key="'rect-' + id"
         :x="item.x"
-        :y="rectY"
-        :height="height"
+        :y="seqRectY"
+        :height="getTrackHeight"
         :width="getLetterWidth"
         class="invisible"
         @click="$emit('click')"
       >
-        <title
-          style="text-align:left"
-        >{{ sequence.name }} {{ item.pos }} - Click to extract the sequence</title>
+        <title style="text-align:left">{{ sequence.name }}{{ item.pos }} - Click to get the sequence</title>
       </rect>
     </template>
   </g>
 </template>
 
 <script>
+import { coordinate } from '@/mixins/coordinate';
 export default {
+  mixins: [coordinate],
   props: {
     sequence: {
       type: Object,
@@ -48,18 +47,16 @@ export default {
         return [];
       }
     },
-    aX: { type: Function, default: () => {} },
-    y: { type: Number, default: 1 },
-    height: { type: Number, default: 20 },
-    textFontSize: { type: Number, default: 15 },
-    coloring: { type: String, default: 'no' },
-    isSelected: { type: Boolean, defaut: false },
     metadatas: {
       type: Array,
       default() {
         return [];
       }
     },
+    y: { type: Number, default: 1 },
+    textFontSize: { type: Number, default: 15 },
+    coloring: { type: String, default: 'no' },
+    isSelected: { type: Boolean, defaut: false },
     selectionMode: { type: Boolean, default: false }
   },
   data() {
@@ -69,76 +66,24 @@ export default {
     };
   },
   computed: {
-    opacity() {
-      if (this.selectionMode === false || (this.selectionMode === true && this.isSelected)) {
-        return this.defaultOpacity;
-      } else {
-        return this.defaultOpacity - this.defaultOpacityContrast;
-      }
-    },
-    sequenceArray() {
+    /**
+     * return an object array. each object represents a nucleotide:
+     * letter : the nucleotide,
+     * x: its x position,
+     * pos: a string given its position in the original sequence (without gap)
+     */
+    seqNucleotides() {
       return this.sequence.seq.split('').map((s, i) => ({
         letter: s,
         x: this.rectX(i),
-        pos: this.sequence.oriseqpositions[i] > 0 ? 'pos ' + this.sequence.oriseqpositions[i] : ''
+        pos: this.sequence.oriseqpositions[i] > 0 ? ':' + this.sequence.oriseqpositions[i] : ''
       }));
-    },
-    getSeqLength() {
-      return this.sequence.seq.length;
-    },
-    getWidth() {
-      return this.aX(this.getSeqLength) - this.aX(0);
-    },
-    getLetterWidth() {
-      return this.aX(1) - this.aX(0);
-    },
-    getShift() {
-      return Math.round((this.getLetterWidth / 2) * 10) / 10;
-    },
-    rectY() {
-      return this.y - this.textFontSize + 1;
-    },
-    /**
-     * build a string given the style of the metadata i, value i2
-     */
-    metadataStyle() {
-      return function(i, i2) {
-        var style = '';
-        if (
-          !this.metadatas.find(m => m.metadata_id === i) ||
-          !this.metadatas.find(m => m.metadata_id === i).values.find(v => v.value_id === i2)
-        ) {
-          return '';
-        }
-        const o_style = this.metadatas
-          .find(m => m.metadata_id === i)
-          .values.find(v => v.value_id === i2);
-
-        if (o_style.hasOwnProperty('fill')) {
-          style = 'fill: ' + o_style.fill;
-          if (o_style.hasOwnProperty('fillopacity')) {
-            style = style + ';fill-opacity: ' + o_style.fillopacity;
-          } else {
-            style = style + ';fill-opacity: ' + this.opacity;
-          }
-        } else {
-          style = 'fill-opacity:0';
-        }
-        if (o_style.hasOwnProperty('stroke')) {
-          style = style + ';stroke:' + o_style.stroke;
-        }
-        if (o_style.hasOwnProperty('strokedash') && o_style.strokedash == true) {
-          style = style + ';stroke-dasharray: 4,2';
-        }
-
-        return style;
-      };
     },
     /**
      * Get the rectangles to display according to the metadata values
      *  Return an array of objects
      */
-    getColoredRect() {
+    coloredRect() {
       let displayedRect = [];
 
       switch (this.coloring) {
@@ -146,6 +91,7 @@ export default {
           if (!this.sequence.metadatas) break;
           this.sequence.metadatas.forEach(m => {
             const metadata_style = this.metadataStyle(m.metadata_id, m.value_id);
+
             if (!m.hasOwnProperty('ranges')) {
               displayedRect.push(this.newSeqRect(metadata_style));
             } else {
@@ -179,10 +125,51 @@ export default {
       }
 
       /* if the sequence is selected add a dash rectangle  */
-      if (this.isSelected) {
-        displayedRect.push(this.newSeqRect('', 'selected'));
-      }
+      // if (this.isSelected) {
+      //   displayedRect.push(this.newSeqRect('', 'selected'));
+      // }
       return displayedRect;
+    },
+    seqLength() {
+      return this.sequence.seq.length;
+    },
+    seqWidth() {
+      return this.aX(this.seqLength) - this.aX(0);
+    },
+    seqRectY() {
+      return this.rectY(this.y);
+    },
+
+    /**
+     * return a function which return a styule object of the value i2 of the metadata
+     *
+     */
+    metadataStyle() {
+      return function(i, i2) {
+        if (
+          !this.metadatas.find(m => m.metadata_id === i) ||
+          !this.metadatas.find(m => m.metadata_id === i).values.find(v => v.value_id === i2)
+        ) {
+          return {};
+        }
+        var o_style = this.metadatas
+          .find(m => m.metadata_id === i)
+          .values.find(v => v.value_id === i2);
+
+        if (o_style.hasOwnProperty('fill')) {
+          o_style['fill-opacity'] = o_style.hasOwnProperty('fill_opacity')
+            ? o_style.fill_opacity
+            : this.opacity;
+        } else {
+          o_style['fill'] = 'white'; // ????
+          o_style['fill-opacity'] = 0;
+        }
+        if (o_style.hasOwnProperty('stroke_dasharray')) {
+          o_style['stroke-dasharray'] = o_style.stroke_dasharray;
+        }
+
+        return o_style;
+      };
     },
     /**
      *
@@ -193,28 +180,33 @@ export default {
           (this.sequence.isConsensus === true && this.sequence.isNode === false) ||
           this.sequence.isNode === true
       };
+    },
+    opacity() {
+      if (this.selectionMode === false || (this.selectionMode === true && this.isSelected)) {
+        return this.defaultOpacity;
+      } else {
+        return this.defaultOpacity - this.defaultOpacityContrast;
+      }
     }
   },
   methods: {
-    /** x coordinate of the rectangle at the index i */
-    rectX(i) {
-      return this.aX(i) - this.getShift;
-    },
     /**
-     * return a string given the fill and its opacity
+     * return an object style given the fill and its opacity
      */
     getStyle(f, o) {
-      return 'fill: ' + f + ';fill-opacity: ' + o;
+      var o_style = {};
+      o_style['fill'] = f;
+      o_style['fill-opacity'] = o;
+      return o_style;
     },
     /**
      * return a new object corresponding to a rect to color all the sequence
      */
-    newSeqRect(s, c) {
+    newSeqRect(s) {
       return {
         x: this.rectX(0),
-        width: this.getWidth,
-        style: s,
-        class: c
+        width: this.seqWidth,
+        style: s
       };
     },
     newRect(x, w, s, c) {
