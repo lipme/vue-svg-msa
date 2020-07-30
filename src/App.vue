@@ -5,7 +5,7 @@
       :end="end"
       :seqs="testSeqs"
       :tracks="testTracks"
-      coloring="metadata"
+      coloring="seqcolor"
       :metadatas="metadatas2"
       :selectedseqs="selectedseqid"
       :selectedregs="selectedregs"
@@ -27,7 +27,7 @@ export default {
     return {
       start: 1,
       end: -1,
-      //selectedseqid: ['seq1', 'seq2', 'seq5'],
+      selectedseqid: ['seq1', 'seq2', 'seq5'],
       selectedregs: [
         {
           ranges: [
@@ -36,7 +36,17 @@ export default {
           ]
         }
       ],
-      selectedseqid: [],
+      // selectedregs: [
+      //   {
+      //     metadata_id: 1,
+      //     value_id: 1,
+      //     ranges: [
+      //       [1, 20],
+      //       [180, 230]
+      //     ]
+      //   }
+      // ],
+      // selectedseqid: [],
       //selectedregs: [],
       metadatas2: [
         {
