@@ -56,7 +56,7 @@
           :y="seqIndex"
           :text-font-size="seqTextFontSize"
           :coloring="coloring"
-          :metadatas="metadatas"
+          :o-metadatas="o_metadatas"
           :is-selected="isSelected(s.id)"
           :selection-mode="selectionMode"
           @click="showSeqDialog(seqIndex)"
@@ -80,6 +80,7 @@ import SvgSequenceNameField from '@/components/SvgMsa/SvgSequenceNameField.vue';
 import SequenceSelectionRect from '@/components/SvgMsa/SequenceSelectionRect.vue';
 import RegionSelectionRect from '@/components/SvgMsa/RegionSelectionRect.vue';
 import SequenceModal from '@/components/SvgMsa/SequenceModal.vue';
+import Metadatas from '@/metadatas.js';
 
 export default {
   /*
@@ -166,7 +167,8 @@ export default {
       offsetX: 200,
       displaySeqDialog: false,
       displayDialogSequences: [],
-      isLoading: false
+      isLoading: false,
+      o_metadatas: new Metadatas(this.metadatas)
     };
   },
   computed: {
