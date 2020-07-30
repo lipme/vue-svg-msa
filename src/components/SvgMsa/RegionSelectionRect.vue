@@ -1,11 +1,16 @@
 <template>
   <!-- draw a rectangle to select a region -->
-  <rect :x="rectX(x1)" :y="rectY(y1)" :height="regionHeight" :width="regionWidth" class="selected"></rect>
+  <MetadataRect :rect="rect"></MetadataRect>
 </template>
 
 <script>
 import { coordinate } from '@/mixins/coordinate';
+import MetadataRect from '@/components/SvgMsa/MetadataRect.vue';
+
 export default {
+  components: {
+    MetadataRect
+  },
   mixins: [coordinate],
   props: {
     x1: { type: Number, default: 1 },
@@ -19,6 +24,16 @@ export default {
     },
     regionHeight() {
       return (this.y2 - this.y1) * this.getTrackHeight;
+    },
+    rect() {
+      return this.newRect(
+        this.rectX(this.x1),
+        this.rectY(this.y1),
+        this.regionWidth,
+        this.regionHeight,
+        '',
+        'selected'
+      );
     }
   }
 };
