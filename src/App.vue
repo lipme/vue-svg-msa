@@ -5,13 +5,13 @@
       :end="end"
       :seqs="testSeqs"
       :tracks="testTracks"
-      coloring="seqcolor"
+      coloring="metadata"
       :metadatas="metadatas2"
       :selectedseqs="selectedseqid"
       :selectedregs="selectedregs"
     ></svg-msa>
 
-    <svg-msa :seqs="seqs2" coloring="auto"></svg-msa>
+    <!-- <svg-msa :seqs="seqs2" coloring="auto"></svg-msa> -->
   </div>
 </template>
 
@@ -31,8 +31,8 @@ export default {
       selectedregs: [
         {
           ranges: [
-            [1, 20],
-            [180, 230]
+            [35, 35],
+            [90, 96]
           ]
         }
       ],
