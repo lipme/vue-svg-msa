@@ -40,10 +40,10 @@ export default {
 </script>
 <style scoped>
 .selected {
-  fill-opacity: 0.1;
-  stroke: black;
-  stroke-opacity: 1;
-  stroke-width: 1.5;
-  stroke-dasharray: 4, 2;
+  fill-opacity: 0.3;
+  /* stroke: black;
+  stroke-opacity: 1; */
+  /* stroke-width: 1.5;
+  stroke-dasharray: 4, 2; */
 }
 </style>
