@@ -25,7 +25,7 @@ export default {
   },
   data() {
     return {
-      start: 1,
+      start: 5,
       end: -1,
       selectedseqid: ['seq1', 'seq2', 'seq5'],
       selectedregs: [

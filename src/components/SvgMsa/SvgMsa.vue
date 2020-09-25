@@ -80,6 +80,8 @@ import RegionSelectionRect from '@/components/SvgMsa/RegionSelectionRect.vue';
 import SequenceModal from '@/components/SvgMsa/SequenceModal.vue';
 import Metadatas from '@/metadatas.js';
 
+import _ from 'lodash';
+
 export default {
   /*
   When the use click to the name of a sequence, emit the event 'select-node'
@@ -293,7 +295,7 @@ export default {
      * return an array of tracks with the transformed coordinate
      */
     regionTracks() {
-      let regTracks = this.tracks;
+      let regTracks = _.cloneDeep(this.tracks);
       regTracks.forEach(t => {
         t.features.forEach(f => {
           if ('positions' in f) f.positions = this.sliceRange(f.positions);
@@ -354,7 +356,7 @@ export default {
     },
     /**
      * ranges is an array of range
-     * for each element, transfrom the position accroding to start and end values
+     * for each element, transfrom the position according to start and end values
      */
     sliceRange(ranges) {
       return ranges
