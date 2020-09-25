@@ -8,6 +8,7 @@
         :sep="trackSep"
         :offset-x="offsetX"
         :width="widthSvg"
+        :tooltip="false"
       ></vue-svg-tracks>
       <svg-scale-bar
         :length="maxLengthExtractSeqs"
