@@ -1,19 +1,17 @@
 <template>
   <div class="seq-alignment">
     <svg :width="widthSvg" :height="heightSvg">
-      <svg-track
-        v-for="(track, index) in regionTracks"
-        :key="'track-' + index"
+      <vue-svg-tracks
+        :tracks="tracks"
         :length="maxLengthExtractSeqs"
-        :y="trackY[index]"
-        :fct-scale-x="coordX"
-        :track="track"
-        :text-font-size="seqTextFontSize"
-      />
-
+        :track-height="trackHeight"
+        :sep="trackSep"
+        :offset-x="offsetX"
+        :width="widthSvg"
+      ></vue-svg-tracks>
       <svg-scale-bar
         :length="maxLengthExtractSeqs"
-        :y="trackY[metadataTrackNumber]"
+        :y="metadataTrackGlobalHeight - 10"
         :fct-scale-x="coordX"
         :start="zerobasedStart"
       />
@@ -32,9 +30,9 @@
         :key="'column' + i"
         :a-x="coordX"
         :a-y="coordY"
-        :x1="s[0]-1"
+        :x1="s[0] - 1"
         :y1="0"
-        :x2="s[1]-1"
+        :x2="s[1] - 1"
         :y2="sequenceNb"
       />
       <!-- display each sequence -->
@@ -74,7 +72,7 @@
 <script>
 import * as d3 from 'd3-scale';
 import SvgScaleBar from '@/components/SvgMsa/SvgScaleBar.vue';
-import SvgTrack from '@/components/SvgMsa/SvgTrack.vue';
+import { VueSvgTracks } from 'vue-svg-tracks';
 import SvgPolyColorSequence from '@/components/SvgMsa/SvgPolyColorSequence.vue';
 import SvgSequenceNameField from '@/components/SvgMsa/SvgSequenceNameField.vue';
 import SequenceSelectionRect from '@/components/SvgMsa/SequenceSelectionRect.vue';
@@ -89,7 +87,7 @@ export default {
 
   name: 'SvgMsa',
   components: {
-    SvgTrack,
+    VueSvgTracks,
     SvgScaleBar,
     SvgPolyColorSequence,
     SvgSequenceNameField,
@@ -158,11 +156,18 @@ export default {
      * String to change the coloration
      * Allowed values:  'no', 'metadata', 'seqcolor', 'auto'
      */
-    coloring: { type: String, default: 'no' }
+    coloring: { type: String, default: 'no' },
+    trackHeight: {
+      type: Number,
+      default: 15
+    },
+    trackSep: {
+      type: Number,
+      default: 5
+    }
   },
   data() {
     return {
-      trackHeight: 15,
       letterAdditionalWidth: 0,
       offsetX: 200,
       displaySeqDialog: false,
@@ -213,7 +218,7 @@ export default {
       return this.tracks.length;
     },
     metadataTrackGlobalHeight() {
-      return (this.metadataTrackNumber + 2) * this.trackHeight;
+      return (this.metadataTrackNumber + 2) * (this.trackHeight + this.trackSep);
     },
     seqsHeight() {
       return this.seqs.length * this.trackHeight;
@@ -247,18 +252,6 @@ export default {
       return i => {
         return this.metadataTrackGlobalHeight + (i + 1) * this.trackHeight;
       };
-    },
-    /**
-     * Return an array of the coordinate 'y' values
-     * of the metadat tracks
-     * @return {number}  an array of the coordinate 'y' values.
-     */
-    trackY() {
-      const metadataTrackY = [];
-      for (let i = 0; i <= this.tracks.length; i += 1) {
-        metadataTrackY.push(this.trackHeight * (i + 1));
-      }
-      return metadataTrackY;
     },
     zerobasedStart() {
       return this.start >= 1 ? this.start - 1 : 0;

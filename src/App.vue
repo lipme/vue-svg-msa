@@ -267,7 +267,25 @@ export default {
               color: 'pink'
             }
           ],
-          trackLabel: 'label1/label2'
+          trackLabel: 'track1'
+        },
+        {
+          features: [
+            {
+              positions: [
+                [2, 32],
+                [109, 234]
+              ],
+              type: 'label1',
+              color: 'green'
+            },
+            {
+              positions: [[33, 108]],
+              type: 'label2',
+              color: 'pink'
+            }
+          ],
+          trackLabel: 'track2'
         }
       ],
       coloring: 'auto' //'auto'
