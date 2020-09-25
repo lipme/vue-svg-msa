@@ -2,7 +2,7 @@
   <div class="seq-alignment">
     <svg :width="widthSvg" :height="heightSvg">
       <vue-svg-tracks
-        :tracks="tracks"
+        :tracks="regionTracks"
         :length="maxLengthExtractSeqs"
         :track-height="trackHeight"
         :sep="trackSep"
