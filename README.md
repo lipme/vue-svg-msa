@@ -21,7 +21,7 @@ import 'vue-svg-msa/dist/vue-svg-msa.css'
       :end="end"
       :tracks="tracks"
       coloring="auto"
-      :metadatas="metadata"
+      :metadata="metadata"
       :selectedseqs="getselectectids"
     ></SvgMsa>
 ```
@@ -65,51 +65,40 @@ tracks: [
 }]
 ```
 
-**coloring** allows the values 'no', 'seqcolor', 'auto', 'metadata'.
-If the value is 'metadata', the sequences are colored with the colors containing in the **metadatas** array.
+**coloring** allows the values 'no', 'seqcolor', 'auto', 'metadata'. It is allowed to mix the values, eg 'seqcolor|metadata'
+If the value is 'metadata', the styles described in the **metadata** array are apply to the svg image.
 
 ```
-metadatas: [
+metadata: [
   {
-    metadata_id: 0,
-    label: 'conservation level',
-    values: [
-    {
-      value_id: 0,
-      label: 'high level',
-      fill: 'blue',
-      fillopacity: 0.3,
-      stroke: 'black',
-      strokedash: false
-    },
-    {
-      value_id: 1,
-      label: 'moderate level',
-      fill: 'pink',
-      fillopacity: 0.8,
-    }
-    ]
-  }
+     label: 'Conservation level',
+          categories: [
+            {
+              label: 'high level',
+              style: {
+                fill: 'red',
+                'fill-opacity': 0.5
+                stroke: 'black'
+              },
+              regions: [
+                {
+                  seqid: 'seqid1',
+                  ranges: [[21, 176],[315,390]]
+                },
+                {
+                  seqid: 'seq2',
+                  ranges: [[21, 176]]
+                }
+              ]
+            }, {...}]
+  }, {...}
 ]
 
-seqs: [
-{
-  seq: 'ATCATCATCATCATCATACTCATTTTTACAT---CATCATACTACATCATCATATACTCATTTTTACATCATC-TCTT',
-  ..
-  metadatas: [
-    { metadata_id: 0, value_id: 0, ranges: [[1, 40],[100, 234]]},
-    { metadata_id: 0, value_id: 1, ranges: [[41, 99]] }
-  ]
-},
-{
-  seq: 'ATCATCATCATCATCATACTCATTTTTACATTTTCATCATACTACATCATCATATACTCATTTTTACATCATCTTCTT',
-  ...
-  metadatas: [ { metadata_id: 0, value_id: 1}]
-}
-...
-]
 
-In the second example the metadata coloring would be apply on all the sequence
+In a region, if the 'seqid' attribute is empty or missing, the regions of all the sequences would be colored.
+In a region, if the 'ranges' attribute is empty or missing, all the sequence would be colored.
+
+Note: 'label' attributes are not used.
 
 **selectedseqs** is an array of sequence ids which will be highlighted in the msa.
 
