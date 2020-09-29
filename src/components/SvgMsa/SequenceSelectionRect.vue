@@ -1,6 +1,4 @@
 <template>
-  <!-- draw a rectangle to select a region -->
-  <!-- <rect :x="rectX(0)" :y="rectY(y)" :height="getTrackHeight" :width="getWidth" class="selected"></rect> -->
   <MetadataRect :rect="rect"></MetadataRect>
 </template>
 
@@ -16,10 +14,8 @@ export default {
   props: {
     y: { type: Number, default: 1 },
     seqlen: { type: Number, default: 0 }
-    // style: {
-    //   type: Object,
-    //   default() { return {}}
   },
+
   computed: {
     rect() {
       return this.newSeqRect(this.y, this.seqlen, '', 'selected');
