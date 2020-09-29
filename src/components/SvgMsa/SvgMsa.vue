@@ -26,17 +26,20 @@
         :y="s.index"
         :seqlen="maxLengthExtractSeqs"
       />
-      <!-- display a rectangle for each selected region -->
-      <region-selection-rect
-        v-for="(s, i) in selectionRegs"
-        :key="'column' + i"
+
+      <!-- draw metadata rectangles -->
+      <metadata-draw
+        v-for="(m, index) in regionMetadata"
+        :key="'m-' + index"
+        :metadata="m"
         :a-x="coordX"
         :a-y="coordY"
-        :x1="s[0]-1"
-        :y1="0"
-        :x2="s[1]-1"
-        :y2="sequenceNb"
+        :a-seqindex="seqInd"
+        :selectionSeqs="selectionSeqs"
+        :seq-len="maxLengthExtractSeqs"
+        :seq-nb="sequenceNb"
       />
+
       <!-- display each sequence -->
       <template v-for="(s, seqIndex) in extractSeqs">
         <svg-sequence-name-field
@@ -56,7 +59,6 @@
           :y="seqIndex"
           :text-font-size="seqTextFontSize"
           :coloring="coloring"
-          :o-metadatas="o_metadatas"
           :is-selected="isSelected(s.id)"
           :selection-mode="selectionMode"
           @click="showSeqDialog(seqIndex)"
@@ -78,9 +80,8 @@ import SvgTrack from '@/components/SvgMsa/SvgTrack.vue';
 import SvgPolyColorSequence from '@/components/SvgMsa/SvgPolyColorSequence.vue';
 import SvgSequenceNameField from '@/components/SvgMsa/SvgSequenceNameField.vue';
 import SequenceSelectionRect from '@/components/SvgMsa/SequenceSelectionRect.vue';
-import RegionSelectionRect from '@/components/SvgMsa/RegionSelectionRect.vue';
 import SequenceModal from '@/components/SvgMsa/SequenceModal.vue';
-import Metadatas from '@/metadatas.js';
+import MetadataDraw from '@/components/SvgMsa/MetadataDraw.vue';
 
 export default {
   /*
@@ -95,7 +96,7 @@ export default {
     SvgSequenceNameField,
     SequenceModal,
     SequenceSelectionRect,
-    RegionSelectionRect
+    MetadataDraw
   },
   props: {
     /**
@@ -131,9 +132,9 @@ export default {
       }
     },
     /**
-     * metadatas: array of metadata definitions
+     * metadata: array of metadata definitions
      */
-    metadatas: {
+    metadata: {
       type: Array,
       default() {
         return [];
@@ -167,8 +168,7 @@ export default {
       offsetX: 200,
       displaySeqDialog: false,
       displayDialogSequences: [],
-      isLoading: false,
-      o_metadatas: new Metadatas(this.metadatas)
+      isLoading: false
     };
   },
   computed: {
@@ -248,6 +248,11 @@ export default {
         return this.metadataTrackGlobalHeight + (i + 1) * this.trackHeight;
       };
     },
+    seqInd() {
+      return seqid => {
+        return this.extractSeqs.findIndex(o => o.id === seqid);
+      };
+    },
     /**
      * Return an array of the coordinate 'y' values
      * of the metadat tracks
@@ -286,9 +291,6 @@ export default {
         })
         .filter(s => this.selectedseqs.find(e => e === s.id));
     },
-    selectionRegs() {
-      return this.selectedregs.map(s => this.sliceRange(s.ranges)).flat();
-    },
     /**
      * return true if a sequence is selected
      * in that case the display opacuty would change
@@ -307,6 +309,24 @@ export default {
         });
       });
       return regTracks;
+    },
+    /**
+     * return an array of metadata with the transformed coordinates
+     */
+    regionMetadata() {
+      if (this.coloring.includes('metadata')) {
+        // slice the coordinates
+        let regionMetadata = this.metadata;
+        this.metadata.forEach(m => {
+          m.categories.forEach(c => {
+            c.regions.forEach(r => {
+              if ('ranges' in r) r.ranges = this.sliceRange(r.ranges);
+            });
+          });
+        });
+        return regionMetadata;
+      }
+      return [];
     }
   },
   mounted() {
