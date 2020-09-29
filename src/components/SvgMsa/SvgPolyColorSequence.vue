@@ -12,7 +12,8 @@
         :y="aY(y)"
         :class="getClass"
         :font-size="textFontSize"
-      >{{ item.letter }}</text>
+        >{{ item.letter }}</text
+      >
       <rect
         :key="'rect-' + id"
         :x="item.x"
@@ -22,7 +23,9 @@
         class="invisible"
         @click="$emit('click')"
       >
-        <title style="text-align:left">{{ sequence.name }}{{ item.pos }} - Click to get the sequence</title>
+        <title style="text-align:left">
+          {{ sequence.name }}{{ item.pos }} - Click to get the sequence
+        </title>
       </rect>
     </template>
   </g>
@@ -30,7 +33,6 @@
 
 <script>
 import { coordinate } from '@/mixins/coordinate';
-import Metadatas from '@/metadatas.js';
 import MetadataRect from '@/components/SvgMsa/MetadataRect.vue';
 
 export default {
@@ -45,13 +47,6 @@ export default {
         return [];
       }
     },
-    oMetadatas: {
-      type: Metadatas,
-      default: function() {
-        return new Metadatas();
-      }
-    },
-
     y: { type: Number, default: 1 },
     textFontSize: { type: Number, default: 15 },
     coloring: { type: String, default: 'no' },
@@ -79,44 +74,21 @@ export default {
       }));
     },
     /**
-     * Get the rectangles to display according to the metadata values
+     * Get the rectangles to display according to the coloring value
      *  Return an array of objects
      */
     coloredRect() {
       let displayedRect = [];
-
-      switch (this.coloring) {
-        case 'metadata':
-          if (!this.sequence.metadatas) break;
-          this.sequence.metadatas.forEach(m => {
-            const metadata_style = this.oMetadatas.getStyle(
-              m.metadata_id,
-              m.value_id,
-              this.opacity
-            );
-            displayedRect.push(this.buildRect(this.y, m, metadata_style, this.seqLength));
-          });
-          displayedRect = displayedRect.flat();
-          break;
-
-        case 'auto':
-          displayedRect = this.sequence.seq.split('').map((l, i) => {
-            return this.newNtRect(i, this.y, this.getStyle(this.getNtColor(l), this.opacity));
-          });
-          break;
-
-        case 'seqcolor':
-          if (this.sequence.color === '') break;
-          displayedRect.push(
-            this.newSeqRect(
-              this.y,
-              this.seqLength,
-              this.getStyle(this.sequence.color, this.opacity)
-            )
-          );
-          break;
+      if (this.coloring.includes('auto')) {
+        displayedRect = this.sequence.seq.split('').map((l, i) => {
+          return this.newNtRect(i, this.y, this.getStyle(this.getNtColor(l), this.opacity));
+        });
       }
-
+      if (this.coloring.includes('seqcolor') && this.sequence.color !== '') {
+        displayedRect.push(
+          this.newSeqRect(this.y, this.seqLength, this.getStyle(this.sequence.color, this.opacity))
+        );
+      }
       return displayedRect;
     },
     seqLength() {
