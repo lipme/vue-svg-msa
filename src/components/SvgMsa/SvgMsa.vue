@@ -1,19 +1,17 @@
 <template>
   <div class="seq-alignment">
     <svg :width="widthSvg" :height="heightSvg">
-      <svg-track
-        v-for="(track, index) in regionTracks"
-        :key="'track-' + index"
+      <vue-svg-tracks
+        :tracks="regionTracks"
         :length="maxLengthExtractSeqs"
-        :y="trackY[index]"
-        :fct-scale-x="coordX"
-        :track="track"
-        :text-font-size="seqTextFontSize"
-      />
-
+        :track-height="trackHeight"
+        :sep="trackSep"
+        :offset-x="offsetX"
+        :width="widthSvg"
+      ></vue-svg-tracks>
       <svg-scale-bar
         :length="maxLengthExtractSeqs"
-        :y="trackY[metadataTrackNumber]"
+        :y="metadataTrackGlobalHeight - 10"
         :fct-scale-x="coordX"
         :start="zerobasedStart"
       />
@@ -76,12 +74,14 @@
 <script>
 import * as d3 from 'd3-scale';
 import SvgScaleBar from '@/components/SvgMsa/SvgScaleBar.vue';
-import SvgTrack from '@/components/SvgMsa/SvgTrack.vue';
+import { VueSvgTracks } from 'vue-svg-tracks';
 import SvgPolyColorSequence from '@/components/SvgMsa/SvgPolyColorSequence.vue';
 import SvgSequenceNameField from '@/components/SvgMsa/SvgSequenceNameField.vue';
 import SequenceSelectionRect from '@/components/SvgMsa/SequenceSelectionRect.vue';
 import SequenceModal from '@/components/SvgMsa/SequenceModal.vue';
 import MetadataDraw from '@/components/SvgMsa/MetadataDraw.vue';
+
+import _ from 'lodash';
 
 export default {
   /*
@@ -90,7 +90,7 @@ export default {
 
   name: 'SvgMsa',
   components: {
-    SvgTrack,
+    VueSvgTracks,
     SvgScaleBar,
     SvgPolyColorSequence,
     SvgSequenceNameField,
@@ -159,11 +159,18 @@ export default {
      * String to change the coloration
      * Allowed values:  'no', 'metadata', 'seqcolor', 'auto'
      */
-    coloring: { type: String, default: 'no' }
+    coloring: { type: String, default: 'no' },
+    trackHeight: {
+      type: Number,
+      default: 15
+    },
+    trackSep: {
+      type: Number,
+      default: 5
+    }
   },
   data() {
     return {
-      trackHeight: 15,
       letterAdditionalWidth: 0,
       offsetX: 200,
       displaySeqDialog: false,
@@ -213,7 +220,7 @@ export default {
       return this.tracks.length;
     },
     metadataTrackGlobalHeight() {
-      return (this.metadataTrackNumber + 2) * this.trackHeight;
+      return (this.metadataTrackNumber + 2) * (this.trackHeight + this.trackSep);
     },
     seqsHeight() {
       return this.seqs.length * this.trackHeight;
@@ -253,18 +260,6 @@ export default {
         return this.extractSeqs.findIndex(o => o.id === seqid);
       };
     },
-    /**
-     * Return an array of the coordinate 'y' values
-     * of the metadat tracks
-     * @return {number}  an array of the coordinate 'y' values.
-     */
-    trackY() {
-      const metadataTrackY = [];
-      for (let i = 0; i <= this.tracks.length; i += 1) {
-        metadataTrackY.push(this.trackHeight * (i + 1));
-      }
-      return metadataTrackY;
-    },
     zerobasedStart() {
       return this.start >= 1 ? this.start - 1 : 0;
     },
@@ -302,7 +297,7 @@ export default {
      * return an array of tracks with the transformed coordinate
      */
     regionTracks() {
-      let regTracks = this.tracks;
+      let regTracks = _.cloneDeep(this.tracks);
       regTracks.forEach(t => {
         t.features.forEach(f => {
           if ('positions' in f) f.positions = this.sliceRange(f.positions);
@@ -381,7 +376,7 @@ export default {
     },
     /**
      * ranges is an array of range
-     * for each element, transfrom the position accroding to start and end values
+     * for each element, transfrom the position according to start and end values
      */
     sliceRange(ranges) {
       return ranges

@@ -7,7 +7,7 @@
     "vue",
     "msa"
   ],
-  "version": "0.1.18",
+  "version": "0.3.0",
   "private": false,
   "license": "Apache-2.0",
   "author": {
@@ -50,7 +50,8 @@
   "dependencies": {
     "d3-scale": "^3.0.0",
     "vue": "^2.6.10",
-    "vue-clipboard2": "^0.3.1"
+    "vue-clipboard2": "^0.3.1",
+    "vue-svg-tracks": "^0.2.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.8.0",
