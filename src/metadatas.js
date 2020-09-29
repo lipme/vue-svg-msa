@@ -1,3 +1,4 @@
+//  NOT USED
 export default class Metadatas {
   constructor(metadataArray) {
     this.metadatas = metadataArray;
