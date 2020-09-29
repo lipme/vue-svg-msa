@@ -25,6 +25,13 @@ export const coordinate = {
     seqWidth(seqLength) {
       return this.aX(seqLength) - this.aX(0);
     },
+    regionWidth(x1, x2) {
+      return (x2 - x1 + 1) * this.getLetterWidth;
+    },
+    regionHeight(y1, y2) {
+      return (y2 - y1) * this.getTrackHeight;
+    },
+
     /**
      * Return an array of rectangle objects to display
      * @param {*} y
@@ -51,6 +58,17 @@ export const coordinate = {
       }
       return displayedRect;
     },
+
+    buildRegionRect(o, seqnb, o_style, regionClass) {
+      let displayedRect = [];
+      o.ranges.forEach(pos => {
+        displayedRect.push(
+          this.newRegionRect(pos[0] - 1, pos[1] - 1, 0, seqnb, o_style, regionClass)
+        );
+      });
+
+      return displayedRect;
+    },
     /**
      * return a new object corresponding to a rect to color all the sequence
      */
@@ -65,6 +83,12 @@ export const coordinate = {
       );
     },
 
+    /**
+     * {return a rectangle to colorate one nucleotide
+     * @param {*} x
+     * @param {*} y
+     * @param {*} style
+     */
     newNtRect(x, y, style) {
       return this.newRect(
         this.rectX(x),
@@ -74,6 +98,18 @@ export const coordinate = {
         style
       );
     },
+
+    newRegionRect(x1, x2, y1, y2, regionStyle, regionClass) {
+      return this.newRect(
+        this.rectX(x1),
+        this.rectY(y1),
+        this.regionWidth(x1, x2),
+        this.regionHeight(y1, y2),
+        regionStyle,
+        regionClass
+      );
+    },
+
     newRect(x, y, w, h, s, c) {
       return {
         x: x,
