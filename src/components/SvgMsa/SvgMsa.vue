@@ -60,6 +60,7 @@
           :coloring="coloring"
           :is-selected="isSelected(s.id)"
           :selection-mode="selectionMode"
+          :letter-type="type"
           @click="showSeqDialog(seqIndex)"
         />
       </template>
@@ -168,6 +169,13 @@ export default {
     trackSep: {
       type: Number,
       default: 5
+    },
+    type: {
+      type: String,
+      default: 'nt',
+      validator: function(value) {
+        return ['nt', 'aa'].indexOf(value) !== -1;
+      }
     }
   },
   data() {
