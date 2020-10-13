@@ -5,7 +5,8 @@
       :end="end"
       :seqs="testSeqsNEW"
       :tracks="testTracks"
-      coloring="metadata"
+      coloring="auto"
+      type="nt"
       :metadata="metadata"
       :selectedseqs="selectedseqid"
     ></svg-msa>
