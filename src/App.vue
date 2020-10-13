@@ -40,47 +40,47 @@ export default {
               },
               regions: [
                 {
-                  seqid: 'seq1',
+                  id: 'seq1',
                   ranges: [[21, 176]]
                 },
                 {
-                  seqid: 'seq2',
+                  id: 'seq2',
                   ranges: [[21, 176]]
                 },
                 {
-                  seqid: 'seq3',
+                  id: 'seq3',
                   ranges: [[21, 176]]
                 },
                 {
-                  seqid: 'seq4',
+                  id: 'seq4',
                   ranges: [[21, 176]]
                 },
                 {
-                  seqid: 'seq5',
+                  id: 'seq5',
                   ranges: [[21, 176]]
                 },
                 {
-                  seqid: 'seq6',
+                  id: 'seq6',
                   ranges: [[21, 176]]
                 },
                 {
-                  seqid: 'seq7',
+                  id: 'seq7',
                   ranges: [[21, 176]]
                 },
                 {
-                  seqid: 'seq8',
+                  id: 'seq8',
                   ranges: [[21, 176]]
                 },
                 {
-                  seqid: 'seq9',
+                  id: 'seq9',
                   ranges: [[21, 176]]
                 },
                 {
-                  seqid: 'seq10',
+                  id: 'seq10',
                   ranges: [[21, 176]]
                 },
                 {
-                  seqid: 'seq11',
+                  id: 'seq11',
                   ranges: [[21, 176]]
                 }
               ]
@@ -92,62 +92,62 @@ export default {
               },
               regions: [
                 {
-                  seqid: 'seq1',
+                  id: 'seq1',
                   ranges: [
                     [1, 20],
                     [177, 234]
                   ]
                 },
                 {
-                  seqid: 'seq2',
+                  id: 'seq2',
                   ranges: [
                     [1, 20],
                     [177, 234]
                   ]
                 },
                 {
-                  seqid: 'seq3',
+                  id: 'seq3',
                   ranges: [
                     [1, 20],
                     [177, 234]
                   ]
                 },
                 {
-                  seqid: 'seq4',
+                  id: 'seq4',
                   ranges: [
                     [1, 20],
                     [177, 234]
                   ]
                 },
                 {
-                  seqid: 'seq5',
+                  id: 'seq5',
                   ranges: [
                     [1, 20],
                     [177, 234]
                   ]
                 },
                 {
-                  seqid: 'seq6',
+                  id: 'seq6',
                   ranges: [[177, 234]]
                 },
                 {
-                  seqid: 'seq7',
+                  id: 'seq7',
                   ranges: [[177, 234]]
                 },
                 {
-                  seqid: 'seq8',
+                  id: 'seq8',
                   ranges: [[177, 234]]
                 },
                 {
-                  seqid: 'seq9',
+                  id: 'seq9',
                   ranges: [[177, 234]]
                 },
                 {
-                  seqid: 'seq10',
+                  id: 'seq10',
                   ranges: [[177, 234]]
                 },
                 {
-                  seqid: 'seq11',
+                  id: 'seq11',
                   ranges: [[177, 234]]
                 }
               ]
@@ -187,7 +187,7 @@ export default {
               },
               regions: [
                 {
-                  seqid: 'seq2',
+                  id: 'seq2',
                   ranges: [
                     [1, 20],
                     [177, 234]
@@ -284,21 +284,6 @@ export default {
           id: 'seq11',
           name: 'seq11',
           color: 'green'
-        }
-      ],
-
-      seqs2: [
-        {
-          seq: 'ATCATCATCATCATCATACTCATTTTTACATCATCATCATACTACATCATCATATACTCATTTTTACATCATC-AT',
-          seqid: 's1',
-          isNode: true,
-          isConsensus: true
-        },
-        {
-          seq: 'ATCATCATCATCATCATACTCATTTTTACATCATCATCATACTACATCATCATATACTCATTTTTACATCATCATC',
-          seqid: 's2',
-          isNode: false,
-          isConsensus: false
         }
       ],
       testTracks: [

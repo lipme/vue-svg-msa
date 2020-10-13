@@ -48,11 +48,9 @@ export default {
       this.metadata.categories.forEach(c => {
         c.regions.forEach(r => {
           // draw rectangle on the sequence
-          if (r.hasOwnProperty('seqid') && r.seqid !== '') {
-            var regionStyle = this.consolidateStyle(c.style, r.seqid);
-            displayedRect.push(
-              this.buildRect(this.aSeqindex(r.seqid), r, regionStyle, this.seqlen)
-            );
+          if (r.hasOwnProperty('id') && r.id !== '') {
+            var regionStyle = this.consolidateStyle(c.style, r.id);
+            displayedRect.push(this.buildRect(this.aSeqindex(r.id), r, regionStyle, this.seqlen));
           } else {
             // draw rectangle on all the sequences
             displayedRect.push(this.buildRegionRect(r, this.seqNb, c.style, ''));

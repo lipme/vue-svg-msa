@@ -82,11 +82,11 @@ metadata: [
               },
               regions: [
                 {
-                  seqid: 'seqid1',
+                  id: 'seqid1',
                   ranges: [[21, 176],[315,390]]
                 },
                 {
-                  seqid: 'seq2',
+                  id: 'seqid2',
                   ranges: [[21, 176]]
                 }
               ]
@@ -95,7 +95,7 @@ metadata: [
 ]
 
 
-In a region, if the 'seqid' attribute is empty or missing, the regions of all the sequences would be colored.
+In a region, if the 'id' attribute is empty or missing, the regions of all the sequences would be colored.
 In a region, if the 'ranges' attribute is empty or missing, all the sequence would be colored.
 
 Note: 'label' attributes are not used.
