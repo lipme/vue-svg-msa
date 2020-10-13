@@ -5,7 +5,7 @@
       :end="end"
       :seqs="testSeqsNEW"
       :tracks="testTracks"
-      coloring="auto"
+      coloring="metadata"
       type="nt"
       :metadata="metadata"
       :selectedseqs="selectedseqid"
