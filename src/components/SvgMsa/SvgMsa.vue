@@ -320,8 +320,8 @@ export default {
     regionMetadata() {
       if (this.coloring.includes('metadata')) {
         // slice the coordinates
-        let regionMetadata = this.metadata;
-        this.metadata.forEach(m => {
+        let regionMetadata = _.cloneDeep(this.metadata);
+        regionMetadata.forEach(m => {
           m.categories.forEach(c => {
             c.regions.forEach(r => {
               if ('ranges' in r) r.ranges = this.sliceRange(r.ranges);
