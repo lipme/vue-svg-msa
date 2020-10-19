@@ -20,7 +20,7 @@
         :y="seqRectY"
         :height="getTrackHeight"
         :width="getLetterWidth"
-        class="invisible"
+        class="msainvisible"
         @click="$emit('click')"
       >
         <title style="text-align:left">
@@ -198,7 +198,7 @@ export default {
   stroke-width: 2;
   stroke-dasharray: 4, 2;
 }
-.invisible {
+.msainvisible {
   fill-opacity: 0;
 }
 </style>
