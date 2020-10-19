@@ -195,11 +195,19 @@ export default {
               label: 'high',
               style: {
                 stroke: 'red',
-                'stroke-dasharray': '4,2'
+                'stroke-dasharray': '4,2',
+                fill: 'red'
               },
               regions: [
                 {
                   id: 'seq2',
+                  ranges: [
+                    [1, 20],
+                    [177, 234]
+                  ]
+                },
+                {
+                  id: 'seq1',
                   ranges: [
                     [1, 20],
                     [177, 234]
