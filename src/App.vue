@@ -490,15 +490,10 @@ export default {
         categories: [
           {
             label: '',
-            style: {
-              'fill-opacity': 0.3,
-              fill: 'black'
-            },
             regions: r
           }
         ]
       };
-      console.log(m);
       return m;
     }
   }
