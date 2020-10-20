@@ -184,7 +184,11 @@ export default {
       offsetX: 200,
       displaySeqDialog: false,
       displayDialogSequences: [],
-      isLoading: false
+      isLoading: false,
+      defaultStyle: {
+        'fill-opacity': 0.3,
+        fill: 'black'
+      }
     };
   },
   computed: {
@@ -323,6 +327,8 @@ export default {
         let regionMetadata = _.cloneDeep(this.metadata);
         regionMetadata.forEach(m => {
           m.categories.forEach(c => {
+            // if the categories has no style, use the default one
+            if (!c.hasOwnProperty('style') || _.isEmpty(c.style)) c.style = this.defaultStyle;
             c.regions.forEach(r => {
               if ('ranges' in r) r.ranges = this.sliceRange(r.ranges);
             });
