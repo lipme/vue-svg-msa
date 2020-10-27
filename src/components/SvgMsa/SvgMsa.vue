@@ -8,7 +8,7 @@
         :sep="trackSep"
         :offset-x="offsetX"
         :width="widthSvg"
-        :tooltip="false"
+        :displayTooltip="displayTrackTooltip"
       ></vue-svg-tracks>
       <svg-scale-bar
         :length="maxLengthExtractSeqs"
@@ -198,6 +198,10 @@ export default {
     offsetX: {
       type: Number,
       default: 200
+    },
+    displayTrackTooltip: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
