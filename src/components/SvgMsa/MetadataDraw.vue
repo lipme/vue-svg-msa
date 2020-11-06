@@ -70,19 +70,17 @@ export default {
     consolidateStyle(s, seqid) {
       var regionStyle = Object.assign({}, s);
 
-      if (
-        regionStyle.hasOwnProperty('fill') &&
-        !regionStyle.hasOwnProperty('fill-opacity') &&
-        seqid !== ''
-      ) {
+      if (regionStyle.hasOwnProperty('fill')) {
+        if (!regionStyle.hasOwnProperty('fill-opacity')) {
+          regionStyle['fill-opacity'] = this.defaultOpacity;
+        }
+
         // fill the opacity according to the state of the sequence (selected or not)
         if (
-          this.selectionMode === false ||
-          (this.selectionMode === true && this.selectionSeqs.find(o => o.id == seqid) !== undefined)
+          this.selectionMode === true &&
+          this.selectionSeqs.find(o => o.id == seqid) == undefined
         ) {
-          regionStyle['fill-opacity'] = this.defaultOpacity;
-        } else {
-          regionStyle['fill-opacity'] = this.defaultOpacity - this.defaultOpacityContrast;
+          regionStyle['fill-opacity'] = regionStyle['fill-opacity'] - this.defaultOpacityContrast;
         }
       }
       if (!regionStyle.hasOwnProperty('fill-opacity')) regionStyle['fill-opacity'] = 0.0;
