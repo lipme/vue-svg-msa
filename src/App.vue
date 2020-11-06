@@ -69,7 +69,8 @@ export default {
           {
             label: 'high level',
             style: {
-              fill: 'red'
+              fill: 'red',
+              'fill-opacity': '0.5'
             },
             regions: [
               {
@@ -402,7 +403,7 @@ export default {
               color: 'pink'
             }
           ],
-          trackLabel: 'track1'
+          trackLabel: 'Structural annotation'
         },
         {
           features: [
