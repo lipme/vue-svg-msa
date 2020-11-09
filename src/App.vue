@@ -395,12 +395,14 @@ export default {
                 [109, 234]
               ],
               type: 'label1',
-              color: 'green'
+              color: 'green',
+              'fill-opacity': 0.2
             },
             {
               positions: [[21, 108]],
               type: 'label2',
-              color: 'pink'
+              color: 'pink',
+              'fill-opacity': 0.5
             }
           ],
           trackLabel: 'Structural annotation'
@@ -418,7 +420,7 @@ export default {
             {
               positions: [[33, 108]],
               type: 'label2',
-              color: 'pink'
+              color: 'red'
             }
           ],
           trackLabel: 'track2'
