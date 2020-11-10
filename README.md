@@ -23,6 +23,8 @@ import 'vue-svg-msa/dist/vue-svg-msa.css'
       coloring="auto"
       :metadata="metadata"
       :selectedseqs="getselectectids"
+      :offset-x="200"
+      :type="nt"
     ></SvgMsa>
 ```
 
@@ -53,7 +55,8 @@ tracks: [
     {
       "positions": [[1,20],[52,80]],
       "type": "exon",
-      "color": "green"
+      "color": "green",
+      "fill-opacity": "0.5"
     },
     {
       "positions": [[21,51]],
@@ -78,7 +81,7 @@ metadata: [
               style: {
                 fill: 'red',
                 'fill-opacity': 0.5
-                stroke: 'black'
+                stroke: 'black',
               },
               regions: [
                 {

@@ -176,12 +176,16 @@ export default {
       validator: function(value) {
         return ['nt', 'aa'].indexOf(value) !== -1;
       }
+    },
+    offsetX: {
+      type: Number,
+      default: 200
     }
   },
   data() {
     return {
       letterAdditionalWidth: 0,
-      offsetX: 200,
+      //offsetX: 200,
       displaySeqDialog: false,
       displayDialogSequences: [],
       isLoading: false,

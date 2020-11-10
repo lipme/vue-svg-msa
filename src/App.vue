@@ -38,6 +38,7 @@
       :selectedseqs="selectedseqs"
       :metadata="activemetadata"
       type="nt"
+      :offset-x="150"
     ></svg-msa>
   </div>
 </template>
