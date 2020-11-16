@@ -30,16 +30,16 @@ export default {
       return textClass;
     },
     displaySeqNameLength() {
-      return this.offsetX / 10;
+      return this.offsetX / 10 + 2;
     },
     displayedName() {
-      if (this.name.length >= this.displaySeqNameLength) {
+      if (this.name.length > this.displaySeqNameLength) {
         let title = '';
         const splitName = this.name.split('');
         splitName.forEach(x => {
-          if (title.length < this.displaySeqNameLength) title = title.concat(String(x));
+          if (title.length < this.displaySeqNameLength - 2) title = title.concat(String(x));
         });
-        title = title.concat('...');
+        title = title.concat('..');
         return title;
       }
       return this.name;
