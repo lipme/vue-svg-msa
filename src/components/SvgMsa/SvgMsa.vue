@@ -51,6 +51,21 @@
           @click="selectNode(s)"
         />
         <svg-poly-color-sequence
+          v-if="resolution == 'high'"
+          :key="'rect' + seqIndex"
+          :sequence="s"
+          :a-x="coordX"
+          :a-y="coordY"
+          :y="seqIndex"
+          :text-font-size="seqTextFontSize"
+          :coloring="coloring"
+          :is-selected="isSelected(s.id)"
+          :selection-mode="selectionMode"
+          :letter-type="type"
+          @click="showSeqDialog(seqIndex)"
+        />
+        <svg-simple-sequence
+          v-else
           :key="'rect' + seqIndex"
           :sequence="s"
           :a-x="coordX"
@@ -78,6 +93,7 @@ import * as d3 from 'd3-scale';
 import SvgScaleBar from '@/components/SvgMsa/SvgScaleBar.vue';
 import { VueSvgTracks } from 'vue-svg-tracks';
 import SvgPolyColorSequence from '@/components/SvgMsa/SvgPolyColorSequence.vue';
+import SvgSimpleSequence from '@/components/SvgMsa/SvgSimpleSequence.vue';
 import SvgSequenceNameField from '@/components/SvgMsa/SvgSequenceNameField.vue';
 import SequenceSelectionRect from '@/components/SvgMsa/SequenceSelectionRect.vue';
 import SequenceModal from '@/components/SvgMsa/SequenceModal.vue';
@@ -95,6 +111,7 @@ export default {
     VueSvgTracks,
     SvgScaleBar,
     SvgPolyColorSequence,
+    SvgSimpleSequence,
     SvgSequenceNameField,
     SequenceModal,
     SequenceSelectionRect,
@@ -162,6 +179,7 @@ export default {
      * Allowed values:  'no', 'metadata', 'seqcolor', 'auto'
      */
     coloring: { type: String, default: 'no' },
+    resolution: { type: String, default: 'medium' },
     trackHeight: {
       type: Number,
       default: 15

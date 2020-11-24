@@ -2,6 +2,7 @@
   <div id="app">
     <h2>Test vue-svg-msa component</h2>
     <button @click="loadExample">Load an exemple (11 sequences)</button>
+    <button @click="loadExample2">Load 500 sequences</button>
     <hr width="100%" />
     <h4>Parameters</h4>
     <label>Start (1-based) </label
@@ -16,12 +17,17 @@
 
     <hr width="100%" />
     <p>
-      <label>Coloring</label>
+      <label>Coloring </label>
       <select v-model="coloring">
         <option>no</option>
         <option>seqcolor</option>
         <option>auto</option>
         <option>metadata</option>
+      </select>
+      <label> Rendering resolution </label>
+      <select v-model="resolution">
+        <option>medium</option>
+        <option>high</option>
       </select>
     </p>
 
@@ -39,13 +45,15 @@
       :metadata="activemetadata"
       type="nt"
       :offset-x="150"
+      :resolution="resolution"
     ></svg-msa>
   </div>
 </template>
 
 <script>
 import SvgMsa from './components/SvgMsa/SvgMsa.vue';
-
+import json from './test500seq.json';
+import json2 from './test500seq_metadata.json';
 export default {
   name: 'App',
   components: {
@@ -53,6 +61,9 @@ export default {
   },
   data() {
     return {
+      resolution: 'medium',
+      myJson: json,
+      myJson2: json2,
       selectedseqs: [],
       activestart: 1,
       activeend: 0,
@@ -63,7 +74,7 @@ export default {
       seqs: [],
       selectedfield: '',
       selectedregions: '',
-
+      currentmetadata: {},
       metadata: {
         label: 'Conservation level',
         categories: [
@@ -232,7 +243,7 @@ export default {
       testSeqs: [
         {
           seq:
-            'ATCATCATCGGGGGATACTCATTTTTACATCATCATCATACTACATGACGACGACAGCAGCCCTTACGACGATTTACGCGAGAACACTATCATCACAGACGAATTAGAGAGGGGGACAGAGGGACAGCAGCAGCCCAGACAGACGACCCGATTTATACTCATACTCACAGCATACGATGACACAGACGACGACAGCAGACGACGCATCATATACTCATTTTTACATCATCAAT',
+            'ATCATCATTCGGGGGATACTCATTTTTACATCATCATCATACTACATGACGACGACAGCAGCCCTTACGACGATTTACGCGAGAACACTATCATCACAGACGAATTAGAGAGGGGGACAGAGGGACAGCAGCAGCCCAGACAGACGACCCGATTTATACTCATACTCACAGCATACGATGACACAGACGACGACAGCAGACGACGCATCATATACTCATTTTTACATCATCAAT',
           id: 'seq1',
           name: 'sequence-maize-A1-A0-v1',
           color: 'red'
@@ -291,7 +302,9 @@ export default {
             '--------------------CATTTTTACATCATCATCATACTACATGACGACGACAGCAGCCCTTACGACGATTTACGCGAGAACACTATCATCACAGACGAATTAGA-----GGACAGAGGGACAGCAGCAGCCCAGACAGACGACCCGATTTATACTCATACTCACAGCATACGATGACACAGACGACGACAGCAGACGACGCATCATATACTCATTTTTACATCATCAAT',
           id: 'seq9',
           name: 'seq9',
-          color: 'green'
+          color: 'green',
+          isConsensus: true,
+          isNode: true
         },
         {
           seq:
@@ -304,87 +317,10 @@ export default {
           seq:
             '--------------------CATTTTTACATCATTATCATACTACATGACGACGACAGCAGCCCTTACGACGATTTACGCGAGAACACTATCATCACAGACGAATTAGAGA---T-TCAGAGGGACAGCAGCAGCCCAGACAGACGACCCGATTTATACTCATACTCACAGCATACGATGACACAGACGACGACAGCAGACGACGCATCATATACTCATTTTTACATCATCAAT',
           id: 'seq11',
-          name: 'seq11',
-          color: 'green'
-        }
-      ],
-      testSeqsNEW: [
-        {
-          seq:
-            'ATCATCATCATCATCATACTCATTTTTACATCATCATCATACTACATGACGACGACAGCAGCCCTTACGACGATTTACGCGAGAACACTATCATCACAGACGAATTAGAGAGGGGGACAGAGGGACAGCAGCAGCCCAGACAGACGACCCGATTTATACTCATACTCACAGCATACGATGACACAGACGACGACAGCAGACGACGCATCATATACTCATTTTTACATCATCAAT',
-          id: 'seq1',
-          name: 'seq1',
-          color: 'red'
-        },
-        {
-          seq:
-            'ATCATCATCATCATCATACTCATTTTTACATCATCATCATACTACATGACGACGACAGCAGCCCTTACGACGATTTACGCGAGAACACTATCATCACAGACGAATTAGAGAGGGGGACAGAGGGACAGCAGCAGCCCAGACAGACGACCCGATTTATACTCATACTCACAGCATAC----ACACAGACGACGACAGCAGTCGACGTTTCATATACTCA---TTACATCATCAAT',
-          id: 'seq2',
-          name: 'seq2',
-          color: 'red'
-        },
-        {
-          seq:
-            'ATCATCATCATCATCATACTCATTTTTACATCATCATCATACTACATGACGACGACAGCAGCCC-GACG--GATTTACGCGAGAACACTATCATCACAGACGAATTAGAGAGGGGGACAGAGGGACAGCAGCAGCCCAGACAGACGACCCGATTTATACTCATACTCACAGCATACGATGACACAGACGACGACAGCAGACGACGCATCATATACTCATTTTTACATCATCAAT',
-          id: 'seq3',
-          name: 'seq3',
-          color: 'red'
-        },
-        {
-          seq:
-            'ATCATCATCATCATGGTACTCA---TTACATCATCATCATACTACATGACGACGACAGCAGCCCTTACGACGATTTACGCGAGAACACTATCATCACAGACGAATT------------AGAGGGACAGCAGCAGCCCAGACAGACGACCCGATTTATACTCATACTCACAGCATACGATGACACAGACGACGACAGCAGACGACGCATCATATACTCATTTTTACATCATCAAT',
-          id: 'seq4',
-          name: 'seq4',
-          color: 'blue'
-        },
-        {
-          seq:
-            'ATCATCATCATCATGGTACTCATTTTTACATCATCATCATACTACATGACGACGACAGCAGCCCTTACGACGATTTACGCGAGAACACTATCATCACAGACGAATT------------AGAGGGACAGCAGCAGCCCAGACAGACGACCCGATTTATACTCATACTCACAGCATACGATGACACAGACGACGACAGCAGACGACGCATCATATACTCATTTTTACATCATCAAT',
-          id: 'seq5',
-          name: 'seq5',
-          color: 'blue'
-        },
-        {
-          seq:
-            '--------------------CATTTTTACATCATCATCATACTACATGACGACGACAGCAGCCCTTACGACGATTTACGCGAGAACACTATCATCACAGACGAATTAGAGAGGGGGACAGAGGGACAGCAGCAGCCCAGACAGACGACCCGATTTATACTCATACTCACAGCATACGATGACACAGACGACGACAGCAGACGACGCATCATATACTCATTTTTACATCATCAAT',
-          id: 'seq6',
-          name: 'seq6',
-          color: 'green'
-        },
-        {
-          seq:
-            '--------------------CATTTTTACATCATCATCATACTACATGACGACGACAGCAGCCCTTACGACGATTTACGCGAGAACACTATCATCACAGACGAATTAGAGAGGGGGACAGAGGGACAGCAGCAGCCCAGACAGACGACCCGATTTATACTCATACTCACAGCATACGATGACACAGACGACGACAGCAGACGACGCATCATATACTCATTTTTACATCATCAAT',
-          id: 'seq7',
-          name: 'seq7',
-          color: 'green'
-        },
-        {
-          seq:
-            '--------------------CATTTTTACATCATCATCATACTACATGACGACGACAGCAGCCCTTACGACGATTTACGCGAGAACACTATCATCACAGACGAA----------GGACAGAGGGACAGCAGCAGCCCAGACAGACGACCCGATTTATACTCATACCCACAGCATACGATGACACAGACGACGACAGCAGACGACGCATCATATACTCATTTTTACATCAGGAAT',
-          name: 'seq8',
-          id: 'seq8',
-          color: 'green'
-        },
-        {
-          seq:
-            '--------------------CATTTTTACATCATCATCATACTACATGACGACGACAGCAGCCCTTACGACGATTTACGCGAGAACACTATCATCACAGACGAATTAGA-----GGACAGAGGGACAGCAGCAGCCCAGACAGACGACCCGATTTATACTCATACTCACAGCATACGATGACACAGACGACGACAGCAGACGACGCATCATATACTCATTTTTACATCATCAAT',
-          id: 'seq9',
-          name: 'seq9',
-          color: 'green'
-        },
-        {
-          seq:
-            '--------------------CATTTTTACATCATCATCATACTACATGACGACGACAGCAGCCCTTACGACGATTTACGCGAGAACACTATCATCACAGACGAATTAGAGA---TGACAGAGGGACAGCAGCAGCCCAGACAGACGACCCGATTTATACTCATACTCACAGCATACGATGACACAGACGACGACAGCAGACGACGCATCATATACTCATTTTTACATCATCAAT',
-          id: 'seq10',
-          name: 'seq10',
-          color: 'green'
-        },
-        {
-          seq:
-            '--------------------CATTTTTACATCATTATCATACTACATGACGACGACAGCAGCCCTTACGACGATTTACGCGAGAACACTATCATCACAGACGAATTAGAGA---T-TCAGAGGGACAGCAGCAGCCCAGACAGACGACCCGATTTATACTCATACTCACAGCATACGATGACACAGACGACGACAGCAGACGACGCATCATATACTCATTTTTACATCATCAAT',
-          id: 'seq11',
-          name: 'seq11',
-          color: 'green'
+          name: 'seq11-consensus',
+          color: 'green',
+          isConsensus: true,
+          isNode: false
         }
       ],
       testTracks: [
@@ -451,7 +387,7 @@ export default {
     activemetadata() {
       let m = [];
       if (this.coloring === 'metadata') {
-        m.push(this.metadata);
+        m.push(this.currentmetadata);
       }
       if (this.activeselectedregions != '') {
         m.push(this.getSelectedRegions());
@@ -462,6 +398,13 @@ export default {
   methods: {
     loadExample() {
       this.seqs = this.testSeqs;
+      this.tracks = this.testTracks;
+      this.currentmetadata = this.metadata;
+      this.reinit();
+    },
+    loadExample2() {
+      this.seqs = this.myJson.seqs;
+      this.currentmetadata = this.myJson2;
       this.tracks = this.testTracks;
       this.reinit();
     },
