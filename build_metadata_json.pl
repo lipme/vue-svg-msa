@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+my $nb = 1000;
+
 print  "{\n";
 print "\"label\": \"Conservation level\",\n";
 print "\"categories\":[\n";
@@ -14,12 +16,12 @@ print "\"fill-opacity\": \"0.5\"\n";
 print "},\n";
 print "\"regions\": [\n";
 
-for (my $i = 1; $i <=500 ; $i++)
+for (my $i = 1; $i <=$nb ; $i++)
 {
 	print "{\n";
 	print "   \"id\": \"seq$i\",\n";
     print "   \"ranges\": [[21,176],[180,186],[210,230]]\n";
-	if ($i < 500) {    
+	if ($i < $nb) {    
 		print "},\n";
 	} else { 
 		print "}\n";
@@ -43,12 +45,12 @@ print "\"fill-opacity\": \"0.5\"\n";
 print "},\n";
 print "\"regions\": [\n";
 
-for (my $i = 1; $i <=500 ; $i++)
+for (my $i = 1; $i <=$nb ; $i++)
 {
 	print "{\n";
 	print "   \"id\": \"seq$i\",\n";
     print "   \"ranges\": [[1,20],[177,179]]\n";
-	if ($i < 500) {    
+	if ($i < $nb) {    
 		print "},\n";
 	} else { 
 		print "}\n";

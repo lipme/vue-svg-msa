@@ -2,7 +2,8 @@
   <div id="app">
     <h2>Test vue-svg-msa component</h2>
     <button @click="loadExample">Load an exemple (11 sequences)</button>
-    <button @click="loadExample2">Load 500 sequences</button>
+    <button @click="loadExampleJson(myjson500seq, myjson500metadata)">Load 500 sequences</button>
+    <button @click="loadExampleJson(myjson1000seq, myjson1000metadata)">Load 1000 sequences</button>
     <hr width="100%" />
     <h4>Parameters</h4>
     <label>Start (1-based) </label
@@ -52,8 +53,10 @@
 
 <script>
 import SvgMsa from './components/SvgMsa/SvgMsa.vue';
-import json from './test500seq.json';
-import json2 from './test500seq_metadata.json';
+import json500seq from './test500seq.json';
+import json500metadata from './test500seq_metadata.json';
+import json1000seq from './test1000seq.json';
+import json1000metadata from './test1000seq_metadata.json';
 export default {
   name: 'App',
   components: {
@@ -62,8 +65,10 @@ export default {
   data() {
     return {
       resolution: 'medium',
-      myJson: json,
-      myJson2: json2,
+      myjson500seq: json500seq,
+      myjson500metadata: json500metadata,
+      myjson1000seq: json1000seq,
+      myjson1000metadata: json1000metadata,
       selectedseqs: [],
       activestart: 1,
       activeend: 0,
@@ -402,9 +407,9 @@ export default {
       this.currentmetadata = this.metadata;
       this.reinit();
     },
-    loadExample2() {
-      this.seqs = this.myJson.seqs;
-      this.currentmetadata = this.myJson2;
+    loadExampleJson(j, m) {
+      this.seqs = j.seqs;
+      this.currentmetadata = m;
       this.tracks = this.testTracks;
       this.reinit();
     },
