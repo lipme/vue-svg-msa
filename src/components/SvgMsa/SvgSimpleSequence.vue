@@ -9,7 +9,7 @@
     <text
       :y="aY(y)"
       :x="aX(0)"
-      dx="-3"
+      dx="-5"
       :font-size="textFontSize"
       :class="getClass"
       :textLength="textLength"

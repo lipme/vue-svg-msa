@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <h2>Test vue-svg-msa component</h2>
-    <button @click="loadExample">Load an exemple (11 sequences)</button>
+    <button @click="loadExample">Load 11 sequences</button>
     <button @click="loadExampleJson(myjson500seq, myjson500metadata)">Load 500 sequences</button>
     <button @click="loadExampleJson(myjson1000seq, myjson1000metadata)">Load 1000 sequences</button>
     <hr width="100%" />
@@ -407,6 +407,7 @@ export default {
       this.currentmetadata = this.metadata;
       this.reinit();
     },
+
     loadExampleJson(j, m) {
       this.seqs = j.seqs;
       this.currentmetadata = m;
