@@ -25,6 +25,7 @@ import 'vue-svg-msa/dist/vue-svg-msa.css'
       :selectedseqs="getselectectids"
       :offset-x="200"
       :type="nt"
+      :resolution="medium"
     ></SvgMsa>
 ```
 
@@ -97,6 +98,7 @@ metadata: [
   }, {...}
 ]
 
+```
 
 In a region, if the 'id' attribute is empty or missing, the regions of all the sequences would be colored.
 In a region, if the 'ranges' attribute is empty or missing, all the sequence would be colored.
@@ -104,6 +106,8 @@ In a region, if the 'ranges' attribute is empty or missing, all the sequence wou
 Note: 'label' attributes are not used.
 
 **selectedseqs** is an array of sequence ids which will be highlighted in the msa.
+
+**resolution** allows the values 'medium' (by default) and 'high'. If "high", the rendering quality would be better and hovering the mouse over a nucleotide gives access to its position in the sequence.
 
 ##Contributors
 
@@ -118,4 +122,3 @@ LIPM Bioinfo Team
 ##Contact
 
 erika.sallet@inrae.fr
-```
