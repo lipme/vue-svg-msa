@@ -84,7 +84,7 @@ export default {
 
 <style scoped>
 #sequence {
-  font-family: 'monospace';
+  font-family: monospace;
   font-weight: normal;
   fill: black;
   /* text-align: justify; */
