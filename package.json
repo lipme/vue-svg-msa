@@ -37,6 +37,10 @@
   },
   "main": "./dist/vue-svg-msa.common.js",
   "unpkg": ".dist/vue-svg-msa.min.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lipme/vue-svg-msa.git"
+  },
   "files": [
     "dist/*"
   ],
