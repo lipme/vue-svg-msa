@@ -13,10 +13,6 @@ See the License for the specific language governing permissions and
   <g id="sequence">
     <!-- draw colored rectangles -->
     <MetadataRect v-for="(r, index) in coloredRect" :key="index" :rect="r"></MetadataRect>
-
-    <!-- Display the sequence in one text element.
-               Careful: the sequence is not exaclty align with the scalebar.
-               TODO: to improve -->
     <text
       :y="aY(y)"
       :x="aX(0)"
