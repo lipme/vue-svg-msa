@@ -38,8 +38,8 @@ See the License for the specific language governing permissions and
       </select>
       <label> Rendering resolution </label>
       <select v-model="resolution">
-        <option>medium</option>
-        <option>high</option>
+        <option>sequence</option>
+        <option>nt</option>
       </select>
     </p>
 
@@ -75,7 +75,7 @@ export default {
   },
   data() {
     return {
-      resolution: 'medium',
+      resolution: 'sequence',
       myjson500seq: json500seq,
       myjson500metadata: json500metadata,
       myjson1000seq: json1000seq,
@@ -262,14 +262,16 @@ export default {
             'ATCATCATTCGGGGGATACTCATTTTTACATCATCATCATACTACATGACGACGACAGCAGCCCTTACGACGATTTACGCGAGAACACTATCATCACAGACGAATTAGAGAGGGGGACAGAGGGACAGCAGCAGCCCAGACAGACGACCCGATTTATACTCATACTCACAGCATACGATGACACAGACGACGACAGCAGACGACGCATCATATACTCATTTTTACATCATCAAT',
           id: 'seq1',
           name: 'sequence-maize-A1-A0-v1',
-          color: 'red'
+          color: 'red',
+          titleColor: 'red'
         },
         {
           seq:
             'ATCATCATCATCATCATACTCATTTTTACATCATCATCATACTACATGACGACGACAGCAGCCCTTACGACGATTTACGCGAGAACACTATCATCACAGACGAATTAGAGAGGGGGACAGAGGGACAGCAGCAGCCCAGACAGACGACCCGATTTATACTCATACTCACAGCATAC----ACACAGACGACGACAGCAGTCGACGTTTCATATACTCA---TTACATCATCAAT',
           id: 'seq2',
           name: 'sequence-maize-A2',
-          color: 'red'
+          color: 'red',
+          titleColor: 'blue'
         },
         {
           seq:

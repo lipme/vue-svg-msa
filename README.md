@@ -27,7 +27,7 @@ import 'vue-svg-msa/dist/vue-svg-msa.css'
       :selectedseqs="getselectectids"
       :offset-x="200"
       :type="nt"
-      :resolution="medium"
+      :resolution="sequence"
     ></SvgMsa>
 ```
 
@@ -40,11 +40,18 @@ seqs: [
 seq: 'ATCATCATCATCATCATACTCATTTTTACAT---CATCATACTACATCATCATATACTCATTTTTACATCATC-TCTT',
 id: 'seqid1',
 name: 'sequence1',
-color: 'red'
+color: 'red',
+titleColor: 'blue',
+isConsensus: true,
+isNode: false
 },
 ...
 ],
 ```
+
+Only the 'seq' and 'id' attributes are mandatory. If the 'titleColor' attribute is defined, the name of the sequence is written in this color.
+The 'color' attribute is the nucleotide background color only applied when the 'coloring' attribute of svg-msa is equal to 'seqcolor'. The sequences for which the attribute **isConsensus** is true are displayed in bold.
+The name of the sequences for which the attribute **isNode** is true can be clicked, and an event named 'select-node' emits the id of the sequence.
 
 **start** and **end** are respectively the start and end positions (1-based) of the sequence regions to be displayed.
 
@@ -71,7 +78,7 @@ tracks: [
 }]
 ```
 
-**coloring** allows the values 'no', 'seqcolor', 'auto', 'metadata'. It is allowed to mix the values, eg 'seqcolor|metadata'
+**coloring** allows to colored the nucleotides. The accepted values are 'no', 'seqcolor', 'auto', 'metadata'. It is allowed to mix the values, eg 'seqcolor|metadata'
 If the value is 'metadata', the styles described in the **metadata** array are apply to the svg image.
 
 ```
@@ -109,7 +116,7 @@ Note: 'label' attributes are not used.
 
 **selectedseqs** is an array of sequence ids which will be highlighted in the msa.
 
-**resolution** allows the values 'medium' (by default) and 'high'. If "high", the rendering quality would be better and hovering the mouse over a nucleotide gives access to its position in the sequence.
+**resolution** allows the values 'sequence' (by default) and 'nt'. If "nt", the rendering quality would be better and hovering the mouse over a nucleotide gives access to its position in the sequence.
 
 ##Contributors
 

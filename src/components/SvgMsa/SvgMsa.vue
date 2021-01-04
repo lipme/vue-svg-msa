@@ -59,10 +59,11 @@ See the License for the specific language governing permissions and
           :name="displayName(s)"
           :offset-x="offsetX"
           :is-clickable="s.isNode"
+          :text-color="s.titleColor"
           @click="selectNode(s)"
         />
         <svg-poly-color-sequence
-          v-if="resolution == 'high'"
+          v-if="resolution == 'nt'"
           :key="'rect' + seqIndex"
           :sequence="s"
           :a-x="coordX"
@@ -190,7 +191,14 @@ export default {
      * Allowed values:  'no', 'metadata', 'seqcolor', 'auto'
      */
     coloring: { type: String, default: 'no' },
-    resolution: { type: String, default: 'medium' },
+    resolution: {
+      type: String,
+      default: 'sequence',
+      validator: function(value) {
+        // La valeur passée doit être l'une de ces chaines de caractères
+        return ['sequence', 'nt'].indexOf(value) !== -1;
+      }
+    },
     trackHeight: {
       type: Number,
       default: 15
@@ -405,6 +413,9 @@ export default {
         extractSeq.metadatas.forEach(m => {
           if (m.hasOwnProperty('ranges')) m.ranges = this.sliceRange(m.ranges);
         });
+      }
+      if (!extractSeq.hasOwnProperty('titleColor')) {
+        extractSeq.titleColor = '';
       }
       return extractSeq;
     },
