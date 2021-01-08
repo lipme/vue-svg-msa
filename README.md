@@ -24,6 +24,7 @@ import 'vue-svg-msa/dist/vue-svg-msa.css'
       :tracks="tracks"
       coloring="auto"
       :metadata="metadata"
+      :glyphs="glyphs"
       :selectedseqs="getselectectids"
       :offset-x="200"
       :type="nt"
@@ -115,6 +116,21 @@ In a region, if the 'ranges' attribute is empty or missing, all the sequence wou
 Note: 'label' attributes are not used.
 
 **selectedseqs** is an array of sequence ids which will be highlighted in the msa.
+
+**glyphs** is an array used to display glyphs to makes possible to add information to describe the sequences.
+for now, for all the sequences of a categorie, a colored circle is drawn to the left of the sequence
+
+```
+glyphs: [
+  {
+    label: 'resistant/not_resistant',
+    categories: [
+      { label: 'resistant', style: { fill: 'red' }, ids: ['seqid1', 'seqid2', 'seqid5'] },
+      { label: 'not resistant', style: { fill: 'pink' }, ids: ['seqid4'] }
+    ]
+  }, ...
+]
+```
 
 **resolution** allows the values 'sequence' (by default) and 'nt'. If "nt", the rendering quality would be better and hovering the mouse over a nucleotide gives access to its position in the sequence.
 
