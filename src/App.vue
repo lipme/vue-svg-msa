@@ -41,6 +41,11 @@ See the License for the specific language governing permissions and
         <option>sequence</option>
         <option>nt</option>
       </select>
+      <label> Show glyphs</label>
+      <select v-model="showglyph">
+        <option :value="true">true</option>
+        <option :value="false">false</option>
+      </select>
     </p>
 
     <hr width="100%" />
@@ -55,6 +60,7 @@ See the License for the specific language governing permissions and
       :coloring="activecoloring"
       :selectedseqs="selectedseqs"
       :metadata="activemetadata"
+      :glyphs="getGlyph"
       type="nt"
       :offset-x="150"
       :resolution="resolution"
@@ -91,6 +97,35 @@ export default {
       selectedfield: '',
       selectedregions: '',
       currentmetadata: {},
+      showglyph: false,
+      glyphs2: [],
+      glyphs: [
+        {
+          label: 'oil/nonoil',
+          categories: [
+            { label: 'oil', style: { fill: 'red' }, ids: ['seq1', 'seq2', 'seq9', 'seq8'] },
+            { label: 'nonoil', style: { fill: 'pink' }, ids: ['seq4', 'seq5', 'seq6', 'seq10'] }
+          ]
+        },
+        {
+          label: 'resit/notresists',
+          categories: [
+            { label: 'resistant', style: { fill: 'green' }, ids: ['seq1', 'seq2', 'seq3', 'seq9'] },
+            {
+              label: 'noresistant',
+              style: { fill: 'yellow' },
+              ids: ['seq5', 'seq6', 'seq7', 'seq10']
+            }
+          ]
+        },
+        {
+          label: 'oil/nonoil',
+          categories: [
+            { label: 'oil', style: { fill: 'red' }, ids: ['seq1', 'seq2', 'seq9', 'seq8'] },
+            { label: 'nonoil', style: { fill: 'pink' }, ids: ['seq4', 'seq5', 'seq6', 'seq10'] }
+          ]
+        }
+      ],
       metadata: {
         label: 'Conservation level',
         categories: [
@@ -385,6 +420,13 @@ export default {
     };
   },
   computed: {
+    getGlyph() {
+      if (this.showglyph) {
+        return this.glyphs;
+      } else {
+        return this.glyphs2;
+      }
+    },
     getselectedids() {
       return this.activeselectedseqs;
     },
