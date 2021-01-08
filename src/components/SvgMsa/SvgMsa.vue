@@ -50,10 +50,21 @@ See the License for the specific language governing permissions and
         :seq-nb="sequenceNb"
       />
 
+      <glyph-serie-draw
+        v-for="(s, i) in glyphs"
+        :key="'g-' + i"
+        :glyph-serie="s"
+        :a-seqindex="seqInd"
+        :a-y="coordY"
+        :x="i + 1"
+        :showLabel="false"
+        :radius="radius"
+      ></glyph-serie-draw>
       <!-- display each sequence -->
       <template v-for="(s, seqIndex) in extractSeqs">
         <svg-sequence-name-field
           :key="seqIndex"
+          :x="sequenceNameFieldX"
           :y="coordY(seqIndex)"
           :text-font-size="seqTextFontSize"
           :name="displayName(s)"
@@ -110,6 +121,7 @@ import SvgSequenceNameField from '@/components/SvgMsa/SvgSequenceNameField.vue';
 import SequenceSelectionRect from '@/components/SvgMsa/SequenceSelectionRect.vue';
 import SequenceModal from '@/components/SvgMsa/SequenceModal.vue';
 import MetadataDraw from '@/components/SvgMsa/MetadataDraw.vue';
+import GlyphSerieDraw from '@/components/SvgMsa/GlyphSerieDraw.vue';
 
 import _ from 'lodash';
 
@@ -127,7 +139,8 @@ export default {
     SvgSequenceNameField,
     SequenceModal,
     SequenceSelectionRect,
-    MetadataDraw
+    MetadataDraw,
+    GlyphSerieDraw
   },
   props: {
     /**
@@ -166,6 +179,12 @@ export default {
      * metadata: array of metadata definitions
      */
     metadata: {
+      type: Array,
+      default() {
+        return [];
+      }
+    },
+    glyphs: {
       type: Array,
       default() {
         return [];
@@ -221,12 +240,15 @@ export default {
     displayTrackTooltip: {
       type: Boolean,
       default: false
+    },
+    radius: {
+      type: Number,
+      default: 5
     }
   },
   data() {
     return {
       letterAdditionalWidth: 0,
-      //offsetX: 200,
       displaySeqDialog: false,
       displayDialogSequences: [],
       isLoading: false,
@@ -250,7 +272,6 @@ export default {
     widthSvg() {
       return this.offsetX + this.letterWidth * this.maxLengthExtractSeqs;
     },
-
     /**
      * Return the max length of all the sequences.
      */
@@ -382,8 +403,12 @@ export default {
         return regionMetadata;
       }
       return [];
+    },
+    sequenceNameFieldX() {
+      return this.glyphs.length * this.radius * 3;
     }
   },
+
   mounted() {
     this.isLoading = true;
   },
