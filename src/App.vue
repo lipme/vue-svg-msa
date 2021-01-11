@@ -103,8 +103,16 @@ export default {
         {
           label: 'oil/nonoil',
           categories: [
-            { label: 'oil', style: { fill: 'red' }, ids: ['seq1', 'seq2', 'seq9', 'seq8'] },
-            { label: 'nonoil', style: { fill: 'pink' }, ids: ['seq4', 'seq5', 'seq6', 'seq10'] }
+            {
+              label: 'oil',
+              style: { fill: 'red' },
+              ids: ['seq1', 'seq2', 'seq9', 'seq8', 'noseq']
+            },
+            {
+              label: 'nonoil',
+              style: { fill: 'pink' },
+              ids: ['seq4', 'seq5', 'seq6', 'seq10', 'seq11']
+            }
           ]
         },
         {

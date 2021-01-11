@@ -1,16 +1,18 @@
 <template lang="">
   <g>
     <template v-for="c in categories">
-      <circle
-        v-for="seqid in c.ids"
-        :key="'c' + seqid"
-        :cx="cx"
-        :cy="cy(seqid)"
-        :r="radius"
-        :style="c.style"
-      >
-        <title v-if="showLabel">{{ c.label }}</title>
-      </circle>
+      <template v-for="seqid in c.ids">
+        <circle
+          v-if="hasIndex(seqid)"
+          :key="'c' + seqid"
+          :cx="cx"
+          :cy="cy(seqid)"
+          :r="radius"
+          :style="c.style"
+        >
+          <title v-if="showLabel">{{ c.label }}</title>
+        </circle>
+      </template>
     </template>
   </g>
 </template>
@@ -39,8 +41,11 @@ export default {
     }
   },
   methods: {
-    cy(i) {
-      return this.aY(this.aSeqindex(i)) - this.radius;
+    cy(seqid) {
+      return this.aY(this.aSeqindex(seqid)) - this.radius;
+    },
+    hasIndex(seqid) {
+      return this.aSeqindex(seqid) >= 0;
     }
   }
 };
