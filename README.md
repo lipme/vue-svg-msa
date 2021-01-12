@@ -25,6 +25,7 @@ import 'vue-svg-msa/dist/vue-svg-msa.css'
       coloring="auto"
       :metadata="metadata"
       :glyphs="glyphs"
+      :display-glyph-tooltip="true"
       :selectedseqs="getselectectids"
       :offset-x="200"
       :type="nt"
@@ -131,6 +132,8 @@ glyphs: [
   }, ...
 ]
 ```
+
+If **display-glyph-tooltip** is true, display the label of the glyph when hovering the mouse over a circle
 
 **resolution** allows the values 'sequence' (by default) and 'nt'. If "nt", the rendering quality would be better and hovering the mouse over a nucleotide gives access to its position in the sequence.
 

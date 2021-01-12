@@ -57,7 +57,7 @@ See the License for the specific language governing permissions and
         :a-seqindex="seqInd"
         :a-y="coordY"
         :x="i + 1"
-        :showLabel="false"
+        :showLabel="displayGlyphTooltip"
         :radius="radius"
       ></glyph-serie-draw>
       <!-- display each sequence -->
@@ -238,6 +238,10 @@ export default {
       default: 200
     },
     displayTrackTooltip: {
+      type: Boolean,
+      default: false
+    },
+    displayGlyphTooltip: {
       type: Boolean,
       default: false
     },

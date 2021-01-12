@@ -64,6 +64,7 @@ See the License for the specific language governing permissions and
       type="nt"
       :offset-x="150"
       :resolution="resolution"
+      :display-glyph-tooltip="true"
     ></svg-msa>
   </div>
 </template>
