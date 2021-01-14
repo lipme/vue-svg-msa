@@ -46,6 +46,11 @@ See the License for the specific language governing permissions and
         <option :value="true">true</option>
         <option :value="false">false</option>
       </select>
+      <label> Show glyphs</label>
+      <select v-model="glyphform">
+        <option value="circle">circle</option>
+        <option value="rectangle">rectangle</option>
+      </select>
     </p>
 
     <hr width="100%" />
@@ -61,6 +66,7 @@ See the License for the specific language governing permissions and
       :selectedseqs="selectedseqs"
       :metadata="activemetadata"
       :glyphs="getGlyph"
+      :glyph-form="glyphform"
       type="nt"
       :offset-x="150"
       :resolution="resolution"
@@ -98,7 +104,8 @@ export default {
       selectedfield: '',
       selectedregions: '',
       currentmetadata: {},
-      showglyph: false,
+      showglyph: true,
+      glyphform: 'circle',
       glyphs2: [],
       glyphs: [
         {
@@ -130,7 +137,11 @@ export default {
         {
           label: 'oil/nonoil',
           categories: [
-            { label: 'oil', style: { fill: 'red' }, ids: ['seq1', 'seq2', 'seq9', 'seq8'] },
+            {
+              label: 'oil',
+              style: { fill: 'red' },
+              ids: ['seq1', 'seq2', 'seq9', 'seq8', 'seq200', 'seq500']
+            },
             { label: 'nonoil', style: { fill: 'pink' }, ids: ['seq4', 'seq5', 'seq6', 'seq10'] }
           ]
         }

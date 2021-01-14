@@ -56,9 +56,10 @@ See the License for the specific language governing permissions and
         :glyph-serie="s"
         :a-seqindex="seqInd"
         :a-y="coordY"
-        :x="i + 1"
+        :col-number="i + 1"
         :showLabel="displayGlyphTooltip"
         :radius="radius"
+        :form="glyphForm"
       ></glyph-serie-draw>
       <!-- display each sequence -->
       <template v-for="(s, seqIndex) in extractSeqs">
@@ -188,6 +189,15 @@ export default {
       type: Array,
       default() {
         return [];
+      }
+    },
+    glyphForm: {
+      type: String,
+      default() {
+        return 'rectangle';
+      },
+      validator: function(value) {
+        return ['circle', 'rectangle'].indexOf(value) !== -1;
       }
     },
     selectedregs: {
