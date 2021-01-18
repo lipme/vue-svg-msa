@@ -48,6 +48,7 @@ See the License for the specific language governing permissions and
         :selectionSeqs="selectionSeqs"
         :seq-len="maxLengthExtractSeqs"
         :seq-nb="sequenceNb"
+        :highlightSelection="highlightSelection"
       />
 
       <glyph-serie-draw
@@ -258,6 +259,10 @@ export default {
     radius: {
       type: Number,
       default: 5
+    },
+    highlightSelection: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
