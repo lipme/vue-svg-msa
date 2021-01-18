@@ -137,6 +137,13 @@ If **display-glyph-tooltip** is true, display the label of the glyph when hoveri
 
 **resolution** allows the values 'sequence' (by default) and 'nt'. If "nt", the rendering quality would be better and hovering the mouse over a nucleotide gives access to its position in the sequence.
 
+**highlight-selection**: by default, if there are selected sequences, metadata on non selected sequences will appear with less opacity. If the highlight-selection property is set to
+'always', metadata  on non selected sequences will appear with less opacity even if there is no selected sequences. On the contrary, if the highlight-selection property is set to
+'never', metadata will appear always with the same opacity, whatever if the sequence is selected or not.
+
+
+
+
 ##Contributors
 
 LIPM Bioinfo Team
