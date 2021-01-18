@@ -51,19 +51,32 @@ See the License for the specific language governing permissions and
         :highlight-selection="highlightSelectedSequences"
       />
 
+      <glyph-serie-draw
+        v-for="(s, i) in glyphs"
+        :key="'g-' + i"
+        :glyph-serie="s"
+        :a-seqindex="seqInd"
+        :a-y="coordY"
+        :col-number="i + 1"
+        :showLabel="displayGlyphTooltip"
+        :radius="radius"
+        :form="glyphForm"
+      ></glyph-serie-draw>
       <!-- display each sequence -->
       <template v-for="(s, seqIndex) in extractSeqs">
         <svg-sequence-name-field
           :key="seqIndex"
+          :x="sequenceNameFieldX"
           :y="coordY(seqIndex)"
           :text-font-size="seqTextFontSize"
           :name="displayName(s)"
           :offset-x="offsetX"
           :is-clickable="s.isNode"
+          :text-color="s.titleColor"
           @click="selectNode(s)"
         />
         <svg-poly-color-sequence
-          v-if="resolution == 'high'"
+          v-if="resolution == 'nt'"
           :key="'rect' + seqIndex"
           :sequence="s"
           :a-x="coordX"
@@ -110,6 +123,7 @@ import SvgSequenceNameField from '@/components/SvgMsa/SvgSequenceNameField.vue';
 import SequenceSelectionRect from '@/components/SvgMsa/SequenceSelectionRect.vue';
 import SequenceModal from '@/components/SvgMsa/SequenceModal.vue';
 import MetadataDraw from '@/components/SvgMsa/MetadataDraw.vue';
+import GlyphSerieDraw from '@/components/SvgMsa/GlyphSerieDraw.vue';
 
 import _ from 'lodash';
 
@@ -127,7 +141,8 @@ export default {
     SvgSequenceNameField,
     SequenceModal,
     SequenceSelectionRect,
-    MetadataDraw
+    MetadataDraw,
+    GlyphSerieDraw
   },
   props: {
     /**
@@ -171,6 +186,21 @@ export default {
         return [];
       }
     },
+    glyphs: {
+      type: Array,
+      default() {
+        return [];
+      }
+    },
+    glyphForm: {
+      type: String,
+      default() {
+        return 'rectangle';
+      },
+      validator: function(value) {
+        return ['circle', 'rectangle'].indexOf(value) !== -1;
+      }
+    },
     selectedregs: {
       type: Array,
       default() {
@@ -191,7 +221,14 @@ export default {
      * Allowed values:  'no', 'metadata', 'seqcolor', 'auto'
      */
     coloring: { type: String, default: 'no' },
-    resolution: { type: String, default: 'medium' },
+    resolution: {
+      type: String,
+      default: 'sequence',
+      validator: function(value) {
+        // La valeur passée doit être l'une de ces chaines de caractères
+        return ['sequence', 'nt'].indexOf(value) !== -1;
+      }
+    },
     trackHeight: {
       type: Number,
       default: 15
@@ -239,7 +276,6 @@ export default {
   data() {
     return {
       letterAdditionalWidth: 0,
-      //offsetX: 200,
       displaySeqDialog: false,
       displayDialogSequences: [],
       isLoading: false,
@@ -263,7 +299,6 @@ export default {
     widthSvg() {
       return this.offsetX + this.letterWidth * this.maxLengthExtractSeqs;
     },
-
     /**
      * Return the max length of all the sequences.
      */
@@ -410,6 +445,7 @@ export default {
       return flag;
     }
   },
+
   mounted() {
     this.isLoading = true;
   },
@@ -439,6 +475,9 @@ export default {
         extractSeq.metadatas.forEach(m => {
           if (m.hasOwnProperty('ranges')) m.ranges = this.sliceRange(m.ranges);
         });
+      }
+      if (!extractSeq.hasOwnProperty('titleColor')) {
+        extractSeq.titleColor = '';
       }
       return extractSeq;
     },

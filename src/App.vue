@@ -38,8 +38,18 @@ See the License for the specific language governing permissions and
       </select>
       <label> Rendering resolution </label>
       <select v-model="resolution">
-        <option>medium</option>
-        <option>high</option>
+        <option>sequence</option>
+        <option>nt</option>
+      </select>
+      <label> Show glyphs</label>
+      <select v-model="showglyph">
+        <option :value="true">true</option>
+        <option :value="false">false</option>
+      </select>
+      <label> Show glyphs</label>
+      <select v-model="glyphform">
+        <option value="circle">circle</option>
+        <option value="rectangle">rectangle</option>
       </select>
     </p>
 
@@ -60,6 +70,7 @@ See the License for the specific language governing permissions and
       type="nt"
       :offset-x="150"
       :resolution="resolution"
+      :display-glyph-tooltip="true"
     ></svg-msa>
   </div>
 </template>
@@ -77,7 +88,7 @@ export default {
   },
   data() {
     return {
-      resolution: 'medium',
+      resolution: 'sequence',
       myjson500seq: json500seq,
       myjson500metadata: json500metadata,
       myjson1000seq: json1000seq,
@@ -93,6 +104,48 @@ export default {
       selectedfield: '',
       selectedregions: '',
       currentmetadata: {},
+      showglyph: true,
+      glyphform: 'circle',
+      glyphs2: [],
+      glyphs: [
+        {
+          label: 'oil/nonoil',
+          categories: [
+            {
+              label: 'oil',
+              style: { fill: 'red' },
+              ids: ['seq1', 'seq2', 'seq9', 'seq8', 'noseq']
+            },
+            {
+              label: 'nonoil',
+              style: { fill: 'pink' },
+              ids: ['seq4', 'seq5', 'seq6', 'seq10', 'seq11']
+            }
+          ]
+        },
+        {
+          label: 'resit/notresists',
+          categories: [
+            { label: 'resistant', style: { fill: 'green' }, ids: ['seq1', 'seq2', 'seq3', 'seq9'] },
+            {
+              label: 'noresistant',
+              style: { fill: 'yellow' },
+              ids: ['seq5', 'seq6', 'seq7', 'seq10']
+            }
+          ]
+        },
+        {
+          label: 'oil/nonoil',
+          categories: [
+            {
+              label: 'oil',
+              style: { fill: 'red' },
+              ids: ['seq1', 'seq2', 'seq9', 'seq8', 'seq200', 'seq500']
+            },
+            { label: 'nonoil', style: { fill: 'pink' }, ids: ['seq4', 'seq5', 'seq6', 'seq10'] }
+          ]
+        }
+      ],
       metadata: {
         label: 'Conservation level',
         categories: [
@@ -264,14 +317,16 @@ export default {
             'ATCATCATTCGGGGGATACTCATTTTTACATCATCATCATACTACATGACGACGACAGCAGCCCTTACGACGATTTACGCGAGAACACTATCATCACAGACGAATTAGAGAGGGGGACAGAGGGACAGCAGCAGCCCAGACAGACGACCCGATTTATACTCATACTCACAGCATACGATGACACAGACGACGACAGCAGACGACGCATCATATACTCATTTTTACATCATCAAT',
           id: 'seq1',
           name: 'sequence-maize-A1-A0-v1',
-          color: 'red'
+          color: 'red',
+          titleColor: 'red'
         },
         {
           seq:
             'ATCATCATCATCATCATACTCATTTTTACATCATCATCATACTACATGACGACGACAGCAGCCCTTACGACGATTTACGCGAGAACACTATCATCACAGACGAATTAGAGAGGGGGACAGAGGGACAGCAGCAGCCCAGACAGACGACCCGATTTATACTCATACTCACAGCATAC----ACACAGACGACGACAGCAGTCGACGTTTCATATACTCA---TTACATCATCAAT',
           id: 'seq2',
           name: 'sequence-maize-A2',
-          color: 'red'
+          color: 'red',
+          titleColor: 'blue'
         },
         {
           seq:
@@ -385,6 +440,13 @@ export default {
     };
   },
   computed: {
+    getGlyph() {
+      if (this.showglyph) {
+        return this.glyphs;
+      } else {
+        return this.glyphs2;
+      }
+    },
     getselectedids() {
       return this.activeselectedseqs;
     },

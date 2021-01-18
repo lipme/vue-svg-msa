@@ -11,7 +11,7 @@ See the License for the specific language governing permissions and
 -->
 <template>
   <text
-    :x="1"
+    :x="x"
     :y="y"
     :font-size="textFontSize"
     :fill="textColor"
@@ -28,6 +28,7 @@ See the License for the specific language governing permissions and
 export default {
   props: {
     name: { type: String, default: '' },
+    x: { type: Number, default: 1 },
     y: { type: Number, default: 1 },
     offsetX: { type: Number, default: 0 },
     textFontSize: { type: Number, default: 15 },
@@ -41,7 +42,7 @@ export default {
       return textClass;
     },
     displaySeqNameLength() {
-      return this.offsetX / 10 + 2;
+      return (this.offsetX - this.x) / 10 + 2;
     },
     displayedName() {
       if (this.name.length > this.displaySeqNameLength) {
