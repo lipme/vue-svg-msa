@@ -48,7 +48,7 @@ See the License for the specific language governing permissions and
         :selectionSeqs="selectionSeqs"
         :seq-len="maxLengthExtractSeqs"
         :seq-nb="sequenceNb"
-        :highlightSelection="highlightSelection"
+        :highlight-selection="highlightSelectedSequences"
       />
 
       <glyph-serie-draw
@@ -260,9 +260,17 @@ export default {
       type: Number,
       default: 5
     },
+    /**
+     * if highlightSelection = always, even if there is no selected sequence, the metadata on unselected sequences will appear with less opacity
+     * if highlightSelection = never, the metadata on sequences will appear with the same opacity, whatever if the sequence is selected or not
+     * if highlightSelection = undefined, if there is at least one selected sequence, the metadata on unselected sequences will appear with less opacity
+     */
     highlightSelection: {
-      type: Boolean,
-      default: false
+      type: String,
+      default: 'undefined',
+      validator: function(value) {
+        return ['undefined', 'always', 'never'].indexOf(value) !== -1;
+      }
     }
   },
   data() {
@@ -425,6 +433,16 @@ export default {
     },
     sequenceNameFieldX() {
       return this.glyphs.length * this.radius * 3;
+    },
+    highlightSelectedSequences() {
+      let flag = false;
+      if (this.highlightSelection === 'undefined') {
+        flag = this.selectionSeqs.length > 0;
+      } else {
+        flag = this.highlightSelection === 'always';
+      }
+
+      return flag;
     }
   },
 

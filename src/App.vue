@@ -67,7 +67,6 @@ See the License for the specific language governing permissions and
       :metadata="activemetadata"
       :glyphs="getGlyph"
       :glyph-form="glyphform"
-      :highlight-selection="selectedseqs.length > 0"
       type="nt"
       :offset-x="150"
       :resolution="resolution"
