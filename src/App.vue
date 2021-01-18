@@ -55,6 +55,7 @@ See the License for the specific language governing permissions and
       :coloring="activecoloring"
       :selectedseqs="selectedseqs"
       :metadata="activemetadata"
+      :highlight-selection="selectedseqs.length > 0"
       type="nt"
       :offset-x="150"
       :resolution="resolution"

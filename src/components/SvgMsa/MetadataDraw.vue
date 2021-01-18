@@ -34,7 +34,8 @@ export default {
     seqLen: { type: Number, default: 0 },
     seqNb: { type: Number, default: 0 },
     aSeqindex: { type: Function, default: () => {} },
-    selectionSeqs: { type: Array, default: () => [] }
+    selectionSeqs: { type: Array, default: () => [] },
+    highlightSelection: { type: Boolean, default: false }
   },
   data() {
     return {
@@ -43,13 +44,6 @@ export default {
     };
   },
   computed: {
-    /**
-     * return true if some sequence are selected
-     */
-    selectionMode() {
-      return this.selectionSeqs.length > 0;
-    },
-
     /**
      * Get an array of rectangles to display
      */
@@ -88,7 +82,7 @@ export default {
 
         // fill the opacity according to the state of the sequence (selected or not)
         if (
-          this.selectionMode === true &&
+          this.highlightSelection === true &&
           this.selectionSeqs.find(o => o.id == seqid) == undefined
         ) {
           regionStyle['fill-opacity'] = regionStyle['fill-opacity'] - this.defaultOpacityContrast;

@@ -48,6 +48,7 @@ See the License for the specific language governing permissions and
         :selectionSeqs="selectionSeqs"
         :seq-len="maxLengthExtractSeqs"
         :seq-nb="sequenceNb"
+        :highlightSelection="highlightSelection"
       />
 
       <!-- display each sequence -->
@@ -211,6 +212,10 @@ export default {
       default: 200
     },
     displayTrackTooltip: {
+      type: Boolean,
+      default: false
+    },
+    highlightSelection: {
       type: Boolean,
       default: false
     }
