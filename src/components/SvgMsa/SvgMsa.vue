@@ -19,7 +19,7 @@ See the License for the specific language governing permissions and
         :sep="trackSep"
         :offset-x="offsetX"
         :width="widthSvg"
-        :displayTooltip="displayTrackTooltip"
+        :tooltip="displayTrackTooltip"
       ></vue-svg-tracks>
       <svg-scale-bar
         :length="maxLengthExtractSeqs"
@@ -249,7 +249,7 @@ export default {
     },
     displayTrackTooltip: {
       type: Boolean,
-      default: false
+      default: true
     },
     displayGlyphTooltip: {
       type: Boolean,

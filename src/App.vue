@@ -71,6 +71,7 @@ See the License for the specific language governing permissions and
       :offset-x="150"
       :resolution="resolution"
       :display-glyph-tooltip="true"
+      :display-track-tooltip="true"
     ></svg-msa>
   </div>
 </template>
