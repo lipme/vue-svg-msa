@@ -30,7 +30,7 @@ See the License for the specific language governing permissions and
 
           <div class="modal-footer">
             <slot name="footer">
-              <button v-clipboard:copy="getFastaFormattedSeqs" class="modal-default-button">
+              <button v-clipboard:copy="getFastaFormattedSeqs">
                 Copy
               </button>
               <button class="modal-default-button" @click="$emit('close')">Close</button>
@@ -121,12 +121,7 @@ export default {
 }
 
 .modal-default-button {
-  /* float: right; */
-  padding: 5px 10px;
   margin: auto 5px;
-  border: none;
-  border-radius: 2px;
-  background-color: rgb(196, 194, 194);
 }
 
 .modal-footer {
